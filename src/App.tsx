@@ -4,6 +4,7 @@ import { ToastProvider } from './components/shared/Toast';
 import Layout from './components/layout/Layout';
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
+import AuthCallback from './pages/auth/AuthCallback';
 import DashboardPage from './pages/dashboard/DashboardPage';
 import UsersPage from './pages/users/UsersPage';
 import OrganizationsPage from './pages/organizations/OrganizationsPage';
@@ -31,6 +32,7 @@ const App: React.FC = () => {
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/auth/callback" element={<AuthCallback />} />
         <Route
           path="/"
           element={

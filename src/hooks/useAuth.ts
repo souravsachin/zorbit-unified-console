@@ -60,7 +60,7 @@ export function useAuth() {
 
   useEffect(() => {
     const token = localStorage.getItem('zorbit_token');
-    if (!token && !window.location.pathname.startsWith('/login') && !window.location.pathname.startsWith('/register')) {
+    if (!token && !window.location.pathname.startsWith('/login') && !window.location.pathname.startsWith('/register') && !window.location.pathname.startsWith('/auth/callback')) {
       navigate('/login');
     }
   }, [navigate]);
