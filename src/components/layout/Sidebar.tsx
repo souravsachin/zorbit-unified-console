@@ -13,6 +13,10 @@ import {
   Settings,
   Lock,
   Play,
+  GraduationCap,
+  Gauge,
+  Pencil,
+  Table2,
   X,
 } from 'lucide-react';
 
@@ -23,6 +27,8 @@ interface SidebarProps {
 
 const navItems = [
   { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
+  { to: '/dashboard-view', icon: Gauge, label: 'Dashboard View' },
+  { to: '/dashboard-designer', icon: Pencil, label: 'Dashboard Designer' },
   { to: '/users', icon: Users, label: 'Users' },
   { to: '/organizations', icon: Building2, label: 'Organizations' },
   { to: '/roles', icon: Shield, label: 'Roles & Privileges' },
@@ -34,6 +40,8 @@ const navItems = [
   { to: '/api-docs', icon: FileText, label: 'API Docs' },
   { to: '/settings', icon: Settings, label: 'Settings' },
   { to: '/demo', icon: Play, label: 'Demo' },
+  { to: '/demo-training', icon: GraduationCap, label: 'Training Center' },
+  { to: '/data-table-demo', icon: Table2, label: 'Data Table Demo' },
 ];
 
 const Sidebar: React.FC<SidebarProps> = ({ open, onClose }) => {

@@ -1,5 +1,11 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import {
+  loadLocalPrefs,
+  savePrefsToServer,
+  clearAllLocalPrefs,
+} from '../services/preferences';
+import { clearMenuCache } from '../components/HamburgerMenu/useMenu';
 
 interface UserInfo {
   id: string;
@@ -49,21 +55,35 @@ export function useAuth() {
     [navigate],
   );
 
-  const logout = useCallback(() => {
+  const logout = useCallback(async () => {
+    // Sync preferences to backend before clearing (token still valid here)
+    const currentUser = user;
+    if (currentUser?.id) {
+      try {
+        const prefs = loadLocalPrefs(currentUser.id);
+        if (Object.keys(prefs).length > 0) {
+          await savePrefsToServer(currentUser.id, prefs);
+        }
+      } catch {
+        // Best-effort — don't block logout
+      }
+    }
+
+    // Clear auth state
     localStorage.removeItem('zorbit_token');
     localStorage.removeItem('zorbit_user');
+
+    // Clear all user preferences and cached menu
+    clearAllLocalPrefs();
+    clearMenuCache();
+
     setUser(null);
     navigate('/login');
-  }, [navigate]);
+  }, [navigate, user]);
 
   const orgId = user?.organizationId || 'O-DEMO';
 
-  useEffect(() => {
-    const token = localStorage.getItem('zorbit_token');
-    if (!token && !window.location.pathname.startsWith('/login') && !window.location.pathname.startsWith('/register') && !window.location.pathname.startsWith('/auth/callback')) {
-      navigate('/login');
-    }
-  }, [navigate]);
+  // Auth redirect is handled by ProtectedRoute in App.tsx — no useEffect needed here
 
   return { user, isAuthenticated, login, logout, orgId };
 }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Lock } from 'lucide-react';
+import { Lock, Shield, Radio, Globe } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { identityService } from '../../services/identity';
 import { useToast } from '../../components/shared/Toast';
@@ -12,6 +12,7 @@ interface AuthProvider {
   name: string;
   enabled: boolean;
   label?: string;
+  type?: string; // 'redirect' (default) or 'credentials'
 }
 
 const LoginPage: React.FC = () => {
@@ -26,10 +27,13 @@ const LoginPage: React.FC = () => {
   useEffect(() => {
     const fetchProviders = async () => {
       try {
-        const res = await api.get<AuthProvider[]>(
+        const res = await api.get(
           `${API_CONFIG.IDENTITY_URL}/api/v1/G/auth/providers`,
         );
-        const enabled = (res.data || []).filter((p) => p.enabled);
+        const data = res.data?.providers || res.data || [];
+        const enabled = (Array.isArray(data) ? data : [])
+          .filter((p: any) => p.enabled)
+          .map((p: any) => ({ ...p, id: p.id || p.name }));
         setProviders(enabled);
       } catch {
         // Providers endpoint unavailable — hide OAuth section
@@ -126,6 +130,26 @@ const LoginPage: React.FC = () => {
           Sign in with LinkedIn
         </button>
       );
+    }
+
+    if (id === 'saml') {
+      const label = provider.label || 'Sign in with SAML SSO';
+      return (
+        <button
+          key={id}
+          type="button"
+          onClick={() => handleOAuthClick(id)}
+          className="w-full flex items-center justify-center gap-3 px-4 py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 transition-colors text-sm font-medium text-white"
+        >
+          <Shield className="w-5 h-5" />
+          {label}
+        </button>
+      );
+    }
+
+    // Skip credentials-based providers (RADIUS, Diameter) — they use the main login form
+    if (provider.type === 'credentials') {
+      return null;
     }
 
     // SSO / generic provider

@@ -6,4 +6,5 @@ export const API_CONFIG = {
   PII_VAULT_URL: import.meta.env.VITE_PII_VAULT_URL || '/api/pii-vault',
   AUDIT_URL: import.meta.env.VITE_AUDIT_URL || '/api/audit',
   CUSTOMER_URL: import.meta.env.VITE_CUSTOMER_URL || '/api/customer',
+  ADMIN_CONSOLE_URL: import.meta.env.VITE_ADMIN_CONSOLE_URL || '/api/admin-console',
 };

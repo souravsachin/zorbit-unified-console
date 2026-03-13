@@ -18,9 +18,13 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem('zorbit_token');
-      localStorage.removeItem('zorbit_user');
-      window.location.href = '/login';
+      // Don't redirect if already on login/register/callback pages — prevents infinite loop
+      const path = window.location.pathname;
+      if (!path.startsWith('/login') && !path.startsWith('/register') && !path.startsWith('/auth/callback')) {
+        localStorage.removeItem('zorbit_token');
+        localStorage.removeItem('zorbit_user');
+        window.location.href = '/login';
+      }
     }
     return Promise.reject(error);
   },

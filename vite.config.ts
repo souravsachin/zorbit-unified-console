@@ -1,7 +1,24 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import { execSync } from 'child_process';
+import { readFileSync } from 'fs';
+
+function getGitSha(): string {
+  try { return execSync('git rev-parse --short HEAD').toString().trim(); }
+  catch { return 'unknown'; }
+}
+
+function getPkgVersion(): string {
+  try { return JSON.parse(readFileSync('package.json', 'utf-8')).version; }
+  catch { return '0.0.0'; }
+}
 
 export default defineConfig({
+  define: {
+    __APP_VERSION__: JSON.stringify(getPkgVersion()),
+    __BUILD_DATE__: JSON.stringify(new Date().toISOString().slice(0, 10)),
+    __GIT_SHA__: JSON.stringify(getGitSha()),
+  },
   plugins: [react()],
   server: {
     port: 5173,
@@ -40,6 +57,11 @@ export default defineConfig({
         target: 'http://localhost:3093',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api\/customer/, ''),
+      },
+      '/api/admin-console': {
+        target: 'http://localhost:3020',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/admin-console/, ''),
       },
     },
   },

@@ -1,0 +1,39 @@
+{
+  "version": "v1",
+  "date": "2026-03-12",
+  "description": "Initial demo recordings - platform bootstrap with Identity, OAuth, and core services",
+  "recordings": [
+    {
+      "id": "platform-overview",
+      "file": "platform-overview-v1.gif",
+      "title": "Platform Overview",
+      "description": "Full walkthrough of the Zorbit admin console: Dashboard, Users, Organizations, Roles, Customers, Navigation, Messaging, Audit, PII Vault, API Docs, Settings, Demo",
+      "frames": 33,
+      "sizeKB": 2313
+    },
+    {
+      "id": "identity-auth",
+      "file": "identity-auth-flow-v1.gif",
+      "title": "Identity & Auth Flow",
+      "description": "Complete OAuth flow: Settings (user profile) → Logout → Login page with Google/GitHub/LinkedIn → Google account chooser → Dashboard (logged in)",
+      "frames": 12,
+      "sizeKB": 761
+    },
+    {
+      "id": "api-docs",
+      "file": "api-docs-services-v1.gif",
+      "title": "API Documentation",
+      "description": "API Documentation page showing all 7 Zorbit platform services with Swagger links: Identity, Authorization, Navigation, Messaging, PII Vault, Audit, Customer",
+      "frames": 3,
+      "sizeKB": 415
+    },
+    {
+      "id": "audit-trail",
+      "file": "audit-trail-demo-v1.gif",
+      "title": "Audit & Compliance",
+      "description": "Audit Logs with filters (event type, actor, resource, date range), PII Vault audit view with tokenization notice, Demo page with seed/delete controls",
+      "frames": 7,
+      "sizeKB": 499
+    }
+  ]
+}
