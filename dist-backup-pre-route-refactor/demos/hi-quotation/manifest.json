@@ -1,0 +1,16 @@
+[
+  {
+    "file": "hi-quotation-overview.mp4",
+    "title": "HI Quotation Overview",
+    "thumbnail": "",
+    "timestamp": "2026-03-18",
+    "duration": 120,
+    "chapters": [
+      { "title": "Introduction", "startMs": 0 },
+      { "title": "Application Form", "startMs": 15000 },
+      { "title": "Region Selection", "startMs": 35000 },
+      { "title": "PII Protection", "startMs": 60000 },
+      { "title": "Submission Flow", "startMs": 85000 }
+    ]
+  }
+]

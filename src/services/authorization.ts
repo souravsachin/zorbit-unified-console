@@ -29,4 +29,7 @@ export const authorizationService = {
 
   getPrivileges: (orgId: string) =>
     api.get<Privilege[]>(`${API_CONFIG.AUTHORIZATION_URL}/api/v1/O/${orgId}/privileges`),
+
+  createPrivilege: (orgId: string, payload: Partial<Privilege>) =>
+    api.post(`${API_CONFIG.AUTHORIZATION_URL}/api/v1/O/${orgId}/privileges`, payload),
 };

@@ -1,0 +1,16 @@
+[
+  {
+    "file": "mi-quotation-overview.mp4",
+    "title": "MI Quotation Overview",
+    "thumbnail": "",
+    "timestamp": "2026-03-18",
+    "duration": 120,
+    "chapters": [
+      { "title": "Introduction", "startMs": 0 },
+      { "title": "Vehicle Details", "startMs": 15000 },
+      { "title": "Coverage Selection", "startMs": 40000 },
+      { "title": "Premium Calculation", "startMs": 65000 },
+      { "title": "Submission", "startMs": 90000 }
+    ]
+  }
+]

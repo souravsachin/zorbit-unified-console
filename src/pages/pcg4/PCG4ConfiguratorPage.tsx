@@ -5,6 +5,7 @@ import { useWizard } from '../../components/ZorbitStepper/useWizard';
 import type { StepConfig } from '../../components/ZorbitStepper/types';
 import type { PCG4Configuration, ConfigurationStage } from '../../types/pcg4';
 import { pcg4ConfiguratorApi } from '../../api/pcg4Api';
+import { useAuth } from '../../hooks/useAuth';
 
 import Step1_InsurerDetails from './steps/Step1_InsurerDetails';
 import Step2_ProductDetails from './steps/Step2_ProductDetails';
@@ -41,19 +42,6 @@ const STEPS: StepConfig[] = [
   { id: 'review_publish', title: 'Review & Publish', description: 'Final review and publish' },
 ];
 
-function getOrgId(): string {
-  try {
-    const user = localStorage.getItem('zorbit_user');
-    if (user) {
-      const parsed = JSON.parse(user);
-      return parsed.organizationHashId || parsed.orgId || 'O-DEFAULT';
-    }
-  } catch {
-    // ignore
-  }
-  return 'O-DEFAULT';
-}
-
 const DEFAULT_CONFIG: PCG4Configuration = {
   insurer: null,
   product: null,
@@ -67,15 +55,15 @@ const DEFAULT_CONFIG: PCG4Configuration = {
 /* ================================================================== */
 
 const PCG4ConfiguratorPage: React.FC = () => {
-  const { configId } = useParams<{ configId?: string }>();
+  const { configId: rawConfigId } = useParams<{ configId?: string }>();
+  const configId = rawConfigId === 'new' ? undefined : rawConfigId;
   const navigate = useNavigate();
+  const { orgId } = useAuth();
 
   const [configuration, setConfiguration] = useState<PCG4Configuration>(DEFAULT_CONFIG);
   const [loading, setLoading] = useState(!!configId);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  const orgId = getOrgId();
 
   const wizard = useWizard({
     steps: STEPS,
@@ -101,6 +89,10 @@ const PCG4ConfiguratorPage: React.FC = () => {
           wizard.goTo(stageIdx);
           // Mark all previous steps completed
           for (let i = 0; i < stageIdx; i++) {
+            wizard.markCompleted(i);
+          }
+          // If config already exists (loaded from API), make all steps navigable for review
+          for (let i = 0; i < STEPS.length; i++) {
             wizard.markCompleted(i);
           }
         }
@@ -131,7 +123,7 @@ const PCG4ConfiguratorPage: React.FC = () => {
         } else {
           const result = await pcg4ConfiguratorApi.createConfig(orgId, updated);
           if (result?.id) {
-            navigate(`/pcg4/configurator/${result.id}`, { replace: true });
+            navigate(`/O/${orgId}/app/pcg4/configurations/${result.id}`, { replace: true });
           }
           setConfiguration({ ...updated, id: result?.id });
         }
@@ -230,7 +222,7 @@ const PCG4ConfiguratorPage: React.FC = () => {
           <p className="text-sm text-red-500 mb-4">{error}</p>
           <button
             type="button"
-            onClick={() => navigate('/pcg4')}
+            onClick={() => navigate(`/O/${orgId}/app/pcg4/configurations`)}
             className="px-4 py-2 text-sm font-medium bg-orange-500 text-white rounded-md hover:bg-orange-600"
           >
             Back to Dashboard
@@ -258,7 +250,7 @@ const PCG4ConfiguratorPage: React.FC = () => {
         </div>
         <button
           type="button"
-          onClick={() => navigate('/pcg4')}
+          onClick={() => navigate(`/O/${orgId}/app/pcg4/configurations`)}
           className="px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-md text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700"
         >
           Back to Dashboard
@@ -274,6 +266,7 @@ const PCG4ConfiguratorPage: React.FC = () => {
         orientation="horizontal"
         variant="compact"
         allowJumpToCompleted
+        allowJumpToAny
         showStepNumbers
         className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4"
       />

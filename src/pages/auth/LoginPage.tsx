@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { Lock, Shield, Radio, Globe } from 'lucide-react';
+import { Lock, Shield, Eye, EyeOff, ShieldCheck, KeyRound } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { identityService } from '../../services/identity';
 import { useToast } from '../../components/shared/Toast';
@@ -20,9 +20,18 @@ const LoginPage: React.FC = () => {
   const { toast } = useToast();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [providers, setProviders] = useState<AuthProvider[]>([]);
   const [providersLoaded, setProvidersLoaded] = useState(false);
+
+  // MFA state
+  const [mfaRequired, setMfaRequired] = useState(false);
+  const [tempToken, setTempToken] = useState('');
+  const [mfaCode, setMfaCode] = useState('');
+  const [useBackupCode, setUseBackupCode] = useState(false);
+  const [backupCode, setBackupCode] = useState('');
+  const mfaInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const fetchProviders = async () => {
@@ -36,7 +45,6 @@ const LoginPage: React.FC = () => {
           .map((p: any) => ({ ...p, id: p.id || p.name }));
         setProviders(enabled);
       } catch {
-        // Providers endpoint unavailable — hide OAuth section
         setProviders([]);
       } finally {
         setProvidersLoaded(true);
@@ -45,16 +53,75 @@ const LoginPage: React.FC = () => {
     fetchProviders();
   }, []);
 
+  // Focus MFA input when MFA step appears
+  useEffect(() => {
+    if (mfaRequired && mfaInputRef.current) {
+      mfaInputRef.current.focus();
+    }
+  }, [mfaRequired, useBackupCode]);
+
+  const completeLogin = (token: string, user?: any) => {
+    const params = new URLSearchParams(window.location.search);
+    const returnTo = params.get('returnTo');
+    if (returnTo) {
+      localStorage.setItem('zorbit_token', token);
+      const domain = window.location.hostname.split('.').slice(-2).join('.');
+      document.cookie = `zorbit_token=${token}; domain=.${domain}; path=/; max-age=3600; SameSite=Lax; Secure`;
+      if (user) localStorage.setItem('zorbit_user', JSON.stringify(user));
+      if (returnTo.startsWith('http')) {
+        if (returnTo.includes('/auth/oauth/authorize')) {
+          const separator = returnTo.includes('?') ? '&' : '?';
+          window.location.href = `${returnTo}${separator}token=${encodeURIComponent(token)}`;
+        } else {
+          window.location.href = returnTo;
+        }
+      } else {
+        window.location.href = returnTo;
+      }
+      return;
+    }
+    login(token, user);
+    toast('Logged in successfully', 'success');
+  };
+
+  // Security note: password is sent over HTTPS (wire encryption) and hashed
+  // server-side with bcrypt (12 rounds). Client-side hashing is a Phase 2
+  // backlog item for defense-in-depth — it would require a migration strategy
+  // for existing bcrypt(plaintext) password hashes.
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
       const res = await identityService.login({ email, password });
+      if (res.data.requiresMfa) {
+        setTempToken(res.data.tempToken);
+        setMfaRequired(true);
+        setLoading(false);
+        return;
+      }
       const token = res.data.accessToken || res.data.token;
-      login(token, res.data.user);
-      toast('Logged in successfully', 'success');
+      completeLogin(token, res.data.user);
     } catch {
       toast('Invalid email or password', 'error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleMfaSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      let res;
+      if (useBackupCode) {
+        res = await identityService.mfaBackupVerify(tempToken, backupCode.trim());
+      } else {
+        res = await identityService.mfaValidateLogin(tempToken, mfaCode.trim());
+      }
+      const token = res.data.accessToken || res.data.token;
+      completeLogin(token, res.data.user);
+    } catch {
+      toast(useBackupCode ? 'Invalid backup code' : 'Invalid verification code', 'error');
     } finally {
       setLoading(false);
     }
@@ -167,6 +234,122 @@ const LoginPage: React.FC = () => {
     );
   };
 
+  // Derive context from returnTo URL for user-friendly messaging
+  const returnToParam = new URLSearchParams(window.location.search).get('returnTo') || '';
+  const contextMap: Record<string, { title: string; subtitle: string }> = {
+    'hi-quotation': { title: 'Health Insurance', subtitle: 'Sign in to access the quotation system' },
+    'mi-quotation': { title: 'Motor Insurance', subtitle: 'Sign in to access motor quotations' },
+    'uw-workflow': { title: 'Underwriting Workflow', subtitle: 'Sign in to access underwriting queues' },
+    'hi-decisioning': { title: 'UW Decisioning', subtitle: 'Sign in to access underwriting rules' },
+    'form-builder': { title: 'Form Builder', subtitle: 'Sign in to manage forms' },
+    'directory': { title: 'Team Directory', subtitle: 'Sign in to connect with your team' },
+    'support-center': { title: 'Support Center', subtitle: 'Sign in to access help & tutorials' },
+    'pii-showcase': { title: 'PII Showcase', subtitle: 'Sign in to explore PII protection' },
+    'claims': { title: 'Claims Management', subtitle: 'Sign in to manage claims' },
+    'fee-management': { title: 'Fee Management', subtitle: 'Sign in to manage fees & invoices' },
+    'admin': { title: 'Platform Administration', subtitle: 'Sign in to manage the platform' },
+    'livestream': { title: 'Live Streaming', subtitle: 'Sign in to access streaming admin' },
+  };
+  const matchedContext = Object.entries(contextMap).find(([key]) => returnToParam.includes(key));
+  const pageTitle = matchedContext ? matchedContext[1].title : 'Zorbit Platform';
+  const pageSubtitle = matchedContext ? matchedContext[1].subtitle : 'Sign in to your account';
+
+  // ─── MFA Verification Screen ────────────────────────────────────
+  if (mfaRequired) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4">
+        <div className="w-full max-w-md">
+          <div className="text-center mb-8">
+            <div className="w-16 h-16 bg-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <ShieldCheck className="w-8 h-8 text-white" />
+            </div>
+            <h1 className="text-2xl font-bold">Two-Factor Authentication</h1>
+            <p className="text-gray-500 mt-1">
+              {useBackupCode
+                ? 'Enter one of your backup codes'
+                : 'Enter the 6-digit code from your authenticator app'}
+            </p>
+          </div>
+
+          <form onSubmit={handleMfaSubmit} className="card p-6 space-y-4">
+            {!useBackupCode ? (
+              <div>
+                <label className="block text-sm font-medium mb-1">Verification Code</label>
+                <input
+                  ref={mfaInputRef}
+                  type="text"
+                  inputMode="numeric"
+                  autoComplete="one-time-code"
+                  value={mfaCode}
+                  onChange={(e) => {
+                    const val = e.target.value.replace(/\D/g, '').slice(0, 6);
+                    setMfaCode(val);
+                  }}
+                  className="input-field text-center text-2xl tracking-[0.5em] font-mono"
+                  placeholder="000000"
+                  maxLength={6}
+                  required
+                />
+                <p className="text-xs text-gray-400 mt-1">
+                  Open Google Authenticator (or your TOTP app) and enter the code shown for Zorbit.
+                </p>
+              </div>
+            ) : (
+              <div>
+                <label className="block text-sm font-medium mb-1">Backup Code</label>
+                <input
+                  ref={mfaInputRef}
+                  type="text"
+                  value={backupCode}
+                  onChange={(e) => setBackupCode(e.target.value.toUpperCase())}
+                  className="input-field text-center text-lg tracking-widest font-mono"
+                  placeholder="XXXXXXXXXX"
+                  required
+                />
+                <p className="text-xs text-gray-400 mt-1">
+                  Enter one of the 10 backup codes you saved during MFA setup.
+                </p>
+              </div>
+            )}
+
+            <button type="submit" disabled={loading} className="btn-primary w-full">
+              {loading ? 'Verifying...' : 'Verify & Sign In'}
+            </button>
+
+            <div className="flex items-center justify-between text-sm">
+              <button
+                type="button"
+                onClick={() => {
+                  setUseBackupCode(!useBackupCode);
+                  setMfaCode('');
+                  setBackupCode('');
+                }}
+                className="text-primary-600 hover:text-primary-700 font-medium flex items-center gap-1"
+              >
+                <KeyRound size={14} />
+                {useBackupCode ? 'Use authenticator code' : 'Use a backup code'}
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setMfaRequired(false);
+                  setTempToken('');
+                  setMfaCode('');
+                  setBackupCode('');
+                  setUseBackupCode(false);
+                }}
+                className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+              >
+                Back to login
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    );
+  }
+
+  // ─── Normal Login Screen ──────────────────────────────────────────
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4">
       <div className="w-full max-w-md">
@@ -174,8 +357,8 @@ const LoginPage: React.FC = () => {
           <div className="w-16 h-16 bg-primary-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
             <span className="text-white font-bold text-2xl">Z</span>
           </div>
-          <h1 className="text-2xl font-bold">Zorbit Admin Console</h1>
-          <p className="text-gray-500 mt-1">Sign in to your account</p>
+          <h1 className="text-2xl font-bold">{pageTitle}</h1>
+          <p className="text-gray-500 mt-1">{pageSubtitle}</p>
         </div>
         <form onSubmit={handleSubmit} className="card p-6 space-y-4">
           <div>
@@ -191,14 +374,24 @@ const LoginPage: React.FC = () => {
           </div>
           <div>
             <label className="block text-sm font-medium mb-1">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="input-field"
-              placeholder="Enter password"
-              required
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="input-field pr-10"
+                placeholder="Enter password"
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                tabIndex={-1}
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
+            </div>
           </div>
           <button type="submit" disabled={loading} className="btn-primary w-full">
             {loading ? 'Signing in...' : 'Sign In'}

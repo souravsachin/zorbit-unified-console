@@ -1,0 +1,16 @@
+[
+  {
+    "file": "uw-workflow-overview.mp4",
+    "title": "UW Workflow Overview",
+    "thumbnail": "",
+    "timestamp": "2026-03-18",
+    "duration": 120,
+    "chapters": [
+      { "title": "Introduction", "startMs": 0 },
+      { "title": "Work Queues", "startMs": 15000 },
+      { "title": "STP vs NSTP", "startMs": 40000 },
+      { "title": "Actions & Transitions", "startMs": 65000 },
+      { "title": "Audit Trail", "startMs": 90000 }
+    ]
+  }
+]

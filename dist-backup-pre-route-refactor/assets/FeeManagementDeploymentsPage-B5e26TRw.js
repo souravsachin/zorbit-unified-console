@@ -1,0 +1,1 @@
+import{j as e,av as m}from"./index-2_yt5QN_.js";import{M as t}from"./ModuleDeploymentsPage-CPasQPCK.js";import"./globe-D7LLFYaR.js";import"./circle-check-C4OCTQNc.js";import"./git-branch-BOgyZck8.js";function i(){return e.jsx(t,{moduleId:"fee-management",moduleName:"Fee Management",icon:m})}export{i as default};

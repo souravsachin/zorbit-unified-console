@@ -1,0 +1,1 @@
+import{j as o,am as t}from"./index-2_yt5QN_.js";import{M as m}from"./ModuleDeploymentsPage-CPasQPCK.js";import"./globe-D7LLFYaR.js";import"./circle-check-C4OCTQNc.js";import"./git-branch-BOgyZck8.js";function u(){return o.jsx(m,{moduleId:"mi-quotation",moduleName:"MI Quotation",icon:t})}export{u as default};

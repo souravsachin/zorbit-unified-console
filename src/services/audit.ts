@@ -24,10 +24,10 @@ export interface AuditQuery {
 export const auditService = {
   getEvents: (orgId: string, query?: AuditQuery) =>
     api.get<{ data: AuditEvent[]; total: number }>(
-      `${API_CONFIG.AUDIT_URL}/api/v1/O/${orgId}/events`,
+      `${API_CONFIG.AUDIT_URL}/api/v1/O/${orgId}/audit/logs`,
       { params: query },
     ),
 
   getEvent: (orgId: string, eventId: string) =>
-    api.get<AuditEvent>(`${API_CONFIG.AUDIT_URL}/api/v1/O/${orgId}/events/${eventId}`),
+    api.get<AuditEvent>(`${API_CONFIG.AUDIT_URL}/api/v1/O/${orgId}/audit/logs/${eventId}`),
 };

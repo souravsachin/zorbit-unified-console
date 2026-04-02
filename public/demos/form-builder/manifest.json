@@ -1,0 +1,44 @@
+[
+  {
+    "file": "form-builder-overview.mp4",
+    "title": "Form Builder Overview",
+    "thumbnail": "",
+    "timestamp": "2026-03-26",
+    "duration": 120,
+    "chapters": [
+      { "title": "Introduction", "startMs": 0 },
+      { "title": "Form Designer", "startMs": 15000 },
+      { "title": "Conditional Logic", "startMs": 40000 },
+      { "title": "Multi-Step Wizard", "startMs": 60000 },
+      { "title": "Submissions", "startMs": 85000 }
+    ]
+  },
+  {
+    "file": "form-creation-tutorial.mp4",
+    "title": "Form Creation Tutorial",
+    "thumbnail": "",
+    "timestamp": "2026-03-26",
+    "duration": 180,
+    "chapters": [
+      { "title": "Creating a New Form", "startMs": 0 },
+      { "title": "Adding Fields", "startMs": 20000 },
+      { "title": "Setting Validation", "startMs": 60000 },
+      { "title": "Conditional Logic", "startMs": 100000 },
+      { "title": "Publishing", "startMs": 140000 }
+    ]
+  },
+  {
+    "file": "form-builder-screencast.mp4",
+    "title": "Form Builder Screencast",
+    "thumbnail": "",
+    "timestamp": "2026-03-26",
+    "duration": 150,
+    "chapters": [
+      { "title": "Dashboard", "startMs": 0 },
+      { "title": "Template Gallery", "startMs": 25000 },
+      { "title": "Builder Interface", "startMs": 55000 },
+      { "title": "Preview & Test", "startMs": 95000 },
+      { "title": "Submission Review", "startMs": 120000 }
+    ]
+  }
+]

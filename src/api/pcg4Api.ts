@@ -28,98 +28,29 @@ export interface PCG4Stats {
 }
 
 // ---------------------------------------------------------------------------
-// Mock Data (fallback when backend is unavailable)
-// ---------------------------------------------------------------------------
-
-const MOCK_CONFIGURATIONS: PCG4Configuration[] = [
-  {
-    id: '1',
-    hashId: 'CFG-92AF',
-    insurerName: 'Acme Health Insurance',
-    productName: 'Gold Shield Plan',
-    status: 'draft',
-    planCount: 3,
-    encounterCount: 12,
-    currentStage: 'benefits_setup',
-    createdAt: '2026-03-10T08:00:00Z',
-    updatedAt: '2026-03-13T14:30:00Z',
-  },
-  {
-    id: '2',
-    hashId: 'CFG-81F3',
-    insurerName: 'Pacific Mutual',
-    productName: 'Silver Care Advantage',
-    status: 'in_review',
-    planCount: 5,
-    encounterCount: 24,
-    currentStage: 'review_publish',
-    createdAt: '2026-02-20T10:15:00Z',
-    updatedAt: '2026-03-12T09:45:00Z',
-  },
-  {
-    id: '3',
-    hashId: 'CFG-51AA',
-    insurerName: 'National Assurance Co.',
-    productName: 'Family Wellness Plus',
-    status: 'published',
-    planCount: 4,
-    encounterCount: 18,
-    currentStage: 'review_publish',
-    createdAt: '2026-01-15T12:00:00Z',
-    updatedAt: '2026-03-01T16:20:00Z',
-  },
-];
-
-// ---------------------------------------------------------------------------
 // API Functions
 // ---------------------------------------------------------------------------
 
 export async function getConfigurations(orgId: string): Promise<PCG4Configuration[]> {
-  try {
-    const res = await api.get(`/api/v1/O/${orgId}/pcg4/configurations`);
-    return res.data?.data || res.data || [];
-  } catch {
-    console.warn('PCG4 API unavailable, using mock data');
-    return MOCK_CONFIGURATIONS;
-  }
+  const res = await api.get(`/api/app/pcg4/v1/O/${orgId}/configurations`);
+  return res.data?.data || res.data || [];
 }
 
 export async function deleteConfiguration(orgId: string, configId: string): Promise<void> {
-  try {
-    await api.delete(`/api/v1/O/${orgId}/pcg4/configurations/${configId}`);
-  } catch (err: unknown) {
-    const error = err as { response?: { status: number } };
-    // If it's a network error (no backend), silently succeed for mock mode
-    if (error.response && error.response.status !== 404) {
-      throw err;
-    }
-  }
+  await api.delete(`/api/app/pcg4/v1/O/${orgId}/configurations/${configId}`);
 }
 
 export async function getTemplates(orgId: string): Promise<PCG4Configuration[]> {
-  try {
-    const res = await api.get(`/api/v1/O/${orgId}/pcg4/configurations/templates`);
-    return res.data?.data || res.data || [];
-  } catch {
-    console.warn('PCG4 templates API unavailable, using mock data');
-    return MOCK_CONFIGURATIONS.filter(
-      (c) => c.status === 'approved' || c.status === 'published',
-    );
-  }
+  const res = await api.get(`/api/app/pcg4/v1/O/${orgId}/configurations/templates`);
+  return res.data?.data || res.data || [];
 }
 
 export async function cloneConfiguration(
   orgId: string,
   sourceId: string,
 ): Promise<{ id: string }> {
-  try {
-    const res = await api.post(`/api/v1/O/${orgId}/pcg4/configurations/${sourceId}/clone`);
-    return res.data;
-  } catch {
-    // Mock: return a fake new ID
-    const mockId = `CFG-${Math.random().toString(16).slice(2, 6).toUpperCase()}`;
-    return { id: mockId };
-  }
+  const res = await api.post(`/api/app/pcg4/v1/O/${orgId}/configurations/${sourceId}/clone`);
+  return res.data;
 }
 
 export function computeStats(configs: PCG4Configuration[]): PCG4Stats {
@@ -132,16 +63,249 @@ export function computeStats(configs: PCG4Configuration[]): PCG4Stats {
 }
 
 // ---------------------------------------------------------------------------
+// Setup API — seed, flush, stats, tables
+// ---------------------------------------------------------------------------
+
+export async function seedDemoData(orgId: string): Promise<{ configurations: number; plans: number; encounterTypes: number; benefits: number }> {
+  const res = await api.post(`/api/app/pcg4/v1/O/${orgId}/setup/seed`);
+  return res.data;
+}
+
+export async function flushDemoData(orgId: string): Promise<{ configurations: number; plans: number; benefits: number; encounterTypes: number }> {
+  const res = await api.post(`/api/app/pcg4/v1/O/${orgId}/setup/flush`);
+  return res.data;
+}
+
+export async function getSetupStats(orgId: string) {
+  const res = await api.get(`/api/app/pcg4/v1/O/${orgId}/setup/stats`);
+  return res.data;
+}
+
+// ---------------------------------------------------------------------------
+// Setup v2 — table inventory + SSE streaming
+// ---------------------------------------------------------------------------
+
+export interface SetupTableInfo {
+  name: string;
+  count: number;
+  protected: boolean;
+}
+
+export interface SetupLogEvent {
+  type: 'info' | 'success' | 'warning' | 'error' | 'done';
+  table?: string;
+  message: string;
+  timestamp: string;
+}
+
+export async function getSetupTables(orgId: string): Promise<{ tables: SetupTableInfo[] }> {
+  const res = await api.get(`/api/app/pcg4/v1/O/${orgId}/setup/tables`);
+  return res.data;
+}
+
+/**
+ * Start an SSE stream for a setup operation.
+ * Returns an AbortController so the caller can cancel.
+ */
+export function startSetupSSE(
+  orgId: string,
+  operation: 'seed-system' | 'seed-demo' | 'flush-demo' | 'flush-all',
+  tables: string[] | undefined,
+  onEvent: (event: SetupLogEvent) => void,
+  onDone: () => void,
+  onError: (err: string) => void,
+): AbortController {
+  const controller = new AbortController();
+  const token = localStorage.getItem('zorbit_token');
+  const qs = tables && tables.length > 0 ? `?tables=${tables.join(',')}` : '';
+  const url = `/api/app/pcg4/v1/O/${orgId}/setup/${operation}${qs}`;
+
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: 'text/event-stream',
+    },
+    signal: controller.signal,
+  })
+    .then(async (response) => {
+      if (!response.ok) {
+        onError(`HTTP ${response.status}: ${response.statusText}`);
+        onDone();
+        return;
+      }
+
+      const reader = response.body?.getReader();
+      if (!reader) {
+        onError('No response body');
+        onDone();
+        return;
+      }
+
+      const decoder = new TextDecoder();
+      let buffer = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop() || '';
+
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            try {
+              const event: SetupLogEvent = JSON.parse(line.slice(6));
+              if (event.type === 'done') {
+                onDone();
+              } else {
+                onEvent(event);
+              }
+            } catch {
+              // ignore malformed lines
+            }
+          }
+        }
+      }
+
+      // Process any remaining buffer
+      if (buffer.startsWith('data: ')) {
+        try {
+          const event: SetupLogEvent = JSON.parse(buffer.slice(6));
+          if (event.type === 'done') {
+            onDone();
+          } else {
+            onEvent(event);
+          }
+        } catch {
+          // ignore
+        }
+      }
+
+      onDone();
+    })
+    .catch((err) => {
+      if (err.name !== 'AbortError') {
+        onError(err.message || 'Connection failed');
+        onDone();
+      }
+    });
+
+  return controller;
+}
+
+// ---------------------------------------------------------------------------
 // Configurator API — full CRUD for the 8-step wizard
 // ---------------------------------------------------------------------------
 
 import type {
   PCG4Configuration as FullConfig,
   EncounterCategory,
+  Plan as FrontendPlan,
+  EncounterBenefit,
+  GeneralRules,
+  ConfigurationStage,
 } from '../types/pcg4';
 
 function orgBase(orgId: string) {
-  return `/api/v1/O/${orgId}/pcg4`;
+  return `/api/app/pcg4/v1/O/${orgId}`;
+}
+
+// ---------------------------------------------------------------------------
+// Stage number → string mapping
+// ---------------------------------------------------------------------------
+const STAGE_MAP: Record<number, ConfigurationStage> = {
+  1: 'insurer_details',
+  2: 'product_details',
+  3: 'create_plans',
+  4: 'base_plan_configuration',
+  5: 'encounter_configuration',
+  6: 'benefits_setup',
+  7: 'plan_specific_overrides',
+  8: 'review_publish',
+};
+
+// ---------------------------------------------------------------------------
+// Backend → Frontend mapper for configuration detail
+// ---------------------------------------------------------------------------
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function mapBackendConfig(raw: any): FullConfig {
+  const plans: FrontendPlan[] = (raw.plans || []).map((p: any) => {
+    const benefits: EncounterBenefit[] = (p.benefits || []).map((b: any) => ({
+      category: '',
+      sub_category: '',
+      encounter_type: b.encounterTypeCode || '',
+      description: b.encounterTypeLabel || '',
+      coverage: true,
+      annual_limit: b.costShare?.annual_limit ?? 0,
+      waiting_period_days: 0,
+      cost_share: {
+        copay: b.costShare?.copay ?? 0,
+        coinsurance: b.costShare?.coinsurance ?? 0,
+        deductible_applies: b.costShare?.deductible_applies ?? false,
+      },
+      visit_limits: {
+        annual_visits: b.visitLimits?.per_year ?? 0,
+        lifetime_limit: b.visitLimits?.per_lifetime ?? 0,
+        per_event_cap: 0,
+      },
+      authorization: {
+        required: b.visitLimits?.auth_required ?? false,
+        notes: '',
+      },
+      exclusions: [],
+    }));
+
+    const generalRules: GeneralRules = p.generalRules
+      ? {
+          annual_limit: p.generalRules.annual_limit ?? 0,
+          deductible: p.generalRules.deductible ?? 0,
+          out_of_pocket_max: p.generalRules.out_of_pocket_max ?? 0,
+          network_restrictions: p.generalRules.network_restrictions ?? 'Both',
+          waiting_period_days: p.generalRules.waiting_period_days ?? 0,
+        }
+      : {
+          annual_limit: 0,
+          deductible: 0,
+          out_of_pocket_max: 0,
+          network_restrictions: 'Both',
+          waiting_period_days: 0,
+        };
+
+    return {
+      plan_id: p.hashId || p.id,
+      plan_name: p.name || '',
+      plan_tier: p.tier || '',
+      regions: p.regions || [],
+      currency: p.currency || 'USD',
+      benefits: {
+        general_rules: generalRules,
+        encounter_specific: benefits,
+      },
+    } as FrontendPlan;
+  });
+
+  return {
+    id: raw.hashId || raw.id,
+    insurer: {
+      name: raw.insurerName || '',
+      description: '',
+      internal_code: raw.insurerCode || '',
+      regulator_assigned_code: '',
+    },
+    product: {
+      name: raw.productName || '',
+      description: '',
+      internal_code: raw.productCode || '',
+      regulator_assigned_code: '',
+    },
+    plans,
+    current_stage: STAGE_MAP[raw.currentStage] || 'insurer_details',
+    status: raw.status === 'review' ? 'in_review' : (raw.status || 'draft'),
+    created_at: raw.createdAt,
+    updated_at: raw.updatedAt,
+  };
 }
 
 export const pcg4ConfiguratorApi = {
@@ -151,7 +315,7 @@ export const pcg4ConfiguratorApi = {
     api.post(`${orgBase(orgId)}/configurations`, data).then((r) => r.data),
 
   getConfig: (orgId: string, configId: string): Promise<FullConfig> =>
-    api.get(`${orgBase(orgId)}/configurations/${configId}`).then((r) => r.data),
+    api.get(`${orgBase(orgId)}/configurations/${configId}`).then((r) => mapBackendConfig(r.data)),
 
   updateStage: (
     orgId: string,
@@ -216,7 +380,7 @@ export const pcg4ConfiguratorApi = {
   // ---- Taxonomies ----
 
   getTaxonomies: (orgId: string): Promise<EncounterCategory[]> =>
-    api.get(`/api/v1/O/${orgId}/taxonomies`).then((r) => {
+    api.get(`/api/app/pcg4/v1/O/${orgId}/taxonomies`).then((r) => {
       const data = r.data?.data || r.data || [];
       // Find the "Healthcare Encounter Types" taxonomy
       const taxonomy = Array.isArray(data)

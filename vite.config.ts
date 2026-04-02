@@ -58,10 +58,76 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api\/customer/, ''),
       },
-      '/api/admin-console': {
+      '/api/unified-console': {
         target: 'http://localhost:3020',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\/admin-console/, ''),
+        rewrite: (path) => path.replace(/^\/api\/unified-console/, ''),
+      },
+      '/api/app/pcg4': {
+        target: 'http://localhost:3011',
+        changeOrigin: true,
+      },
+      '/api/chat': {
+        target: 'http://localhost:3108',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/chat/, ''),
+      },
+      '/api/rtc': {
+        target: 'http://localhost:3107',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/rtc/, ''),
+      },
+      '/api/uw-workflow': {
+        target: 'http://localhost:3115',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/uw-workflow/, ''),
+      },
+      '/api/hi-decisioning': {
+        target: 'http://localhost:3116',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/hi-decisioning/, ''),
+      },
+      '/api/hi-quotation': {
+        target: 'http://localhost:3117',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/hi-quotation/, ''),
+      },
+      '/api/mi-quotation': {
+        target: 'http://localhost:3123',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/mi-quotation/, ''),
+      },
+      '/api/product-pricing': {
+        target: 'http://localhost:3125',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/product-pricing/, ''),
+      },
+      '/api/form-builder': {
+        target: 'http://localhost:3114',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/form-builder/, ''),
+      },
+      '/api/notification': {
+        target: 'http://localhost:3026',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/notification/, ''),
+      },
+      '/api/jayna': {
+        target: 'http://localhost:3028',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/jayna/, ''),
+      },
+      '/socket.io/chat': {
+        target: 'http://localhost:3108',
+        changeOrigin: true,
+        ws: true,
+        rewrite: (path) => path.replace(/^\/socket\.io\/chat/, '/socket.io'),
+      },
+      '/socket.io/rtc': {
+        target: 'http://localhost:3107',
+        changeOrigin: true,
+        ws: true,
+        rewrite: (path) => path.replace(/^\/socket\.io\/rtc/, '/socket.io'),
       },
     },
   },

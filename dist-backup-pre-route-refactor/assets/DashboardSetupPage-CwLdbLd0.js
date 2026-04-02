@@ -1,0 +1,1 @@
+import{j as a,au as t}from"./index-2_yt5QN_.js";import{M as e}from"./ModuleSetupPage-yYElFy0s.js";import"./heart-C62eH8e6.js";import"./circle-check-C4OCTQNc.js";function p(){return a.jsx(e,{moduleId:"dashboard",moduleName:"Dashboard",icon:t,seedEndpoint:"/api/identity/api/v1/G/dashboard/seed",healthEndpoint:"/api/identity/api/v1/G/identity/health"})}export{p as default};

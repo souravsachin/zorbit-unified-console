@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import React, { useState, useMemo } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import {
   ChevronRight,
   ChevronDown,
@@ -50,25 +50,94 @@ import {
   Calculator,
   Scale,
   FormInput,
+  Info,
+  Library,
+  GitCompare,
+  Rocket,
+  Banknote,
+  HelpCircle,
+  LifeBuoy,
+  Upload,
+  Fingerprint,
+  Compass,
+  Radio,
+  LockKeyhole,
+  Cpu,
+  Boxes,
+  EyeOff,
+  UsersRound,
+  Headset,
+  HeartPulse,
+  Car,
+  FileWarning,
+  Wallet,
+  BarChart3,
+  Zap,
+  Stethoscope,
+  ClipboardCheck,
+  Receipt,
+  Contact,
+  Package,
+  FileCheck,
+  Gavel,
+  Activity,
+  Clock,
+  Sparkles,
   type LucideIcon,
 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { useMenu } from './useMenu';
 import { MenuSource } from './menuApi';
 
-// Map Material Design icon names (from navigation service) to lucide-react components
+// ─── Section accent colors ───────────────────────────────────────────
+// Each section gets a unique accent color for its header border, icons, and active state.
+// Keyed by lowercase section label.
+const SECTION_COLORS: Record<string, { light: string; dark: string; border: string; bg: string; darkBg: string }> = {
+  dashboard:          { light: '#3b82f6', dark: '#60a5fa', border: '#3b82f6', bg: 'rgba(59,130,246,0.08)',  darkBg: 'rgba(59,130,246,0.15)' },
+  identity:           { light: '#10b981', dark: '#34d399', border: '#10b981', bg: 'rgba(16,185,129,0.08)', darkBg: 'rgba(16,185,129,0.15)' },
+  authorization:      { light: '#f59e0b', dark: '#fbbf24', border: '#f59e0b', bg: 'rgba(245,158,11,0.08)', darkBg: 'rgba(245,158,11,0.15)' },
+  navigation:         { light: '#8b5cf6', dark: '#a78bfa', border: '#8b5cf6', bg: 'rgba(139,92,246,0.08)', darkBg: 'rgba(139,92,246,0.15)' },
+  messaging:          { light: '#06b6d4', dark: '#22d3ee', border: '#06b6d4', bg: 'rgba(6,182,212,0.08)',  darkBg: 'rgba(6,182,212,0.15)' },
+  audit:              { light: '#f97316', dark: '#fb923c', border: '#f97316', bg: 'rgba(249,115,22,0.08)', darkBg: 'rgba(249,115,22,0.15)' },
+  'pii vault':        { light: '#ef4444', dark: '#f87171', border: '#ef4444', bg: 'rgba(239,68,68,0.08)',  darkBg: 'rgba(239,68,68,0.15)' },
+  settings:           { light: '#6b7280', dark: '#9ca3af', border: '#6b7280', bg: 'rgba(107,114,128,0.08)',darkBg: 'rgba(107,114,128,0.15)' },
+  admin:              { light: '#475569', dark: '#94a3b8', border: '#475569', bg: 'rgba(71,85,105,0.08)',  darkBg: 'rgba(71,85,105,0.15)' },
+  products:           { light: '#14b8a6', dark: '#2dd4bf', border: '#14b8a6', bg: 'rgba(20,184,166,0.08)', darkBg: 'rgba(20,184,166,0.15)' },
+  'form builder':     { light: '#6366f1', dark: '#818cf8', border: '#6366f1', bg: 'rgba(99,102,241,0.08)', darkBg: 'rgba(99,102,241,0.15)' },
+  'pii showcase':     { light: '#f43f5e', dark: '#fb7185', border: '#f43f5e', bg: 'rgba(244,63,94,0.08)',  darkBg: 'rgba(244,63,94,0.15)' },
+  directory:          { light: '#0ea5e9', dark: '#38bdf8', border: '#0ea5e9', bg: 'rgba(14,165,233,0.08)', darkBg: 'rgba(14,165,233,0.15)' },
+  'support center':   { light: '#a855f7', dark: '#c084fc', border: '#a855f7', bg: 'rgba(168,85,247,0.08)',darkBg: 'rgba(168,85,247,0.15)' },
+  'hi quotation':      { light: '#22c55e', dark: '#4ade80', border: '#22c55e', bg: 'rgba(34,197,94,0.08)',  darkBg: 'rgba(34,197,94,0.15)' },
+  'uw workflow':       { light: '#f97316', dark: '#fb923c', border: '#f97316', bg: 'rgba(249,115,22,0.08)', darkBg: 'rgba(249,115,22,0.15)' },
+  'hi decisioning':    { light: '#8b5cf6', dark: '#a78bfa', border: '#8b5cf6', bg: 'rgba(139,92,246,0.08)', darkBg: 'rgba(139,92,246,0.15)' },
+  'motor insurance':   { light: '#3b82f6', dark: '#60a5fa', border: '#3b82f6', bg: 'rgba(59,130,246,0.08)', darkBg: 'rgba(59,130,246,0.15)' },
+  'mi quotation':      { light: '#3b82f6', dark: '#60a5fa', border: '#3b82f6', bg: 'rgba(59,130,246,0.08)', darkBg: 'rgba(59,130,246,0.15)' },
+  claims:             { light: '#ef4444', dark: '#f87171', border: '#ef4444', bg: 'rgba(239,68,68,0.08)',  darkBg: 'rgba(239,68,68,0.15)' },
+  fees:               { light: '#f59e0b', dark: '#fbbf24', border: '#f59e0b', bg: 'rgba(245,158,11,0.08)', darkBg: 'rgba(245,158,11,0.15)' },
+  'product pricing':  { light: '#0d9488', dark: '#2dd4bf', border: '#0d9488', bg: 'rgba(13,148,136,0.08)', darkBg: 'rgba(13,148,136,0.15)' },
+  'voice engine':     { light: '#ec4899', dark: '#f472b6', border: '#ec4899', bg: 'rgba(236,72,153,0.08)', darkBg: 'rgba(236,72,153,0.15)' },
+  'jayna ai':         { light: '#7c3aed', dark: '#a78bfa', border: '#7c3aed', bg: 'rgba(124,58,237,0.08)', darkBg: 'rgba(124,58,237,0.15)' },
+};
+
+const DEFAULT_COLOR = { light: '#6b7280', dark: '#9ca3af', border: '#6b7280', bg: 'rgba(107,114,128,0.08)', darkBg: 'rgba(107,114,128,0.15)' };
+
+function getSectionColor(label: string) {
+  return SECTION_COLORS[label.toLowerCase()] || DEFAULT_COLOR;
+}
+
+// ─── Icon map ────────────────────────────────────────────────────────
 const ICON_MAP: Record<string, LucideIcon> = {
-  // Section icons
-  dashboard: LayoutDashboard,
-  person: UserCircle,
-  security: Shield,
-  menu: Navigation,
-  email: Mail,
+  // Section icons — distinctive per domain
+  dashboard: BarChart3,
+  person: Fingerprint,
+  security: ShieldCheck,
+  menu: Compass,
+  email: Radio,
   fact_check: ScrollText,
-  enhanced_encryption: ShieldAlert,
-  settings: Settings,
-  admin_panel_settings: SlidersHorizontal,
-  inventory_2: Box,
+  enhanced_encryption: LockKeyhole,
+  settings: SlidersHorizontal,
+  admin_panel_settings: Cpu,
+  inventory_2: Boxes,
 
   // Dashboard items
   visibility: Eye,
@@ -86,18 +155,19 @@ const ICON_MAP: Record<string, LucideIcon> = {
   route: Route,
 
   // Messaging items
-  topic: MessageSquare,
+  topic: Zap,
   receipt_long: ReceiptText,
 
   // Audit items
   history: History,
 
   // PII Vault items
-  vpn_key: KeyRound,
+  vpn_key: LockKeyhole,
 
   // Settings items
   tune: Wrench,
   lock: KeySquare,
+  'shield-check': ShieldCheck,
 
   // Admin items
   hub: Server,
@@ -111,7 +181,70 @@ const ICON_MAP: Record<string, LucideIcon> = {
   rule: Scale,
   dynamic_form: FormInput,
 
-  // Legacy/alias names (backwards compat with older menu data)
+  // PCG4 / app menu icons
+  info: Info,
+  library_books: Library,
+  compare: GitCompare,
+  rocket_launch: Rocket,
+  payments: Banknote,
+  help: HelpCircle,
+  life_buoy: LifeBuoy,
+  support: Headset,
+  upload: Upload,
+
+  // Extended domain icons
+  fingerprint: Fingerprint,
+  compass: Compass,
+  radio: Radio,
+  lock_keyhole: LockKeyhole,
+  eye_off: EyeOff,
+  users_round: UsersRound,
+  headset: Headset,
+  heart_pulse: HeartPulse,
+  stethoscope: Stethoscope,
+  car: Car,
+  file_warning: FileWarning,
+  wallet: Wallet,
+  clipboard_check: ClipboardCheck,
+  receipt: Receipt,
+  contact: Contact,
+  package: Package,
+  file_check: FileCheck,
+  gavel: Gavel,
+  activity: Activity,
+
+  // Form Builder items
+  form_input: FormInput,
+  form_templates: ClipboardList,
+  form_submissions: ClipboardCheck,
+  form_create: PenLine,
+
+  // Insurance / UW workflow icons
+  health_insurance: HeartPulse,
+  motor_insurance: Car,
+  add_circle: PenLine,
+  assignment_ind: UserCircle,
+  check_circle: FileCheck,
+  data_object: Box,
+  fiber_new: Zap,
+  help_outline: HelpCircle,
+  list_alt: List,
+  menu_book: Library,
+  payment: CreditCard,
+  pending: Clock,
+  question_answer: MessageSquare,
+  quiz: HelpCircle,
+  speed: Activity,
+  table_chart: BarChart3,
+  thumb_down: ShieldAlert,
+  thumb_up: FileCheck,
+  verified: FileCheck,
+
+  // Voice Engine / Jayna icons
+  sparkles: Sparkles,
+  'play': Play,
+
+  // Legacy/alias names
   users: Users,
   building: Building2,
   organizations: Building2,
@@ -121,9 +254,9 @@ const ICON_MAP: Record<string, LucideIcon> = {
   article: ScrollText,
   audit: ScrollText,
   mail: Mail,
-  messaging: Mail,
-  navigation: Navigation,
-  pii: ShieldAlert,
+  messaging: Radio,
+  navigation: Compass,
+  pii: LockKeyhole,
   description: FileText,
   docs: FileText,
   play_arrow: Play,
@@ -132,7 +265,7 @@ const ICON_MAP: Record<string, LucideIcon> = {
   server: Server,
   gauge: Gauge,
   inventory: Box,
-  products: Box,
+  products: Boxes,
   work: Briefcase,
 };
 
@@ -140,11 +273,36 @@ function getIcon(iconName: string): LucideIcon {
   return ICON_MAP[iconName] || LayoutDashboard;
 }
 
+/** Map section labels for display — allows renaming without DB changes */
+const SECTION_LABEL_MAP: Record<string, string> = {
+  'Retail Insurance': 'Health Insurance \u2014 Retail',
+};
+
+/** Map section icon overrides by label — ensures distinctive icons */
+const SECTION_ICON_OVERRIDE: Record<string, LucideIcon> = {
+  'Retail Insurance': HeartPulse,
+  'Health Insurance \u2014 Retail': HeartPulse,
+  'Motor Insurance': Car,
+  'Form Builder': FormInput,
+  'Products': Boxes,
+  'Claims': FileWarning,
+  'Fees': Wallet,
+  'Directory': Contact,
+  'Support Center': Headset,
+  'PII Showcase': EyeOff,
+};
+
+function getSectionLabel(label: string): string {
+  return SECTION_LABEL_MAP[label] || label;
+}
+
+function getSectionIcon(label: string, iconName: string): LucideIcon {
+  return SECTION_ICON_OVERRIDE[label] || ICON_MAP[iconName] || LayoutDashboard;
+}
+
 // Layout constants — icons centered in the compact column (60px)
-// Icon column: 20px left pad + 18px icon = icon center at ~29px
-// Text starts at 64px — fully hidden when aside is 60px wide
-const ICON_LEFT_PAD = 'pl-5'; // 20px — centers 18px icon in 60px strip
-const TEXT_LEFT_GAP = 'ml-7'; // 28px — pushes text start past 60px
+const ICON_LEFT_PAD = 'pl-5';
+const TEXT_LEFT_GAP = 'ml-7';
 
 interface HamburgerMenuProps {
   open: boolean;
@@ -177,11 +335,29 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ open, onClose, isOverlay,
 
   const [showSourceToggle, setShowSourceToggle] = useState(false);
 
+  // Detect dark mode for inline styles
+  const isDark = useMemo(() => {
+    if (typeof window === 'undefined') return false;
+    return document.documentElement.classList.contains('dark');
+  }, []);
+
+  const stripOrgPrefix = (path: string) => path.replace(/^\/(O|org)\/[^/]+/, '');
+
   const isRouteActive = (route: string) => {
     if (!route) return false;
-    const normalizedRoute = route.replace(/\/$/, '') || '/';
-    const normalizedPath = location.pathname.replace(/\/$/, '') || '/';
-    return normalizedPath === normalizedRoute || normalizedPath.startsWith(normalizedRoute + '/');
+    const r = stripOrgPrefix(route).replace(/\/$/, '') || '/';
+    const p = stripOrgPrefix(location.pathname).replace(/\/$/, '') || '/';
+    // Exact match — prevents overlapping highlights
+    // (e.g. /dashboard matching both "View Dashboard" and "Dashboard Designer")
+    return p === r || p === r + '/';
+  };
+
+  /** Loose match for section-level highlighting (section stays accented when any child page is open) */
+  const isRouteBelongsToSection = (route: string) => {
+    if (!route) return false;
+    const r = stripOrgPrefix(route).replace(/\/$/, '') || '/';
+    const p = stripOrgPrefix(location.pathname).replace(/\/$/, '') || '/';
+    return p === r || p.startsWith(r + '/');
   };
 
   const getInitials = (name: string) => {
@@ -203,54 +379,54 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ open, onClose, isOverlay,
         />
       )}
 
-      {/* Sidebar — width animates, content inside is always 240px and gets cropped */}
+      {/* Sidebar */}
       <aside
         style={{ width: open ? widthPx : 0 }}
         className={`
           ${isOverlay ? 'fixed top-0 left-0 z-50' : 'relative z-0'}
-          h-full bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700
+          h-full bg-white dark:bg-gray-900 border-r border-gray-200/80 dark:border-gray-700/60
           flex flex-col
           transition-[width] duration-300 ease-in-out
           ${isOverlay && !open ? '-translate-x-full' : 'translate-x-0'}
           overflow-hidden
+          shadow-[2px_0_8px_-2px_rgba(0,0,0,0.06)] dark:shadow-[2px_0_8px_-2px_rgba(0,0,0,0.3)]
         `}
       >
-        {/* Inner container — always 240px wide, never changes. The aside crops it. */}
         <div className="flex flex-col h-full" style={{ width: 240, minWidth: 240 }}>
 
           {/* Header: Logo */}
-          <div className={`flex items-center h-14 ${ICON_LEFT_PAD} border-b border-gray-200 dark:border-gray-700 shrink-0`}>
-            <div className="w-7 h-7 bg-primary-600 rounded-lg flex items-center justify-center shrink-0">
+          <div className={`flex items-center h-14 ${ICON_LEFT_PAD} border-b border-gray-100 dark:border-gray-800 shrink-0`}>
+            <div className="w-7 h-7 bg-gradient-to-br from-primary-500 to-primary-700 rounded-lg flex items-center justify-center shrink-0 shadow-sm">
               <span className="text-white font-bold text-xs">Z</span>
             </div>
-            <span className={`font-bold text-lg ${TEXT_LEFT_GAP} whitespace-nowrap`}>Zorbit</span>
+            <span className={`font-bold text-lg ${TEXT_LEFT_GAP} whitespace-nowrap bg-gradient-to-r from-primary-600 to-primary-500 bg-clip-text text-transparent dark:from-primary-400 dark:to-primary-300`}>Zorbit</span>
           </div>
 
           {/* User profile */}
           {user && (
-            <div className={`py-2.5 ${ICON_LEFT_PAD} pr-3 border-b border-gray-200 dark:border-gray-700 shrink-0`}>
+            <div className={`py-2.5 ${ICON_LEFT_PAD} pr-3 border-b border-gray-100 dark:border-gray-800 shrink-0`}>
               <div className="flex items-center">
-                <div className="w-7 h-7 bg-primary-100 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300 rounded-full flex items-center justify-center text-[11px] font-semibold shrink-0">
+                <div className="w-7 h-7 bg-gradient-to-br from-primary-400 to-primary-600 text-white rounded-full flex items-center justify-center text-[11px] font-semibold shrink-0 shadow-sm">
                   {getInitials(user.displayName || user.email)}
                 </div>
                 <div className={`min-w-0 flex-1 ${TEXT_LEFT_GAP}`}>
-                  <p className="text-sm font-medium truncate">{user.displayName || user.email}</p>
+                  <p className="text-sm font-medium truncate text-gray-800 dark:text-gray-200">{user.displayName || user.email}</p>
                   <div className="flex items-center space-x-1.5 mt-0.5">
                     <span className="inline-block px-1.5 py-0.5 text-[10px] font-medium bg-primary-100 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300 rounded">
                       admin
                     </span>
-                    <span className="text-[10px] text-gray-400 truncate">{orgId}</span>
+                    <span className="text-[10px] text-gray-400 dark:text-gray-500 truncate">{orgId}</span>
                   </div>
                 </div>
               </div>
             </div>
           )}
 
-          {/* Toolbar — drawer toggle + lock first (visible in compact), gap, then expand/collapse */}
-          <div className="flex items-center px-2 py-1.5 border-b border-gray-100 dark:border-gray-700/50 shrink-0">
+          {/* Toolbar */}
+          <div className="flex items-center px-2 py-1.5 border-b border-gray-100 dark:border-gray-800/60 shrink-0">
             <button
               onClick={toggleCompact}
-              className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
+              className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700/60 rounded transition-colors text-gray-500 dark:text-gray-400"
               title={isCompact ? 'Expand sidebar' : 'Collapse to icons'}
             >
               {isCompact ? <PanelLeftOpen size={14} /> : <PanelLeftClose size={14} />}
@@ -260,26 +436,25 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ open, onClose, isOverlay,
               className={`p-1 rounded transition-colors ${
                 pinned
                   ? 'bg-primary-50 text-primary-600 dark:bg-primary-900/30 dark:text-primary-400'
-                  : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-400'
+                  : 'hover:bg-gray-100 dark:hover:bg-gray-700/60 text-gray-400'
               }`}
               title={pinned ? 'Unlock sidebar (drawer mode)' : 'Lock sidebar open'}
             >
               {pinned ? <Lock size={13} /> : <Unlock size={13} />}
             </button>
 
-            {/* Spacer */}
             <div className="flex-1" />
 
             <button
               onClick={collapseAll}
-              className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
+              className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700/60 rounded transition-colors text-gray-500 dark:text-gray-400"
               title="Collapse all sections"
             >
               <ChevronsUp size={14} />
             </button>
             <button
               onClick={expandAll}
-              className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
+              className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700/60 rounded transition-colors text-gray-500 dark:text-gray-400"
               title="Expand all sections"
             >
               <ChevronsDown size={14} />
@@ -287,7 +462,7 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ open, onClose, isOverlay,
           </div>
 
           {/* Menu sections */}
-          <nav className="flex-1 overflow-y-auto overflow-x-hidden py-2">
+          <nav className="flex-1 overflow-y-auto overflow-x-hidden py-1 scrollbar-thin scrollbar-thumb-gray-200 dark:scrollbar-thumb-gray-700">
             {loading && sections.length === 0 && (
               <div className="flex items-center justify-center py-8 text-gray-400">
                 <Loader2 size={20} className="animate-spin" />
@@ -312,59 +487,116 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ open, onClose, isOverlay,
             )}
 
             {sections.map((section, idx) => {
-              const SectionIcon = getIcon(section.icon);
+              const displayLabel = getSectionLabel(section.label);
+              const SectionIcon = getSectionIcon(section.label, section.icon);
               const collapsed = isSectionCollapsed(section.id);
-              const hasActiveItem = section.items.some((item) => isRouteActive(item.route));
+              const hasActiveItem = section.items.some((item) => isRouteBelongsToSection(item.route));
+              const color = getSectionColor(displayLabel);
+              const accentColor = isDark ? color.dark : color.light;
 
               return (
                 <div key={section.id}>
-                  {/* Section separator */}
+                  {/* Section separator — colored line visible in both compact and expanded */}
                   {idx > 0 && (
-                    <div className="mx-3 my-1.5 border-t border-gray-100 dark:border-gray-700/40" />
+                    <div className="mx-3 my-2">
+                      <div className="h-px rounded-full" style={{ backgroundColor: color.border, opacity: 0.25 }} />
+                    </div>
                   )}
-                  {/* Section header — icon at fixed left, text beyond 60px crop line */}
+
+                  {/* Section header */}
                   <button
                     onClick={() => toggleSection(section.id)}
                     className={`
-                      w-full flex items-center ${ICON_LEFT_PAD} pr-3 py-2
-                      text-xs font-semibold uppercase tracking-wider
-                      ${hasActiveItem
-                        ? 'text-primary-600 dark:text-primary-400'
-                        : 'text-gray-400 dark:text-gray-500'}
-                      hover:text-gray-600 dark:hover:text-gray-300 transition-colors
+                      w-full flex items-center pr-3 py-2 group
+                      text-[11px] font-bold uppercase tracking-widest
+                      transition-all duration-200
                     `}
-                    title={section.label}
+                    style={{
+                      paddingLeft: 20,
+                      borderLeft: `3px solid ${color.border}`,
+                      color: hasActiveItem ? accentColor : (isDark ? '#9ca3af' : '#6b7280'),
+                    }}
+                    title={displayLabel}
+                    onMouseEnter={(e) => {
+                      (e.currentTarget as HTMLButtonElement).style.color = accentColor;
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!hasActiveItem) {
+                        (e.currentTarget as HTMLButtonElement).style.color = isDark ? '#9ca3af' : '#6b7280';
+                      }
+                    }}
                   >
-                    <SectionIcon size={16} className="shrink-0" />
-                    <span className={`${TEXT_LEFT_GAP} truncate whitespace-nowrap flex-1 text-left`}>{section.label}</span>
-                    {collapsed ? <ChevronRight size={14} className="shrink-0 ml-1" /> : <ChevronDown size={14} className="shrink-0 ml-1" />}
+                    <SectionIcon
+                      size={16}
+                      className="shrink-0 transition-colors duration-200"
+                      style={{ color: accentColor }}
+                    />
+                    <span className={`${TEXT_LEFT_GAP} truncate whitespace-nowrap flex-1 text-left`}>
+                      {displayLabel}
+                    </span>
+                    {collapsed
+                      ? <ChevronRight size={14} className="shrink-0 ml-1 opacity-50" />
+                      : <ChevronDown size={14} className="shrink-0 ml-1 opacity-50" />}
                   </button>
 
                   {/* Section items */}
                   {!collapsed && (
-                    <div className="space-y-0.5">
+                    <div
+                      className="space-y-px pb-0.5"
+                      style={{
+                        transition: 'max-height 0.25s ease-in-out',
+                      }}
+                    >
                       {section.items.map((item) => {
                         const ItemIcon = getIcon(item.icon);
                         const active = isRouteActive(item.route);
 
                         return (
-                          <NavLink
+                          <Link
                             key={item.id}
-                            to={item.route}
+                            to={stripOrgPrefix(item.route)}
                             onClick={() => {
                               if (isOverlay) onClose();
                             }}
                             title={item.label}
                             className={`
-                              flex items-center ${ICON_LEFT_PAD} pr-3 py-2 text-sm
+                              flex items-center pr-3 py-[7px] text-[13px] group/item
+                              transition-all duration-150
                               ${active
-                                ? 'bg-primary-50 text-primary-700 dark:bg-primary-900/30 dark:text-primary-300 font-medium'
-                                : 'text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700/50'}
+                                ? 'font-medium'
+                                : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'}
                             `}
+                            style={{
+                              paddingLeft: 24,
+                              borderLeft: active ? `3px solid ${color.border}` : '3px solid transparent',
+                              backgroundColor: active
+                                ? (isDark ? color.darkBg : color.bg)
+                                : undefined,
+                              color: active ? accentColor : undefined,
+                            }}
+                            onMouseEnter={(e) => {
+                              if (!active) {
+                                (e.currentTarget as HTMLAnchorElement).style.backgroundColor =
+                                  isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.03)';
+                              }
+                            }}
+                            onMouseLeave={(e) => {
+                              if (!active) {
+                                (e.currentTarget as HTMLAnchorElement).style.backgroundColor = '';
+                              }
+                            }}
                           >
-                            <ItemIcon size={18} className="shrink-0" />
-                            <span className={`${TEXT_LEFT_GAP} truncate whitespace-nowrap`}>{item.label}</span>
-                          </NavLink>
+                            <ItemIcon
+                              size={16}
+                              className="shrink-0 transition-colors duration-150"
+                              style={{
+                                color: active ? accentColor : (isDark ? '#6b7280' : '#9ca3af'),
+                              }}
+                            />
+                            <span className={`${TEXT_LEFT_GAP} truncate whitespace-nowrap`}>
+                              {item.label}
+                            </span>
+                          </Link>
                         );
                       })}
                     </div>
@@ -375,13 +607,14 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ open, onClose, isOverlay,
           </nav>
 
           {/* Bottom: source + version info */}
-          <div className={`border-t border-gray-200 dark:border-gray-700 shrink-0 ${ICON_LEFT_PAD} pr-3 py-2`}>
-            {/* Source indicator */}
+          <div className={`border-t border-gray-100 dark:border-gray-800 shrink-0 ${ICON_LEFT_PAD} pr-3 py-2`}>
             <button
               onClick={() => setShowSourceToggle(!showSourceToggle)}
-              className="flex items-center text-[11px] text-gray-400 hover:text-gray-500 transition-colors"
+              className="flex items-center text-[11px] text-gray-400 hover:text-gray-500 dark:text-gray-500 dark:hover:text-gray-400 transition-colors"
             >
-              {menuSource === 'database' ? <Database size={12} className="shrink-0" /> : <FileJson size={12} className="shrink-0" />}
+              {menuSource === 'database'
+                ? <Database size={11} className="shrink-0 opacity-50" />
+                : <FileJson size={11} className="shrink-0 opacity-50" />}
               <span className={`${TEXT_LEFT_GAP} whitespace-nowrap`}>{menuSource}</span>
             </button>
             {showSourceToggle && (
@@ -399,9 +632,9 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ open, onClose, isOverlay,
               </div>
             )}
             {/* Version info */}
-            <div className="flex items-center mt-1 text-[10px] text-gray-300 dark:text-gray-600">
-              <span className="shrink-0 w-[18px] text-center">v</span>
-              <span className={`${TEXT_LEFT_GAP} whitespace-nowrap`}>
+            <div className="flex items-center mt-1.5 text-[10px] text-gray-300 dark:text-gray-600">
+              <span className="shrink-0 w-[18px] text-center opacity-50">v</span>
+              <span className={`${TEXT_LEFT_GAP} whitespace-nowrap font-mono tracking-tight`}>
                 {__APP_VERSION__} &middot; {__BUILD_DATE__} &middot; {__GIT_SHA__}
               </span>
             </div>

@@ -18,9 +18,9 @@ async function bootstrap(): Promise<void> {
   app.enableCors();
 
   const config = new DocumentBuilder()
-    .setTitle('Zorbit Admin Console Server')
+    .setTitle('Zorbit Unified Console Server')
     .setDescription(
-      'Backend APIs for the Zorbit Admin Console including Dashboard Configurator and Demo/Training Engine.',
+      'Backend APIs for the Zorbit Unified Console including Dashboard Configurator and Demo/Training Engine.',
     )
     .setVersion('1.0')
     .addBearerAuth()

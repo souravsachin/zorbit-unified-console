@@ -1,0 +1,1 @@
+import{j as e}from"./index-2_yt5QN_.js";import{M as o}from"./ModuleDeploymentsPage-CPasQPCK.js";import{F as t}from"./file-search-BHhRDNc8.js";import"./globe-D7LLFYaR.js";import"./circle-check-C4OCTQNc.js";import"./git-branch-BOgyZck8.js";function s(){return e.jsx(o,{moduleId:"audit",moduleName:"Audit Service",icon:t})}export{s as default};

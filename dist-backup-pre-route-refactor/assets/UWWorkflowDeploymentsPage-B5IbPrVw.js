@@ -1,0 +1,1 @@
+import{j as o}from"./index-2_yt5QN_.js";import{M as r}from"./ModuleDeploymentsPage-CPasQPCK.js";import{G as e}from"./git-branch-BOgyZck8.js";import"./globe-D7LLFYaR.js";import"./circle-check-C4OCTQNc.js";function p(){return o.jsx(r,{moduleId:"uw-workflow",moduleName:"UW Workflow",icon:e})}export{p as default};

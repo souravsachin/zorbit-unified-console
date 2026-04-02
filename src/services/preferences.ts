@@ -97,6 +97,12 @@ export async function fetchPrefsFromServer(userId: string): Promise<UserPreferen
   const resp = await api.get<UserPreferences>(
     `${API_CONFIG.ADMIN_CONSOLE_URL}/api/v1/U/${userId}/preferences`,
   );
+  // Guard against HTML error pages (e.g. when the backend is down and nginx
+  // returns its default page). If the response is not a valid object, treat
+  // it as unavailable.
+  if (!resp.data || typeof resp.data !== 'object' || typeof resp.data === 'string') {
+    throw new Error('Preferences endpoint returned non-JSON response');
+  }
   return resp.data;
 }
 

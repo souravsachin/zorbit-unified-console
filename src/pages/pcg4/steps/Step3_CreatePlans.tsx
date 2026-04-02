@@ -46,6 +46,8 @@ const Step3_CreatePlans: React.FC<StepProps> = ({
 }) => {
   const [plans, setPlans] = useState<Plan[]>([createNewPlan()]);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
+  const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
     if (configuration?.plans && configuration.plans.length > 0) {
@@ -69,6 +71,11 @@ const Step3_CreatePlans: React.FC<StepProps> = ({
   }, [plans, validate]);
 
   const isValid = plans.length > 0 && Object.keys(errors).length === 0;
+  const showError = (field: string) => (touched[field] || submitted) && errors[field];
+
+  const handleBlur = (field: string) => {
+    setTouched((prev) => ({ ...prev, [field]: true }));
+  };
 
   const handlePlanChange = (index: number, field: keyof Plan, value: unknown) => {
     setPlans((prev) =>
@@ -97,6 +104,7 @@ const Step3_CreatePlans: React.FC<StepProps> = ({
   };
 
   const handleNext = async () => {
+    setSubmitted(true);
     if (!isValid) return;
     await onNext({ plans });
   };
@@ -151,13 +159,14 @@ const Step3_CreatePlans: React.FC<StepProps> = ({
                     placeholder="e.g., Health Plus Gold"
                     value={plan.plan_name}
                     onChange={(e) => handlePlanChange(index, 'plan_name', e.target.value)}
+                    onBlur={() => handleBlur(`${index}_name`)}
                     className={`w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 dark:bg-gray-800 dark:text-gray-100 ${
-                      errors[`${index}_name`]
+                      showError(`${index}_name`)
                         ? 'border-red-500'
                         : 'border-gray-300 dark:border-gray-600'
                     }`}
                   />
-                  {errors[`${index}_name`] && (
+                  {showError(`${index}_name`) && (
                     <p className="text-xs text-red-500">{errors[`${index}_name`]}</p>
                   )}
                 </div>
@@ -170,8 +179,9 @@ const Step3_CreatePlans: React.FC<StepProps> = ({
                   <select
                     value={plan.plan_tier}
                     onChange={(e) => handlePlanChange(index, 'plan_tier', e.target.value)}
+                    onBlur={() => handleBlur(`${index}_tier`)}
                     className={`w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 dark:bg-gray-800 dark:text-gray-100 ${
-                      errors[`${index}_tier`]
+                      showError(`${index}_tier`)
                         ? 'border-red-500'
                         : 'border-gray-300 dark:border-gray-600'
                     }`}
@@ -183,7 +193,7 @@ const Step3_CreatePlans: React.FC<StepProps> = ({
                       </option>
                     ))}
                   </select>
-                  {errors[`${index}_tier`] && (
+                  {showError(`${index}_tier`) && (
                     <p className="text-xs text-red-500">{errors[`${index}_tier`]}</p>
                   )}
                 </div>
@@ -230,7 +240,7 @@ const Step3_CreatePlans: React.FC<StepProps> = ({
                     </label>
                   ))}
                 </div>
-                {errors[`${index}_regions`] && (
+                {showError(`${index}_regions`) && (
                   <p className="text-xs text-red-500">{errors[`${index}_regions`]}</p>
                 )}
               </div>

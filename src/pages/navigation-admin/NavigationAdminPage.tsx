@@ -11,7 +11,7 @@ const NavigationAdminPage: React.FC = () => {
   const [menus, setMenus] = useState<MenuItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
-  const [form, setForm] = useState({ label: '', route: '', icon: '', order: 0 });
+  const [form, setForm] = useState({ label: '', route: '', icon: '', sortOrder: 0, section: '', parentHashId: '', privilegeCode: '' });
   const [creating, setCreating] = useState(false);
 
   const loadMenus = async () => {
@@ -32,10 +32,18 @@ const NavigationAdminPage: React.FC = () => {
     e.preventDefault();
     setCreating(true);
     try {
-      await navigationService.createMenuItem(orgId, { ...form, parentId: null, privileges: [] });
+      await navigationService.createMenuItem(orgId, {
+        label: form.label,
+        route: form.route || undefined,
+        icon: form.icon || undefined,
+        sortOrder: form.sortOrder,
+        section: form.section || undefined,
+        parentHashId: form.parentHashId || undefined,
+        privilegeCode: form.privilegeCode || undefined,
+      } as Partial<MenuItem>);
       toast('Menu item created', 'success');
       setShowCreate(false);
-      setForm({ label: '', route: '', icon: '', order: 0 });
+      setForm({ label: '', route: '', icon: '', sortOrder: 0, section: '', parentHashId: '', privilegeCode: '' });
       loadMenus();
     } catch {
       toast('Failed to create menu item', 'error');
@@ -117,8 +125,16 @@ const NavigationAdminPage: React.FC = () => {
             <input value={form.icon} onChange={(e) => setForm({ ...form, icon: e.target.value })} className="input-field" placeholder="users" />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1">Order</label>
-            <input type="number" value={form.order} onChange={(e) => setForm({ ...form, order: parseInt(e.target.value) || 0 })} className="input-field" />
+            <label className="block text-sm font-medium mb-1">Section</label>
+            <input value={form.section} onChange={(e) => setForm({ ...form, section: e.target.value })} className="input-field" placeholder="main" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">Parent Hash ID</label>
+            <input value={form.parentHashId} onChange={(e) => setForm({ ...form, parentHashId: e.target.value })} className="input-field" placeholder="NAV-92AF (leave empty for top-level)" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">Sort Order</label>
+            <input type="number" value={form.sortOrder} onChange={(e) => setForm({ ...form, sortOrder: parseInt(e.target.value) || 0 })} className="input-field" />
           </div>
           <div className="flex justify-end space-x-3">
             <button type="button" onClick={() => setShowCreate(false)} className="btn-secondary">Cancel</button>

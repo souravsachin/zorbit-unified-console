@@ -3,11 +3,16 @@ import api from './api';
 
 export interface MenuItem {
   id: string;
+  hashId: string;
   label: string;
   route: string;
   icon: string;
   parentId: string | null;
+  parentHashId: string | null;
   order: number;
+  sortOrder: number;
+  section: string;
+  privilegeCode: string;
   privileges: string[];
   children?: MenuItem[];
 }

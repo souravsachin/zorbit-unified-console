@@ -47,7 +47,7 @@ const RolesPage: React.FC = () => {
   };
 
   const columns: Column<Role>[] = [
-    { key: 'id', header: 'Hash ID', render: (r) => <code className="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded">{r.id}</code> },
+    { key: 'id', header: 'Hash ID', render: (r) => <code className="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded">{(r as unknown as { hashId?: string }).hashId || r.id}</code> },
     { key: 'name', header: 'Name' },
     { key: 'description', header: 'Description' },
     {

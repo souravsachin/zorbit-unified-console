@@ -1,0 +1,1 @@
+import{j as e}from"./index-2_yt5QN_.js";import{R as o}from"./RegionalFormPage-B0pzYbUL.js";import"./circle-check-C4OCTQNc.js";import"./send-pqR4H4I5.js";const m=()=>e.jsx(o,{formSlug:"hi-application-uae-v2",regionName:"UAE",regionFlag:"🇦🇪",accentColor:"text-emerald-600 dark:text-emerald-400"});export{m as default};

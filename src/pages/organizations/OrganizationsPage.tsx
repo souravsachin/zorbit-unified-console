@@ -6,10 +6,20 @@ import Modal from '../../components/shared/Modal';
 import { useToast } from '../../components/shared/Toast';
 import { identityService, Organization } from '../../services/identity';
 
+const ORG_TYPES = [
+  'Insurance Company',
+  'Cedent',
+  'Broker',
+  'Reinsurer',
+  'Third Party Administrator (TPA)',
+  'Regulator',
+  'Healthcare Provider',
+] as const;
+
 const columns: Column<Organization>[] = [
-  { key: 'id', header: 'Hash ID', render: (o) => <code className="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded">{o.id}</code> },
+  { key: 'id', header: 'Hash ID', render: (o) => <code className="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded">{o.hashId || o.id}</code> },
   { key: 'name', header: 'Name' },
-  { key: 'slug', header: 'Slug' },
+  { key: 'orgType', header: 'Type', render: (o) => o.orgType || <span className="text-gray-400">—</span> },
   { key: 'status', header: 'Status', render: (o) => <StatusBadge label={o.status || 'active'} /> },
   { key: 'createdAt', header: 'Created', render: (o) => new Date(o.createdAt).toLocaleDateString() },
 ];
@@ -19,7 +29,7 @@ const OrganizationsPage: React.FC = () => {
   const [orgs, setOrgs] = useState<Organization[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
-  const [form, setForm] = useState({ name: '', slug: '' });
+  const [form, setForm] = useState({ name: '', orgType: '' });
   const [creating, setCreating] = useState(false);
 
   const loadOrgs = async () => {
@@ -43,7 +53,7 @@ const OrganizationsPage: React.FC = () => {
       await identityService.createOrganization(form);
       toast('Organization created', 'success');
       setShowCreate(false);
-      setForm({ name: '', slug: '' });
+      setForm({ name: '', orgType: '' });
       loadOrgs();
     } catch {
       toast('Failed to create organization', 'error');
@@ -71,8 +81,13 @@ const OrganizationsPage: React.FC = () => {
             <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="input-field" required />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1">Slug</label>
-            <input value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} className="input-field" placeholder="my-org" required />
+            <label className="block text-sm font-medium mb-1">Organization Type <span className="text-red-500">*</span></label>
+            <select value={form.orgType} onChange={(e) => setForm({ ...form, orgType: e.target.value })} className="input-field" required>
+              <option value="">Select type</option>
+              {ORG_TYPES.map((t) => (
+                <option key={t} value={t}>{t}</option>
+              ))}
+            </select>
           </div>
           <div className="flex justify-end space-x-3">
             <button type="button" onClick={() => setShowCreate(false)} className="btn-secondary">Cancel</button>

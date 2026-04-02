@@ -29,8 +29,8 @@ const WidgetCard: React.FC<WidgetCardProps> = ({ widget, onClick, showEditOverla
       onClick={onClick}
     >
       <div className="px-4 py-2 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between shrink-0">
-        <h3 className="text-sm font-semibold truncate">{widget.title}</h3>
-        <span className="text-xs text-gray-400 uppercase">{widget.type}</span>
+        <h3 className="text-sm font-semibold truncate">{typeof widget.title === 'string' ? widget.title : String(widget.title ?? '')}</h3>
+        <span className="text-xs text-gray-400 uppercase">{typeof widget.type === 'string' ? widget.type : String(widget.type ?? '')}</span>
       </div>
       <div className="flex-1 min-h-0 relative">
         <Renderer widget={widget} />

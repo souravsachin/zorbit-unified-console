@@ -1,0 +1,1 @@
+import{j as e}from"./index-2_yt5QN_.js";import{M as o}from"./ModuleDeploymentsPage-CPasQPCK.js";import{M as s}from"./message-square-Cyx8kTNw.js";import"./globe-D7LLFYaR.js";import"./circle-check-C4OCTQNc.js";import"./git-branch-BOgyZck8.js";function p(){return e.jsx(o,{moduleId:"messaging",moduleName:"Messaging Service",icon:s})}export{p as default};

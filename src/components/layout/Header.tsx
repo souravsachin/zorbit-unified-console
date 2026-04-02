@@ -1,6 +1,7 @@
 import React from 'react';
 import { Menu, Sun, Moon, LogOut } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
+import NotificationBell from '../notifications/NotificationBell';
 
 interface HeaderProps {
   onMenuToggle: () => void;
@@ -26,6 +27,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle, darkMode, onDarkModeToggl
         )}
       </div>
       <div className="flex items-center space-x-3">
+        <NotificationBell />
         <button
           onClick={onDarkModeToggle}
           className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"

@@ -1,19 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Plus } from 'lucide-react';
+import { Plus, Trash2 } from 'lucide-react';
 import DataTable, { Column } from '../../components/shared/DataTable';
 import StatusBadge from '../../components/shared/StatusBadge';
 import Modal from '../../components/shared/Modal';
 import { useAuth } from '../../hooks/useAuth';
 import { useToast } from '../../components/shared/Toast';
 import { identityService, User } from '../../services/identity';
-
-const columns: Column<User>[] = [
-  { key: 'id', header: 'Hash ID', render: (u) => <code className="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded">{u.id}</code> },
-  { key: 'displayName', header: 'Display Name' },
-  { key: 'organizationId', header: 'Organization' },
-  { key: 'status', header: 'Status', render: (u) => <StatusBadge label={u.status || 'active'} /> },
-  { key: 'createdAt', header: 'Created', render: (u) => new Date(u.createdAt).toLocaleDateString() },
-];
 
 const UsersPage: React.FC = () => {
   const { orgId } = useAuth();
@@ -53,6 +45,40 @@ const UsersPage: React.FC = () => {
       setCreating(false);
     }
   };
+
+  const handleDelete = async (user: User) => {
+    const userId = user.hashId || user.id;
+    if (!confirm(`Delete user "${user.displayName}" (${userId})?`)) return;
+    try {
+      await identityService.deleteUser(orgId, userId);
+      toast('User deleted', 'success');
+      loadUsers();
+    } catch {
+      toast('Failed to delete user', 'error');
+    }
+  };
+
+  const columns: Column<User>[] = [
+    { key: 'hashId', header: 'Hash ID', render: (u) => <code className="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded">{u.hashId || u.id}</code> },
+    { key: 'displayName', header: 'Display Name' },
+    { key: 'organizationHashId', header: 'Organization', render: (u) => <code className="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded">{u.organizationHashId || u.organizationId || '-'}</code> },
+    { key: 'role', header: 'Role', render: (u) => <span className="text-sm">{u.role || '-'}</span> },
+    { key: 'status', header: 'Status', render: (u) => <StatusBadge label={u.status || 'active'} /> },
+    { key: 'createdAt', header: 'Created', render: (u) => new Date(u.createdAt).toLocaleDateString() },
+    {
+      key: 'actions' as keyof User,
+      header: 'Actions',
+      render: (u) => (
+        <button
+          onClick={(e) => { e.stopPropagation(); handleDelete(u); }}
+          className="p-1 hover:bg-red-100 dark:hover:bg-red-900/30 rounded"
+          title="Delete user"
+        >
+          <Trash2 size={14} className="text-red-500" />
+        </button>
+      ),
+    },
+  ];
 
   return (
     <div className="space-y-4">

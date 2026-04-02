@@ -1,0 +1,1 @@
+import{j as o,y as t}from"./index-2_yt5QN_.js";import{M as e}from"./ModuleDeploymentsPage-CPasQPCK.js";import"./globe-D7LLFYaR.js";import"./circle-check-C4OCTQNc.js";import"./git-branch-BOgyZck8.js";function u(){return o.jsx(e,{moduleId:"pii-vault",moduleName:"PII Vault",icon:t})}export{u as default};

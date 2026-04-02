@@ -1,0 +1,1 @@
+import{j as o}from"./index-2_yt5QN_.js";import{M as i}from"./ModuleDeploymentsPage-CPasQPCK.js";import{B as e}from"./brain-BKjFNcVS.js";import"./globe-D7LLFYaR.js";import"./circle-check-C4OCTQNc.js";import"./git-branch-BOgyZck8.js";function a(){return o.jsx(i,{moduleId:"hi-decisioning",moduleName:"HI Decisioning",icon:e})}export{a as default};

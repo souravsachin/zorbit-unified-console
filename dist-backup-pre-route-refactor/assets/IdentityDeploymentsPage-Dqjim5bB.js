@@ -1,0 +1,1 @@
+import{j as e,O as t}from"./index-2_yt5QN_.js";import{M as o}from"./ModuleDeploymentsPage-CPasQPCK.js";import"./globe-D7LLFYaR.js";import"./circle-check-C4OCTQNc.js";import"./git-branch-BOgyZck8.js";function s(){return e.jsx(o,{moduleId:"identity",moduleName:"Identity Service",icon:t})}export{s as default};

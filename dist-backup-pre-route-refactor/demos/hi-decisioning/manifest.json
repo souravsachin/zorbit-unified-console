@@ -1,0 +1,16 @@
+[
+  {
+    "file": "hi-decisioning-overview.mp4",
+    "title": "HI Decisioning Overview",
+    "thumbnail": "",
+    "timestamp": "2026-03-18",
+    "duration": 120,
+    "chapters": [
+      { "title": "Introduction", "startMs": 0 },
+      { "title": "Rule Engine", "startMs": 15000 },
+      { "title": "Condition Builder", "startMs": 40000 },
+      { "title": "Action Types", "startMs": 65000 },
+      { "title": "Decision Audit", "startMs": 90000 }
+    ]
+  }
+]

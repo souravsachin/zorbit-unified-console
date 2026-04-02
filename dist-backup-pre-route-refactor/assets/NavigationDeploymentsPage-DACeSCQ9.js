@@ -1,0 +1,1 @@
+import{j as o}from"./index-2_yt5QN_.js";import{M as i}from"./ModuleDeploymentsPage-CPasQPCK.js";import{N as t}from"./navigation-CfMpH4hJ.js";import"./globe-D7LLFYaR.js";import"./circle-check-C4OCTQNc.js";import"./git-branch-BOgyZck8.js";function s(){return o.jsx(i,{moduleId:"navigation",moduleName:"Navigation Service",icon:t})}export{s as default};

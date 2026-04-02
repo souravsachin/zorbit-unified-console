@@ -1,0 +1,7124 @@
+{
+  "date": "2026-04-02T16:24:13.902Z",
+  "totalRoutes": 123,
+  "totalApiCalls": 396,
+  "errors": [
+    {
+      "type": "API-5xx",
+      "route": "/dashboard/guide",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/dashboard/guide",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/dashboard",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/customer/api/v1/O/O-OZPY/customers?limit=1",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/dashboard",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/customer/api/v1/O/O-OZPY/customers?limit=1",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/dashboard",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/dashboard",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/dashboard/designer",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/O/O-OZPY/dashboard/designer",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/dashboard/designer",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/O/O-OZPY/dashboard/designer",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/dashboard/designer",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/dashboard/designer",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/dashboard/setup",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/dashboard/setup",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/dashboard/deployments",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/dashboard/deployments",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/identity/guide",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/identity/guide",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/users",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/users",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/organizations",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/organizations",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/roles",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/roles",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/authorization/guide",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/authorization/guide",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/privileges",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/privileges",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/authorization/setup",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/authorization/setup",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/authorization/deployments",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/authorization/deployments",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/navigation/menus",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/navigation/menus",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/navigation/guide",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/navigation/guide",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/navigation/routes",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/navigation/routes",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/navigation/setup",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/navigation/setup",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/navigation/deployments",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/navigation/deployments",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/messaging/topics",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/messaging/topics",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/messaging/guide",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/messaging/guide",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/messaging/events",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/messaging/events",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/messaging/setup",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/messaging/setup",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/messaging/deployments",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/messaging/deployments",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/audit/guide",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/audit/guide",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/audit/logs",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/audit/logs",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/audit/setup",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/audit/setup",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/audit/deployments",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/audit/deployments",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/pii-vault/guide",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/pii-vault/guide",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/pii-vault/tokens",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/pii-vault/tokens",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/pii-vault/setup",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/pii-vault/setup",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/pii-vault/deployments",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/pii-vault/deployments",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/settings/guide",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/settings/guide",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/settings/general",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/settings/general",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/settings/secrets",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/settings/secrets",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/settings/security",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/settings/security",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/settings/setup",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/settings/setup",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/settings/deployments",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/settings/deployments",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/admin/guide",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/customer/api/v1/O/O-OZPY/customers?limit=1",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/admin/guide",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/customer/api/v1/O/O-OZPY/customers?limit=1",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/admin/guide",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/admin/guide",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/admin/modules",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/admin/modules",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/admin/sitemap",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/admin/sitemap",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/admin/licensing",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/admin/licensing",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/admin/setup",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/admin/setup",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/admin/setup",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/G/admin/health",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/admin/setup",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/G/admin/health",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/admin/deployments",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/admin/deployments",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/app/pcg4/guide",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/app/pcg4/guide",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/app/pcg4/configurations",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/app/pcg4/configurations",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/app/pcg4/configurations-fb",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/app/pcg4/configurations-fb",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/app/pcg4/reference-library",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/app/pcg4/reference-library",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/app/pcg4/coverage-mapper",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/app/pcg4/coverage-mapper",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/app/pcg4/setup",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/app/pcg4/setup",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/app/pcg4/deployments",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/app/pcg4/deployments",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/product-pricing/guide",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/product-pricing/guide",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/product-pricing/rate-tables",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/product-pricing/rate-tables",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/product-pricing/calculator",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/product-pricing/calculator",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/product-pricing/import",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/product-pricing/import",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/product-pricing/setup",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/product-pricing/setup",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/product-pricing/deployments",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/product-pricing/deployments",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/form-builder/guide",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/form-builder/guide",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/form-builder/templates",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/form-builder/templates",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/form-builder/create",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/form-builder/create",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/form-builder/submissions",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/form-builder/submissions",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/form-builder/setup",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/form-builder/setup",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/form-builder/deployments",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/form-builder/deployments",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/support-center/guide",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/support-center/guide",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/support-center",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/support-center",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/support-center/setup",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/support-center/setup",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/support-center/deployments",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/support-center/deployments",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/voice-engine/guide",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/voice-engine/guide",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/voice-engine/demo",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/voice-engine/demo",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/voice-engine/demo",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/voice-engine/api/v1/G/voice/tts/voices?engine=edge-tts",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/voice-engine/setup",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/voice-engine/setup",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/voice-engine/setup",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/voice-engine/api/v1/G/voice/health",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/voice-engine/deployments",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/voice-engine/deployments",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/jayna/guide",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/jayna/guide",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/jayna/agents",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/jayna/agents",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/jayna/agents",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/jayna/api/v1/O/O-OZPY/jayna/agents",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/jayna/workflows",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/jayna/workflows",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/jayna/workflows",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/jayna/api/v1/O/O-OZPY/jayna/workflows",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/jayna/workflows",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/jayna/api/v1/O/O-OZPY/jayna/agents",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/jayna/calls",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/jayna/calls",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/jayna/calls",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/jayna/api/v1/O/O-OZPY/jayna/calls",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/jayna/test-call",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/jayna/test-call",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/jayna/test-call",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/jayna/api/v1/O/O-OZPY/jayna/agents",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/jayna/setup",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/jayna/setup",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/jayna/setup",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/jayna/api/v1/G/jayna/health",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/jayna/deployments",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/jayna/deployments",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/hi-quotation/guide",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/hi-quotation/guide",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/hi-quotation/new",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/hi-quotation/new",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/hi-quotation/quotations",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/hi-quotation/quotations",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/hi-quotation/maf",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/hi-quotation/maf",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/hi-quotation/setup",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/hi-quotation/setup",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/hi-quotation/deployments",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/hi-quotation/deployments",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/uw-workflow/guide",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/uw-workflow/guide",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "API-5xx",
+      "route": "/uw-workflow/wf/new-quotations-l1",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    },
+    {
+      "type": "HTML-LEAK",
+      "route": "/uw-workflow/wf/new-quotations-l1",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0
+    }
+  ],
+  "warnings": [
+    {
+      "type": "LARGE",
+      "route": "/hi-quotation/quotations",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/hi-quotation/api/v1/O/O-OZPY/hi-quotation/quotations",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 108491,
+      "timeMs": 0
+    },
+    {
+      "type": "LARGE",
+      "route": "/hi-quotation/maf",
+      "method": "GET",
+      "url": "https://zorbit.scalatics.com/api/hi-quotation/api/v1/O/O-OZPY/hi-quotation/quotations",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 108491,
+      "timeMs": 0
+    }
+  ],
+  "routes": [
+    {
+      "path": "/dashboard/guide",
+      "label": "Guide",
+      "status": "OK",
+      "apiCallCount": 3,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3356
+    },
+    {
+      "path": "/dashboard",
+      "label": "View Dashboard",
+      "status": "OK",
+      "apiCallCount": 8,
+      "apiErrorCount": 2,
+      "totalTimeMs": 3307
+    },
+    {
+      "path": "/dashboard/designer",
+      "label": "Dashboard Designer",
+      "status": "OK",
+      "apiCallCount": 4,
+      "apiErrorCount": 2,
+      "totalTimeMs": 3287
+    },
+    {
+      "path": "/dashboard/setup",
+      "label": "Setup",
+      "status": "OK",
+      "apiCallCount": 4,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3331
+    },
+    {
+      "path": "/dashboard/deployments",
+      "label": "Deployments",
+      "status": "OK",
+      "apiCallCount": 3,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3381
+    },
+    {
+      "path": "/identity/guide",
+      "label": "Guide",
+      "status": "OK",
+      "apiCallCount": 3,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3378
+    },
+    {
+      "path": "/users",
+      "label": "Users",
+      "status": "OK",
+      "apiCallCount": 4,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3281
+    },
+    {
+      "path": "/organizations",
+      "label": "Organizations",
+      "status": "OK",
+      "apiCallCount": 4,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3283
+    },
+    {
+      "path": "/roles",
+      "label": "Roles",
+      "status": "OK",
+      "apiCallCount": 4,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3281
+    },
+    {
+      "path": "/authorization/guide",
+      "label": "Guide",
+      "status": "OK",
+      "apiCallCount": 3,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3362
+    },
+    {
+      "path": "/privileges",
+      "label": "Privileges",
+      "status": "OK",
+      "apiCallCount": 4,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3346
+    },
+    {
+      "path": "/authorization/setup",
+      "label": "Setup",
+      "status": "OK",
+      "apiCallCount": 4,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3309
+    },
+    {
+      "path": "/authorization/deployments",
+      "label": "Deployments",
+      "status": "OK",
+      "apiCallCount": 3,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3283
+    },
+    {
+      "path": "/navigation/menus",
+      "label": "Menu Items",
+      "status": "OK",
+      "apiCallCount": 4,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3285
+    },
+    {
+      "path": "/navigation/guide",
+      "label": "Guide",
+      "status": "OK",
+      "apiCallCount": 3,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3366
+    },
+    {
+      "path": "/navigation/routes",
+      "label": "Routes",
+      "status": "OK",
+      "apiCallCount": 4,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3283
+    },
+    {
+      "path": "/navigation/setup",
+      "label": "Setup",
+      "status": "OK",
+      "apiCallCount": 4,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3282
+    },
+    {
+      "path": "/navigation/deployments",
+      "label": "Deployments",
+      "status": "OK",
+      "apiCallCount": 3,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3281
+    },
+    {
+      "path": "/messaging/topics",
+      "label": "Topics",
+      "status": "OK",
+      "apiCallCount": 6,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3281
+    },
+    {
+      "path": "/messaging/guide",
+      "label": "Guide",
+      "status": "OK",
+      "apiCallCount": 3,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3356
+    },
+    {
+      "path": "/messaging/events",
+      "label": "Event Log",
+      "status": "OK",
+      "apiCallCount": 4,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3278
+    },
+    {
+      "path": "/messaging/setup",
+      "label": "Setup",
+      "status": "OK",
+      "apiCallCount": 4,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3307
+    },
+    {
+      "path": "/messaging/deployments",
+      "label": "Deployments",
+      "status": "OK",
+      "apiCallCount": 3,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3349
+    },
+    {
+      "path": "/audit/guide",
+      "label": "Guide",
+      "status": "OK",
+      "apiCallCount": 3,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3381
+    },
+    {
+      "path": "/audit/logs",
+      "label": "Audit Logs",
+      "status": "OK",
+      "apiCallCount": 4,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3280
+    },
+    {
+      "path": "/audit/setup",
+      "label": "Setup",
+      "status": "OK",
+      "apiCallCount": 4,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3378
+    },
+    {
+      "path": "/audit/deployments",
+      "label": "Deployments",
+      "status": "OK",
+      "apiCallCount": 3,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3284
+    },
+    {
+      "path": "/pii-vault/guide",
+      "label": "Guide",
+      "status": "OK",
+      "apiCallCount": 3,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3279
+    },
+    {
+      "path": "/pii-vault/tokens",
+      "label": "Token Registry",
+      "status": "OK",
+      "apiCallCount": 3,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3300
+    },
+    {
+      "path": "/pii-vault/setup",
+      "label": "Setup",
+      "status": "OK",
+      "apiCallCount": 4,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3339
+    },
+    {
+      "path": "/pii-vault/deployments",
+      "label": "Deployments",
+      "status": "OK",
+      "apiCallCount": 3,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3304
+    },
+    {
+      "path": "/settings/guide",
+      "label": "Guide",
+      "status": "OK",
+      "apiCallCount": 3,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3285
+    },
+    {
+      "path": "/settings/general",
+      "label": "General Settings",
+      "status": "OK",
+      "apiCallCount": 3,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3283
+    },
+    {
+      "path": "/settings/secrets",
+      "label": "Secrets",
+      "status": "OK",
+      "apiCallCount": 3,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3340
+    },
+    {
+      "path": "/settings/security",
+      "label": "Security (MFA)",
+      "status": "OK",
+      "apiCallCount": 4,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3375
+    },
+    {
+      "path": "/settings/setup",
+      "label": "Setup",
+      "status": "OK",
+      "apiCallCount": 3,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3280
+    },
+    {
+      "path": "/settings/deployments",
+      "label": "Deployments",
+      "status": "OK",
+      "apiCallCount": 3,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3279
+    },
+    {
+      "path": "/admin/guide",
+      "label": "Guide",
+      "status": "OK",
+      "apiCallCount": 8,
+      "apiErrorCount": 2,
+      "totalTimeMs": 3374
+    },
+    {
+      "path": "/admin/modules",
+      "label": "Module Registry",
+      "status": "OK",
+      "apiCallCount": 3,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3282
+    },
+    {
+      "path": "/admin/sitemap",
+      "label": "Platform Sitemap",
+      "status": "OK",
+      "apiCallCount": 4,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3373
+    },
+    {
+      "path": "/admin/licensing",
+      "label": "Licensing",
+      "status": "OK",
+      "apiCallCount": 3,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3295
+    },
+    {
+      "path": "/admin/setup",
+      "label": "Setup",
+      "status": "OK",
+      "apiCallCount": 4,
+      "apiErrorCount": 2,
+      "totalTimeMs": 3281
+    },
+    {
+      "path": "/admin/deployments",
+      "label": "Deployments",
+      "status": "OK",
+      "apiCallCount": 3,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3297
+    },
+    {
+      "path": "/app/pcg4/guide",
+      "label": "Guide",
+      "status": "OK",
+      "apiCallCount": 3,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3282
+    },
+    {
+      "path": "/app/pcg4/configurations",
+      "label": "Configurations",
+      "status": "OK",
+      "apiCallCount": 4,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3332
+    },
+    {
+      "path": "/app/pcg4/configurations-fb",
+      "label": "Configurations (FB)",
+      "status": "OK",
+      "apiCallCount": 4,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3282
+    },
+    {
+      "path": "/app/pcg4/reference-library",
+      "label": "Reference Library",
+      "status": "OK",
+      "apiCallCount": 3,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3374
+    },
+    {
+      "path": "/app/pcg4/coverage-mapper",
+      "label": "Coverage Mapper",
+      "status": "OK",
+      "apiCallCount": 3,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3285
+    },
+    {
+      "path": "/app/pcg4/setup",
+      "label": "Setup",
+      "status": "OK",
+      "apiCallCount": 5,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3349
+    },
+    {
+      "path": "/app/pcg4/deployments",
+      "label": "Deployments",
+      "status": "OK",
+      "apiCallCount": 3,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3403
+    },
+    {
+      "path": "/product-pricing/guide",
+      "label": "Guide",
+      "status": "OK",
+      "apiCallCount": 3,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3291
+    },
+    {
+      "path": "/product-pricing/rate-tables",
+      "label": "Rate Tables",
+      "status": "OK",
+      "apiCallCount": 4,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3364
+    },
+    {
+      "path": "/product-pricing/calculator",
+      "label": "Premium Calculator",
+      "status": "OK",
+      "apiCallCount": 4,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3315
+    },
+    {
+      "path": "/product-pricing/import",
+      "label": "Import Rate Card",
+      "status": "OK",
+      "apiCallCount": 4,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3281
+    },
+    {
+      "path": "/product-pricing/setup",
+      "label": "Setup",
+      "status": "OK",
+      "apiCallCount": 4,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3284
+    },
+    {
+      "path": "/product-pricing/deployments",
+      "label": "Deployments",
+      "status": "OK",
+      "apiCallCount": 3,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3283
+    },
+    {
+      "path": "/form-builder/guide",
+      "label": "Guide",
+      "status": "OK",
+      "apiCallCount": 3,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3282
+    },
+    {
+      "path": "/form-builder/templates",
+      "label": "Form Templates",
+      "status": "OK",
+      "apiCallCount": 5,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3293
+    },
+    {
+      "path": "/form-builder/create",
+      "label": "Create Form",
+      "status": "OK",
+      "apiCallCount": 3,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3282
+    },
+    {
+      "path": "/form-builder/submissions",
+      "label": "Submissions",
+      "status": "OK",
+      "apiCallCount": 4,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3284
+    },
+    {
+      "path": "/form-builder/setup",
+      "label": "Setup",
+      "status": "OK",
+      "apiCallCount": 4,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3293
+    },
+    {
+      "path": "/form-builder/deployments",
+      "label": "Deployments",
+      "status": "OK",
+      "apiCallCount": 3,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3286
+    },
+    {
+      "path": "/support-center/guide",
+      "label": "Guide",
+      "status": "OK",
+      "apiCallCount": 3,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3288
+    },
+    {
+      "path": "/support-center",
+      "label": "Support",
+      "status": "OK",
+      "apiCallCount": 3,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3282
+    },
+    {
+      "path": "/support-center/setup",
+      "label": "Setup",
+      "status": "OK",
+      "apiCallCount": 4,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3283
+    },
+    {
+      "path": "/support-center/deployments",
+      "label": "Deployments",
+      "status": "OK",
+      "apiCallCount": 3,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3291
+    },
+    {
+      "path": "/voice-engine/guide",
+      "label": "Guide",
+      "status": "OK",
+      "apiCallCount": 3,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3283
+    },
+    {
+      "path": "/voice-engine/demo",
+      "label": "TTS Demo",
+      "status": "OK",
+      "apiCallCount": 4,
+      "apiErrorCount": 2,
+      "totalTimeMs": 3283
+    },
+    {
+      "path": "/voice-engine/setup",
+      "label": "Setup",
+      "status": "OK",
+      "apiCallCount": 4,
+      "apiErrorCount": 2,
+      "totalTimeMs": 3292
+    },
+    {
+      "path": "/voice-engine/deployments",
+      "label": "Deployments",
+      "status": "OK",
+      "apiCallCount": 3,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3284
+    },
+    {
+      "path": "/jayna/guide",
+      "label": "Guide",
+      "status": "OK",
+      "apiCallCount": 3,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3287
+    },
+    {
+      "path": "/jayna/agents",
+      "label": "Agents",
+      "status": "OK",
+      "apiCallCount": 4,
+      "apiErrorCount": 2,
+      "totalTimeMs": 3281
+    },
+    {
+      "path": "/jayna/workflows",
+      "label": "Workflows",
+      "status": "OK",
+      "apiCallCount": 5,
+      "apiErrorCount": 3,
+      "totalTimeMs": 3289
+    },
+    {
+      "path": "/jayna/calls",
+      "label": "Call History",
+      "status": "OK",
+      "apiCallCount": 4,
+      "apiErrorCount": 2,
+      "totalTimeMs": 3280
+    },
+    {
+      "path": "/jayna/test-call",
+      "label": "Test Call",
+      "status": "OK",
+      "apiCallCount": 4,
+      "apiErrorCount": 2,
+      "totalTimeMs": 3281
+    },
+    {
+      "path": "/jayna/setup",
+      "label": "Setup",
+      "status": "OK",
+      "apiCallCount": 4,
+      "apiErrorCount": 2,
+      "totalTimeMs": 3285
+    },
+    {
+      "path": "/jayna/deployments",
+      "label": "Deployments",
+      "status": "OK",
+      "apiCallCount": 3,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3284
+    },
+    {
+      "path": "/hi-quotation/guide",
+      "label": "Guide",
+      "status": "OK",
+      "apiCallCount": 3,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3283
+    },
+    {
+      "path": "/hi-quotation/new",
+      "label": "New Application",
+      "status": "OK",
+      "apiCallCount": 3,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3284
+    },
+    {
+      "path": "/hi-quotation/quotations",
+      "label": "All Quotations",
+      "status": "OK",
+      "apiCallCount": 7,
+      "apiErrorCount": 2,
+      "totalTimeMs": 3281
+    },
+    {
+      "path": "/hi-quotation/maf",
+      "label": "MAF Questions",
+      "status": "OK",
+      "apiCallCount": 7,
+      "apiErrorCount": 2,
+      "totalTimeMs": 3324
+    },
+    {
+      "path": "/hi-quotation/setup",
+      "label": "Setup",
+      "status": "OK",
+      "apiCallCount": 4,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3280
+    },
+    {
+      "path": "/hi-quotation/deployments",
+      "label": "Deployments",
+      "status": "OK",
+      "apiCallCount": 3,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3340
+    },
+    {
+      "path": "/uw-workflow/guide",
+      "label": "Guide",
+      "status": "OK",
+      "apiCallCount": 3,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3298
+    },
+    {
+      "path": "/uw-workflow/wf/new-quotations-l1",
+      "label": "New Quotations (L1)",
+      "status": "OK",
+      "apiCallCount": 7,
+      "apiErrorCount": 1,
+      "totalTimeMs": 3280
+    },
+    {
+      "path": "/uw-workflow/wf/new-quotations-l2",
+      "label": "New Quotations (L2)",
+      "status": "OK",
+      "apiCallCount": 2,
+      "apiErrorCount": 0,
+      "totalTimeMs": 3283
+    },
+    {
+      "path": "/uw-workflow/wf/stp-approved",
+      "label": "STP Approved",
+      "status": "OK",
+      "apiCallCount": 2,
+      "apiErrorCount": 0,
+      "totalTimeMs": 3284
+    },
+    {
+      "path": "/uw-workflow/wf/nstp-review",
+      "label": "NSTP Review",
+      "status": "OK",
+      "apiCallCount": 2,
+      "apiErrorCount": 0,
+      "totalTimeMs": 3282
+    },
+    {
+      "path": "/uw-workflow/wf/query-raised",
+      "label": "Query Raised",
+      "status": "OK",
+      "apiCallCount": 2,
+      "apiErrorCount": 0,
+      "totalTimeMs": 3288
+    },
+    {
+      "path": "/uw-workflow/wf/query-responded",
+      "label": "Query Responded",
+      "status": "OK",
+      "apiCallCount": 2,
+      "apiErrorCount": 0,
+      "totalTimeMs": 3279
+    },
+    {
+      "path": "/uw-workflow/wf/approved",
+      "label": "Approved",
+      "status": "OK",
+      "apiCallCount": 2,
+      "apiErrorCount": 0,
+      "totalTimeMs": 3280
+    },
+    {
+      "path": "/uw-workflow/wf/declined",
+      "label": "Declined",
+      "status": "OK",
+      "apiCallCount": 2,
+      "apiErrorCount": 0,
+      "totalTimeMs": 3282
+    },
+    {
+      "path": "/uw-workflow/wf/payment-pending",
+      "label": "Payment Pending",
+      "status": "OK",
+      "apiCallCount": 2,
+      "apiErrorCount": 0,
+      "totalTimeMs": 3344
+    },
+    {
+      "path": "/uw-workflow/wf/policy-issued",
+      "label": "Policy Issued",
+      "status": "OK",
+      "apiCallCount": 2,
+      "apiErrorCount": 0,
+      "totalTimeMs": 3379
+    },
+    {
+      "path": "/uw-workflow/wf/all-quotations",
+      "label": "All Quotations",
+      "status": "OK",
+      "apiCallCount": 2,
+      "apiErrorCount": 0,
+      "totalTimeMs": 3278
+    },
+    {
+      "path": "/uw-workflow/wf/my-assignments",
+      "label": "My Assignments",
+      "status": "OK",
+      "apiCallCount": 2,
+      "apiErrorCount": 0,
+      "totalTimeMs": 3280
+    },
+    {
+      "path": "/uw-workflow/workflow-actions",
+      "label": "Workflow Actions",
+      "status": "OK",
+      "apiCallCount": 2,
+      "apiErrorCount": 0,
+      "totalTimeMs": 3284
+    },
+    {
+      "path": "/uw-workflow/setup",
+      "label": "Setup",
+      "status": "OK",
+      "apiCallCount": 2,
+      "apiErrorCount": 0,
+      "totalTimeMs": 3276
+    },
+    {
+      "path": "/uw-workflow/deployments",
+      "label": "Deployments",
+      "status": "OK",
+      "apiCallCount": 2,
+      "apiErrorCount": 0,
+      "totalTimeMs": 3367
+    },
+    {
+      "path": "/hi-decisioning/guide",
+      "label": "Guide",
+      "status": "OK",
+      "apiCallCount": 2,
+      "apiErrorCount": 0,
+      "totalTimeMs": 3277
+    },
+    {
+      "path": "/hi-decisioning/rules",
+      "label": "Rules",
+      "status": "OK",
+      "apiCallCount": 2,
+      "apiErrorCount": 0,
+      "totalTimeMs": 3380
+    },
+    {
+      "path": "/hi-decisioning/evaluations",
+      "label": "Evaluation History",
+      "status": "OK",
+      "apiCallCount": 2,
+      "apiErrorCount": 0,
+      "totalTimeMs": 3378
+    },
+    {
+      "path": "/hi-decisioning/loading-tables",
+      "label": "Loading Tables",
+      "status": "OK",
+      "apiCallCount": 2,
+      "apiErrorCount": 0,
+      "totalTimeMs": 3380
+    },
+    {
+      "path": "/hi-decisioning/stp-criteria",
+      "label": "STP Criteria",
+      "status": "OK",
+      "apiCallCount": 2,
+      "apiErrorCount": 0,
+      "totalTimeMs": 3380
+    },
+    {
+      "path": "/hi-decisioning/fields",
+      "label": "Field Introspection",
+      "status": "OK",
+      "apiCallCount": 2,
+      "apiErrorCount": 0,
+      "totalTimeMs": 3276
+    },
+    {
+      "path": "/hi-decisioning/setup",
+      "label": "Setup",
+      "status": "OK",
+      "apiCallCount": 2,
+      "apiErrorCount": 0,
+      "totalTimeMs": 3380
+    },
+    {
+      "path": "/hi-decisioning/deployments",
+      "label": "Deployments",
+      "status": "OK",
+      "apiCallCount": 2,
+      "apiErrorCount": 0,
+      "totalTimeMs": 3286
+    },
+    {
+      "path": "/mi-quotation/guide",
+      "label": "Guide",
+      "status": "OK",
+      "apiCallCount": 2,
+      "apiErrorCount": 0,
+      "totalTimeMs": 3280
+    },
+    {
+      "path": "/mi-quotation/new",
+      "label": "New Quotation",
+      "status": "OK",
+      "apiCallCount": 2,
+      "apiErrorCount": 0,
+      "totalTimeMs": 3278
+    },
+    {
+      "path": "/mi-quotation/setup",
+      "label": "Setup",
+      "status": "OK",
+      "apiCallCount": 2,
+      "apiErrorCount": 0,
+      "totalTimeMs": 3277
+    },
+    {
+      "path": "/mi-quotation/deployments",
+      "label": "Deployments",
+      "status": "OK",
+      "apiCallCount": 2,
+      "apiErrorCount": 0,
+      "totalTimeMs": 3276
+    },
+    {
+      "path": "/claims/guide",
+      "label": "Guide",
+      "status": "OK",
+      "apiCallCount": 2,
+      "apiErrorCount": 0,
+      "totalTimeMs": 3289
+    },
+    {
+      "path": "/claims/setup",
+      "label": "Setup",
+      "status": "OK",
+      "apiCallCount": 2,
+      "apiErrorCount": 0,
+      "totalTimeMs": 3276
+    },
+    {
+      "path": "/claims/deployments",
+      "label": "Deployments",
+      "status": "OK",
+      "apiCallCount": 2,
+      "apiErrorCount": 0,
+      "totalTimeMs": 3297
+    },
+    {
+      "path": "/fee-management/guide",
+      "label": "Guide",
+      "status": "OK",
+      "apiCallCount": 2,
+      "apiErrorCount": 0,
+      "totalTimeMs": 3276
+    },
+    {
+      "path": "/fee-management/setup",
+      "label": "Setup",
+      "status": "OK",
+      "apiCallCount": 2,
+      "apiErrorCount": 0,
+      "totalTimeMs": 3281
+    },
+    {
+      "path": "/fee-management/deployments",
+      "label": "Deployments",
+      "status": "OK",
+      "apiCallCount": 2,
+      "apiErrorCount": 0,
+      "totalTimeMs": 3328
+    },
+    {
+      "path": "/O/O-OZPY/pii-showcase",
+      "label": "PII Showcase",
+      "status": "OK",
+      "apiCallCount": 2,
+      "apiErrorCount": 0,
+      "totalTimeMs": 3348
+    },
+    {
+      "path": "/O/O-OZPY/pii-showcase/dashboard",
+      "label": "Dashboard",
+      "status": "OK",
+      "apiCallCount": 2,
+      "apiErrorCount": 0,
+      "totalTimeMs": 3307
+    },
+    {
+      "path": "/O/O-OZPY/pii-showcase/upload",
+      "label": "Upload & Ingest",
+      "status": "OK",
+      "apiCallCount": 2,
+      "apiErrorCount": 0,
+      "totalTimeMs": 3380
+    },
+    {
+      "path": "/O/O-OZPY/pii-showcase/config",
+      "label": "PII Configuration",
+      "status": "OK",
+      "apiCallCount": 2,
+      "apiErrorCount": 0,
+      "totalTimeMs": 3280
+    },
+    {
+      "path": "/directory",
+      "label": "Team Directory",
+      "status": "OK",
+      "apiCallCount": 2,
+      "apiErrorCount": 0,
+      "totalTimeMs": 3276
+    },
+    {
+      "path": "/directory/groups",
+      "label": "Group Spaces",
+      "status": "OK",
+      "apiCallCount": 2,
+      "apiErrorCount": 0,
+      "totalTimeMs": 3303
+    }
+  ],
+  "apiCalls": [
+    {
+      "url": "https://zorbit.scalatics.com/dashboard/guide",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/dashboard/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/dashboard/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/dashboard/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/dashboard",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/dashboard"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/customer/api/v1/O/O-OZPY/customers?limit=1",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/dashboard"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/dashboard"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/messaging/api/v1/G/messaging/health",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 118,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/dashboard"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/dashboard"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/identity/api/v1/O/O-OZPY/users?limit=1",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11255,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/dashboard"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/audit/api/v1/O/O-OZPY/audit/logs?limit=5",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 2717,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/dashboard"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/identity/api/v1/G/organizations?limit=1",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 1253,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/dashboard"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/dashboard/designer",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/dashboard/designer"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/O/O-OZPY/dashboard/designer",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/dashboard/designer"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/dashboard/designer"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/dashboard/designer"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/dashboard/setup",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/dashboard/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/dashboard/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/dashboard/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/identity/api/v1/G/identity/health",
+      "method": "GET",
+      "status": 404,
+      "contentType": "application/json; charset=utf-8",
+      "size": 87,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/dashboard/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/dashboard/deployments",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/dashboard/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/dashboard/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/dashboard/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/identity/guide",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/identity/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/identity/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/identity/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/users",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/users"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/users"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/users"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/identity/api/v1/O/O-OZPY/users",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11255,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/users"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/organizations",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/organizations"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/organizations"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/identity/api/v1/G/organizations",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 1253,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/organizations"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/organizations"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/roles",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/roles"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/roles"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/roles"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/authorization/api/v1/O/O-OZPY/roles",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 2157,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/roles"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/authorization/guide",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/authorization/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/authorization/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/authorization/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/privileges",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/privileges"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/privileges"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/privileges"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/authorization/api/v1/O/O-OZPY/privileges",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 2,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/privileges"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/authorization/setup",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/authorization/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/authorization/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/authorization/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/authorization/api/v1/G/authorization/health",
+      "method": "GET",
+      "status": 404,
+      "contentType": "application/json; charset=utf-8",
+      "size": 92,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/authorization/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/authorization/deployments",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/authorization/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/authorization/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/authorization/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/navigation/menus",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/navigation/menus"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/navigation/menus"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/navigation/menus"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/navigation/api/v1/O/O-OZPY/navigation/menus",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 54286,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/navigation/menus"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/navigation/guide",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/navigation/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/navigation/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/navigation/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/navigation/routes",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/navigation/routes"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/navigation/routes"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/navigation/api/v1/O/O-OZPY/navigation/routes",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 2,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/navigation/routes"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/navigation/routes"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/navigation/setup",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/navigation/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/navigation/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/navigation/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/navigation/api/v1/G/navigation/health",
+      "method": "GET",
+      "status": 404,
+      "contentType": "application/json; charset=utf-8",
+      "size": 89,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/navigation/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/navigation/deployments",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/navigation/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/navigation/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/navigation/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/messaging/topics",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/messaging/topics"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/messaging/topics"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/messaging/topics"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/messaging/api/v1/G/messaging/health",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 118,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/messaging/topics"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/messaging/api/v1/G/messaging/dlq",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 2,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/messaging/topics"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/messaging/api/v1/G/messaging/topics",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 2,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/messaging/topics"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/messaging/guide",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/messaging/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/messaging/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/messaging/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/messaging/events",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/messaging/events"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/messaging/events"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/messaging/events"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/audit/api/v1/O/O-OZPY/audit/logs?page=1&limit=20",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 10560,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/messaging/events"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/messaging/setup",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/messaging/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/messaging/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/messaging/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/messaging/api/v1/G/messaging/health",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 118,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/messaging/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/messaging/deployments",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/messaging/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/messaging/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/messaging/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/audit/guide",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/audit/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/audit/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/audit/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/audit/logs",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/audit/logs"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/audit/logs"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/audit/logs"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/audit/api/v1/O/O-OZPY/audit/logs?page=1&limit=20",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 10560,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/audit/logs"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/audit/setup",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/audit/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/audit/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/audit/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/audit/api/v1/G/audit/health",
+      "method": "GET",
+      "status": 404,
+      "contentType": "application/json; charset=utf-8",
+      "size": 84,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/audit/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/audit/deployments",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/audit/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/audit/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/audit/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/pii-vault/guide",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/pii-vault/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/pii-vault/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/pii-vault/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/pii-vault/tokens",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/pii-vault/tokens"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/pii-vault/tokens"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/pii-vault/tokens"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/pii-vault/setup",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/pii-vault/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/pii-vault/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/pii-vault/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/pii-vault/api/v1/G/pii-vault/health",
+      "method": "GET",
+      "status": 404,
+      "contentType": "application/json; charset=utf-8",
+      "size": 88,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/pii-vault/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/pii-vault/deployments",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/pii-vault/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/pii-vault/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/pii-vault/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/settings/guide",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/settings/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/settings/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/settings/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/settings/general",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/settings/general"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/settings/general"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/settings/general"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/settings/secrets",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/settings/secrets"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/settings/secrets"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/settings/secrets"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/settings/security",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/settings/security"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/settings/security"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/settings/security"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/identity/api/v1/G/auth/mfa/status",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 45,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/settings/security"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/settings/setup",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/settings/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/settings/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/settings/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/settings/deployments",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/settings/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/settings/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/settings/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/admin/guide",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/admin/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/customer/api/v1/O/O-OZPY/customers?limit=1",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/admin/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/admin/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/messaging/api/v1/G/messaging/health",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 118,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/admin/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/admin/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/identity/api/v1/O/O-OZPY/users?limit=1",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11255,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/admin/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/identity/api/v1/G/organizations?limit=1",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 1253,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/admin/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/audit/api/v1/O/O-OZPY/audit/logs?limit=5",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 2717,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/admin/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/admin/modules",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/admin/modules"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/admin/modules"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/admin/modules"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/admin/sitemap",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/admin/sitemap"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/admin/sitemap"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/admin/sitemap"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/navigation/api/v1/O/O-OZPY/navigation/menus",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 54286,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/admin/sitemap"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/admin/licensing",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/admin/licensing"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/admin/licensing"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/admin/licensing"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/admin/setup",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/admin/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/admin/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/admin/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/G/admin/health",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/admin/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/admin/deployments",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/admin/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/admin/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/admin/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/app/pcg4/guide",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/app/pcg4/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/app/pcg4/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/app/pcg4/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/app/pcg4/configurations",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/app/pcg4/configurations"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/app/pcg4/configurations"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/app/pcg4/configurations"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/app/pcg4/v1/O/O-OZPY/configurations",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 2946,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/app/pcg4/configurations"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/app/pcg4/configurations-fb",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/app/pcg4/configurations-fb"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/app/pcg4/configurations-fb"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/app/pcg4/configurations-fb"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/form-builder/api/v1/O/O-OZPY/form-builder/forms/pcg4-configuration-fb",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 4636,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/app/pcg4/configurations-fb"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/app/pcg4/reference-library",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/app/pcg4/reference-library"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/app/pcg4/reference-library"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/app/pcg4/reference-library"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/app/pcg4/coverage-mapper",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/app/pcg4/coverage-mapper"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/app/pcg4/coverage-mapper"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/app/pcg4/coverage-mapper"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/app/pcg4/setup",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/app/pcg4/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/app/pcg4/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/app/pcg4/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/app/pcg4/v1/O/O-OZPY/setup/tables",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 222,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/app/pcg4/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/app/pcg4/v1/O/O-OZPY/setup/stats",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 155,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/app/pcg4/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/app/pcg4/deployments",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/app/pcg4/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/app/pcg4/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/app/pcg4/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/product-pricing/guide",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/product-pricing/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/product-pricing/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/product-pricing/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/product-pricing/rate-tables",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/product-pricing/rate-tables"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/product-pricing/rate-tables"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/product-pricing/rate-tables"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/product-pricing/api/v1/O/O-OZPY/product-pricing/rate-tables",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 1553,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/product-pricing/rate-tables"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/product-pricing/calculator",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/product-pricing/calculator"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/product-pricing/calculator"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/product-pricing/calculator"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/product-pricing/api/v1/O/O-OZPY/product-pricing/rate-tables",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 1553,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/product-pricing/calculator"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/product-pricing/import",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/product-pricing/import"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/product-pricing/import"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/product-pricing/import"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/form-builder/api/v1/O/O-OZPY/form-builder/forms/rate-card-import",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 4413,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/product-pricing/import"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/product-pricing/setup",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/product-pricing/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/product-pricing/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/product-pricing/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/product-pricing/api/v1/G/product-pricing/health",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 137,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/product-pricing/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/product-pricing/deployments",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/product-pricing/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/product-pricing/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/product-pricing/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/form-builder/guide",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/form-builder/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/form-builder/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/form-builder/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/form-builder/templates",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/form-builder/templates"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/form-builder/templates"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/form-builder/templates"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/form-builder/api/v1/G/form-builder/templates",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 8007,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/form-builder/templates"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/form-builder/api/v1/O/O-OZPY/form-builder/forms",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 74037,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/form-builder/templates"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/form-builder/create",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/form-builder/create"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/form-builder/create"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/form-builder/create"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/form-builder/submissions",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/form-builder/submissions"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/form-builder/submissions"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/form-builder/submissions"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/form-builder/api/v1/O/O-OZPY/form-builder/submissions",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 28,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/form-builder/submissions"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/form-builder/setup",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/form-builder/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/form-builder/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/form-builder/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/form-builder/api/v1/G/form-builder/health",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 125,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/form-builder/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/form-builder/deployments",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/form-builder/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/form-builder/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/form-builder/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/support-center/guide",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/support-center/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/support-center/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/support-center/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/support-center",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/support-center"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/support-center"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/support-center"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/support-center/setup",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/support-center/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/support-center/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/support-center/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/chat/api/v1/G/chat/health",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 117,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/support-center/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/support-center/deployments",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/support-center/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/support-center/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/support-center/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/voice-engine/guide",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/voice-engine/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/voice-engine/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/voice-engine/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/voice-engine/demo",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/voice-engine/demo"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/voice-engine/demo"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/voice-engine/demo"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/voice-engine/api/v1/G/voice/tts/voices?engine=edge-tts",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [
+        "HTML-LEAK"
+      ],
+      "route": "/voice-engine/demo"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/voice-engine/setup",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/voice-engine/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/voice-engine/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/voice-engine/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/voice-engine/api/v1/G/voice/health",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [
+        "HTML-LEAK"
+      ],
+      "route": "/voice-engine/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/voice-engine/deployments",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/voice-engine/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/voice-engine/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/voice-engine/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/jayna/guide",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/jayna/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/jayna/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/jayna/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/jayna/agents",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/jayna/agents"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/jayna/agents"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/jayna/agents"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/jayna/api/v1/O/O-OZPY/jayna/agents",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [
+        "HTML-LEAK"
+      ],
+      "route": "/jayna/agents"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/jayna/workflows",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/jayna/workflows"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/jayna/workflows"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/jayna/workflows"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/jayna/api/v1/O/O-OZPY/jayna/workflows",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [
+        "HTML-LEAK"
+      ],
+      "route": "/jayna/workflows"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/jayna/api/v1/O/O-OZPY/jayna/agents",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [
+        "HTML-LEAK"
+      ],
+      "route": "/jayna/workflows"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/jayna/calls",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/jayna/calls"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/jayna/calls"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/jayna/calls"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/jayna/api/v1/O/O-OZPY/jayna/calls",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [
+        "HTML-LEAK"
+      ],
+      "route": "/jayna/calls"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/jayna/test-call",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/jayna/test-call"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/jayna/test-call"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/jayna/test-call"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/jayna/api/v1/O/O-OZPY/jayna/agents",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [
+        "HTML-LEAK"
+      ],
+      "route": "/jayna/test-call"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/jayna/setup",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/jayna/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/jayna/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/jayna/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/jayna/api/v1/G/jayna/health",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [
+        "HTML-LEAK"
+      ],
+      "route": "/jayna/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/jayna/deployments",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/jayna/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/jayna/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/jayna/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/hi-quotation/guide",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/hi-quotation/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/hi-quotation/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/hi-quotation/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/hi-quotation/new",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/hi-quotation/new"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/hi-quotation/new"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/hi-quotation/new"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/hi-quotation/quotations",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/hi-quotation/quotations"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/hi-quotation/quotations"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/hi-quotation/quotations"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/hi-quotation/api/v1/G/hi-quotation/health",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 90,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/hi-quotation/quotations"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/hi-quotation/api/v1/O/O-OZPY/hi-quotation/quotations",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 108491,
+      "timeMs": 0,
+      "issues": [
+        "LARGE"
+      ],
+      "route": "/hi-quotation/quotations"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/hi-quotation/api/v1/O/O-OZPY/hi-quotation/maf-questions",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 17091,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/hi-quotation/quotations"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/hi-quotation/api/v1/O/O-OZPY/hi-quotation/maf-question-sets",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 2,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/hi-quotation/quotations"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/hi-quotation/maf",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/hi-quotation/maf"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/hi-quotation/maf"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/hi-quotation/api/v1/G/hi-quotation/health",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 90,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/hi-quotation/maf"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/hi-quotation/maf"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/hi-quotation/api/v1/O/O-OZPY/hi-quotation/quotations",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 108491,
+      "timeMs": 0,
+      "issues": [
+        "LARGE"
+      ],
+      "route": "/hi-quotation/maf"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/hi-quotation/api/v1/O/O-OZPY/hi-quotation/maf-questions",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 17091,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/hi-quotation/maf"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/hi-quotation/api/v1/O/O-OZPY/hi-quotation/maf-question-sets",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 2,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/hi-quotation/maf"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/hi-quotation/setup",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/hi-quotation/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/hi-quotation/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/hi-quotation/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/hi-quotation/api/v1/G/hi-quotation/health",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 90,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/hi-quotation/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/hi-quotation/deployments",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/hi-quotation/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/hi-quotation/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/hi-quotation/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/uw-workflow/guide",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/uw-workflow/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/uw-workflow/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/uw-workflow/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/uw-workflow/wf/new-quotations-l1",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/uw-workflow/wf/new-quotations-l1"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/unified-console/api/v1/U/U-0113/preferences",
+      "method": "GET",
+      "status": 502,
+      "contentType": "text/html",
+      "size": 568,
+      "timeMs": 0,
+      "issues": [
+        "API-5xx",
+        "HTML-LEAK"
+      ],
+      "route": "/uw-workflow/wf/new-quotations-l1"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/notification/api/v1/U/U-0113/notifications/unread-count",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 11,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/uw-workflow/wf/new-quotations-l1"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/uw-workflow/api/v1/O/O-OZPY/uw-workflow/queues/new-quotations-l1/items?page=1&limit=25&sort=createdAt&order=desc",
+      "method": "GET",
+      "status": 401,
+      "contentType": "application/json; charset=utf-8",
+      "size": 43,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/uw-workflow/wf/new-quotations-l1"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/uw-workflow/api/v1/O/O-OZPY/uw-workflow/queues/stats",
+      "method": "GET",
+      "status": 401,
+      "contentType": "application/json; charset=utf-8",
+      "size": 0,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/uw-workflow/wf/new-quotations-l1"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/login",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/uw-workflow/wf/new-quotations-l1"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/identity/api/v1/G/auth/providers",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 734,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/uw-workflow/wf/new-quotations-l1"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/uw-workflow/wf/new-quotations-l2",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/uw-workflow/wf/new-quotations-l2"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/identity/api/v1/G/auth/providers",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 734,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/uw-workflow/wf/new-quotations-l2"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/uw-workflow/wf/stp-approved",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/uw-workflow/wf/stp-approved"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/identity/api/v1/G/auth/providers",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 734,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/uw-workflow/wf/stp-approved"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/uw-workflow/wf/nstp-review",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/uw-workflow/wf/nstp-review"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/identity/api/v1/G/auth/providers",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 734,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/uw-workflow/wf/nstp-review"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/uw-workflow/wf/query-raised",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/uw-workflow/wf/query-raised"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/identity/api/v1/G/auth/providers",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 734,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/uw-workflow/wf/query-raised"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/uw-workflow/wf/query-responded",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/uw-workflow/wf/query-responded"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/identity/api/v1/G/auth/providers",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 734,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/uw-workflow/wf/query-responded"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/uw-workflow/wf/approved",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/uw-workflow/wf/approved"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/identity/api/v1/G/auth/providers",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 734,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/uw-workflow/wf/approved"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/uw-workflow/wf/declined",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/uw-workflow/wf/declined"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/identity/api/v1/G/auth/providers",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 734,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/uw-workflow/wf/declined"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/uw-workflow/wf/payment-pending",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/uw-workflow/wf/payment-pending"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/identity/api/v1/G/auth/providers",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 734,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/uw-workflow/wf/payment-pending"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/uw-workflow/wf/policy-issued",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/uw-workflow/wf/policy-issued"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/identity/api/v1/G/auth/providers",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 734,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/uw-workflow/wf/policy-issued"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/uw-workflow/wf/all-quotations",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/uw-workflow/wf/all-quotations"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/identity/api/v1/G/auth/providers",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 734,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/uw-workflow/wf/all-quotations"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/uw-workflow/wf/my-assignments",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/uw-workflow/wf/my-assignments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/identity/api/v1/G/auth/providers",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 734,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/uw-workflow/wf/my-assignments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/uw-workflow/workflow-actions",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/uw-workflow/workflow-actions"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/identity/api/v1/G/auth/providers",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 734,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/uw-workflow/workflow-actions"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/uw-workflow/setup",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/uw-workflow/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/identity/api/v1/G/auth/providers",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 734,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/uw-workflow/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/uw-workflow/deployments",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/uw-workflow/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/identity/api/v1/G/auth/providers",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 734,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/uw-workflow/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/hi-decisioning/guide",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/hi-decisioning/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/identity/api/v1/G/auth/providers",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 734,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/hi-decisioning/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/hi-decisioning/rules",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/hi-decisioning/rules"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/identity/api/v1/G/auth/providers",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 734,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/hi-decisioning/rules"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/hi-decisioning/evaluations",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/hi-decisioning/evaluations"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/identity/api/v1/G/auth/providers",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 734,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/hi-decisioning/evaluations"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/hi-decisioning/loading-tables",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/hi-decisioning/loading-tables"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/identity/api/v1/G/auth/providers",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 734,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/hi-decisioning/loading-tables"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/hi-decisioning/stp-criteria",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/hi-decisioning/stp-criteria"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/identity/api/v1/G/auth/providers",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 734,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/hi-decisioning/stp-criteria"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/hi-decisioning/fields",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/hi-decisioning/fields"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/identity/api/v1/G/auth/providers",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 734,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/hi-decisioning/fields"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/hi-decisioning/setup",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/hi-decisioning/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/identity/api/v1/G/auth/providers",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 734,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/hi-decisioning/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/hi-decisioning/deployments",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/hi-decisioning/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/identity/api/v1/G/auth/providers",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 734,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/hi-decisioning/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/mi-quotation/guide",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/mi-quotation/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/identity/api/v1/G/auth/providers",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 734,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/mi-quotation/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/mi-quotation/new",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/mi-quotation/new"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/identity/api/v1/G/auth/providers",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 734,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/mi-quotation/new"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/mi-quotation/setup",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/mi-quotation/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/identity/api/v1/G/auth/providers",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 734,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/mi-quotation/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/mi-quotation/deployments",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/mi-quotation/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/identity/api/v1/G/auth/providers",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 734,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/mi-quotation/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/claims/guide",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/claims/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/identity/api/v1/G/auth/providers",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 734,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/claims/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/claims/setup",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/claims/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/identity/api/v1/G/auth/providers",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 734,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/claims/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/claims/deployments",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/claims/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/identity/api/v1/G/auth/providers",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 734,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/claims/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/fee-management/guide",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/fee-management/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/identity/api/v1/G/auth/providers",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 734,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/fee-management/guide"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/fee-management/setup",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/fee-management/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/identity/api/v1/G/auth/providers",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 734,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/fee-management/setup"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/fee-management/deployments",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/fee-management/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/identity/api/v1/G/auth/providers",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 734,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/fee-management/deployments"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/O/O-OZPY/pii-showcase",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/O/O-OZPY/pii-showcase"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/identity/api/v1/G/auth/providers",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 734,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/O/O-OZPY/pii-showcase"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/O/O-OZPY/pii-showcase/dashboard",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/O/O-OZPY/pii-showcase/dashboard"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/identity/api/v1/G/auth/providers",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 734,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/O/O-OZPY/pii-showcase/dashboard"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/O/O-OZPY/pii-showcase/upload",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/O/O-OZPY/pii-showcase/upload"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/identity/api/v1/G/auth/providers",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 734,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/O/O-OZPY/pii-showcase/upload"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/O/O-OZPY/pii-showcase/config",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/O/O-OZPY/pii-showcase/config"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/identity/api/v1/G/auth/providers",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 734,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/O/O-OZPY/pii-showcase/config"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/directory",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/directory"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/identity/api/v1/G/auth/providers",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 734,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/directory"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/directory/groups",
+      "method": "GET",
+      "status": 200,
+      "contentType": "text/html",
+      "size": 505,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/directory/groups"
+    },
+    {
+      "url": "https://zorbit.scalatics.com/api/identity/api/v1/G/auth/providers",
+      "method": "GET",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "size": 734,
+      "timeMs": 0,
+      "issues": [],
+      "route": "/directory/groups"
+    }
+  ]
+}

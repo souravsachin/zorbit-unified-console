@@ -50,7 +50,7 @@ export const builtinSegments: BuiltinSegmentSeed[] = [
       { seq: 2, action: StepAction.INFO, target: '', value: 'The Users page shows all users in your organization.', delay_ms: 2000, narration: 'The Users page shows all users in your organization.' },
       { seq: 3, action: StepAction.HIGHLIGHT, target: '[data-testid="create-user-btn"]', value: '', delay_ms: 1500, narration: 'Click here to create a new user.' },
       { seq: 4, action: StepAction.HIGHLIGHT, target: '.data-table', value: '', delay_ms: 2000, narration: 'The table shows user details including name, email token, and status.' },
-      { seq: 5, action: StepAction.INFO, target: '', value: 'Note: Email addresses are stored as PII tokens. Raw emails are never displayed in the admin console.', delay_ms: 3000, narration: 'Email addresses are stored as PII tokens for security.' },
+      { seq: 5, action: StepAction.INFO, target: '', value: 'Note: Email addresses are stored as PII tokens. Raw emails are never displayed in the unified console.', delay_ms: 3000, narration: 'Email addresses are stored as PII tokens for security.' },
       { seq: 6, action: StepAction.HIGHLIGHT, target: '.user-status-badge', value: '', delay_ms: 1500, narration: 'Status badges show whether users are active or inactive.' },
       { seq: 7, action: StepAction.INFO, target: '', value: 'Users inherit permissions from their assigned roles.', delay_ms: 2000, narration: 'Users inherit permissions from their assigned roles.' },
     ],

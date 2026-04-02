@@ -15,7 +15,7 @@ const CountWidget: React.FC<CountWidgetProps> = ({ widget }) => {
 
   return (
     <div className="h-full flex flex-col items-center justify-center p-4">
-      <p className={`text-4xl font-bold ${color}`}>{value}</p>
+      <p className={`text-4xl font-bold ${color}`}>{typeof value === 'object' ? JSON.stringify(value) : value}</p>
       {trend && (
         <div className="flex items-center mt-2 space-x-1 text-sm">
           {trendDirection === 'up' && <TrendingUp size={16} className="text-green-500" />}

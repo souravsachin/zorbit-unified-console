@@ -1,0 +1,1 @@
+import{j as o}from"./index-2_yt5QN_.js";import{R as a}from"./RegionalFormPage-B0pzYbUL.js";import"./circle-check-C4OCTQNc.js";import"./send-pqR4H4I5.js";const n=()=>o.jsx(a,{formSlug:"hi-application-india-v2",regionName:"India",regionFlag:"🇮🇳",accentColor:"text-orange-600 dark:text-orange-400"});export{n as default};

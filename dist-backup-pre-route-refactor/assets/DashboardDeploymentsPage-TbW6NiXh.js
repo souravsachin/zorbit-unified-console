@@ -1,0 +1,1 @@
+import{j as o,au as a}from"./index-2_yt5QN_.js";import{M as r}from"./ModuleDeploymentsPage-CPasQPCK.js";import"./globe-D7LLFYaR.js";import"./circle-check-C4OCTQNc.js";import"./git-branch-BOgyZck8.js";function p(){return o.jsx(r,{moduleId:"dashboard",moduleName:"Dashboard",icon:a})}export{p as default};

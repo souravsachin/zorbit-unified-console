@@ -18,6 +18,8 @@ const Step2_ProductDetails: React.FC<StepProps> = ({
 }) => {
   const [form, setForm] = useState<ProductDetails>(EMPTY);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
+  const [submitted, setSubmitted] = useState(false);
   const [showInheritance, setShowInheritance] = useState(true);
   const [templates, setTemplates] = useState<Array<{ id: string; hashId: string; insurerName: string; productName: string }>>([]);
   const [loadingTemplates, setLoadingTemplates] = useState(false);
@@ -54,12 +56,18 @@ const Step2_ProductDetails: React.FC<StepProps> = ({
   }, [form, validate]);
 
   const isValid = Object.keys(errors).length === 0;
+  const showError = (field: string) => (touched[field] || submitted) && errors[field];
 
   const handleChange = (field: keyof ProductDetails, value: string) => {
     setForm((prev) => ({ ...prev, [field]: value }));
   };
 
+  const handleBlur = (field: string) => {
+    setTouched((prev) => ({ ...prev, [field]: true }));
+  };
+
   const handleNext = async () => {
+    setSubmitted(true);
     if (!isValid) return;
     await onNext({ product: form });
   };
@@ -132,11 +140,12 @@ const Step2_ProductDetails: React.FC<StepProps> = ({
             placeholder="e.g., Comprehensive Health Plus"
             value={form.name}
             onChange={(e) => handleChange('name', e.target.value)}
+            onBlur={() => handleBlur('name')}
             className={`w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 dark:bg-gray-800 dark:text-gray-100 ${
-              errors.name ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
+              showError('name') ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
             }`}
           />
-          {errors.name && <p className="text-xs text-red-500">{errors.name}</p>}
+          {showError('name') && <p className="text-xs text-red-500">{errors.name}</p>}
         </div>
 
         <div className="space-y-1.5">
@@ -148,11 +157,12 @@ const Step2_ProductDetails: React.FC<StepProps> = ({
             placeholder="e.g., CHP-2024-V1"
             value={form.internal_code}
             onChange={(e) => handleChange('internal_code', e.target.value)}
+            onBlur={() => handleBlur('internal_code')}
             className={`w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 dark:bg-gray-800 dark:text-gray-100 ${
-              errors.internal_code ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
+              showError('internal_code') ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
             }`}
           />
-          {errors.internal_code && (
+          {showError('internal_code') && (
             <p className="text-xs text-red-500">{errors.internal_code}</p>
           )}
         </div>
@@ -166,13 +176,14 @@ const Step2_ProductDetails: React.FC<StepProps> = ({
             placeholder="e.g., REG-PROD-CHP-2024-001"
             value={form.regulator_assigned_code}
             onChange={(e) => handleChange('regulator_assigned_code', e.target.value)}
+            onBlur={() => handleBlur('regulator_assigned_code')}
             className={`w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 dark:bg-gray-800 dark:text-gray-100 ${
-              errors.regulator_assigned_code
+              showError('regulator_assigned_code')
                 ? 'border-red-500'
                 : 'border-gray-300 dark:border-gray-600'
             }`}
           />
-          {errors.regulator_assigned_code && (
+          {showError('regulator_assigned_code') && (
             <p className="text-xs text-red-500">{errors.regulator_assigned_code}</p>
           )}
         </div>

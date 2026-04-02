@@ -19,6 +19,8 @@ const Step4_BasePlanConfig: React.FC<StepProps> = ({
   const [rules, setRules] = useState<GeneralRules>(DEFAULT_RULES);
   const [activePlanTab, setActivePlanTab] = useState(0);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
+  const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
     if (configuration?.plans && configuration.plans.length > 0) {
@@ -50,6 +52,11 @@ const Step4_BasePlanConfig: React.FC<StepProps> = ({
   }, [rules, validate]);
 
   const isValid = Object.keys(errors).length === 0;
+  const showError = (field: string) => (touched[field] || submitted) && errors[field];
+
+  const handleBlur = (field: string) => {
+    setTouched((prev) => ({ ...prev, [field]: true }));
+  };
 
   const handleNumericChange = (field: keyof GeneralRules, raw: string) => {
     const val = field === 'network_restrictions' ? raw : parseFloat(raw) || 0;
@@ -63,6 +70,7 @@ const Step4_BasePlanConfig: React.FC<StepProps> = ({
     }));
 
   const handleNext = async () => {
+    setSubmitted(true);
     if (!isValid) return;
     await onNext({ plans: buildUpdatedPlans() });
   };
@@ -125,12 +133,13 @@ const Step4_BasePlanConfig: React.FC<StepProps> = ({
                 min={0}
                 value={rules.annual_limit}
                 onChange={(e) => handleNumericChange('annual_limit', e.target.value)}
+                onBlur={() => handleBlur('annual_limit')}
                 className={`w-full pl-7 pr-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 dark:bg-gray-800 dark:text-gray-100 ${
-                  errors.annual_limit ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
+                  showError('annual_limit') ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
                 }`}
               />
             </div>
-            {errors.annual_limit && (
+            {showError('annual_limit') && (
               <p className="text-xs text-red-500">{errors.annual_limit}</p>
             )}
             <p className="text-xs text-gray-400">Set to 0 for unlimited coverage</p>
@@ -150,12 +159,13 @@ const Step4_BasePlanConfig: React.FC<StepProps> = ({
                 min={0}
                 value={rules.deductible}
                 onChange={(e) => handleNumericChange('deductible', e.target.value)}
+                onBlur={() => handleBlur('deductible')}
                 className={`w-full pl-7 pr-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 dark:bg-gray-800 dark:text-gray-100 ${
-                  errors.deductible ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
+                  showError('deductible') ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
                 }`}
               />
             </div>
-            {errors.deductible && (
+            {showError('deductible') && (
               <p className="text-xs text-red-500">{errors.deductible}</p>
             )}
           </div>
@@ -174,14 +184,15 @@ const Step4_BasePlanConfig: React.FC<StepProps> = ({
                 min={0}
                 value={rules.out_of_pocket_max}
                 onChange={(e) => handleNumericChange('out_of_pocket_max', e.target.value)}
+                onBlur={() => handleBlur('out_of_pocket_max')}
                 className={`w-full pl-7 pr-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 dark:bg-gray-800 dark:text-gray-100 ${
-                  errors.out_of_pocket_max
+                  showError('out_of_pocket_max')
                     ? 'border-red-500'
                     : 'border-gray-300 dark:border-gray-600'
                 }`}
               />
             </div>
-            {errors.out_of_pocket_max && (
+            {showError('out_of_pocket_max') && (
               <p className="text-xs text-red-500">{errors.out_of_pocket_max}</p>
             )}
           </div>
@@ -196,13 +207,14 @@ const Step4_BasePlanConfig: React.FC<StepProps> = ({
               min={0}
               value={rules.waiting_period_days}
               onChange={(e) => handleNumericChange('waiting_period_days', e.target.value)}
+              onBlur={() => handleBlur('waiting_period_days')}
               className={`w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 dark:bg-gray-800 dark:text-gray-100 ${
-                errors.waiting_period_days
+                showError('waiting_period_days')
                   ? 'border-red-500'
                   : 'border-gray-300 dark:border-gray-600'
               }`}
             />
-            {errors.waiting_period_days && (
+            {showError('waiting_period_days') && (
               <p className="text-xs text-red-500">{errors.waiting_period_days}</p>
             )}
           </div>

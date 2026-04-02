@@ -8,6 +8,13 @@ import { customerService } from '../../services/customer';
 import { auditService, AuditEvent } from '../../services/audit';
 import { messagingService } from '../../services/messaging';
 
+/** Safely format a date value — handles ISO strings, epoch numbers, and invalid values. */
+function formatDate(d: unknown): string {
+  if (!d) return 'N/A';
+  const date = new Date(typeof d === 'number' ? d : String(d));
+  return isNaN(date.getTime()) ? 'N/A' : date.toLocaleString();
+}
+
 const DashboardPage: React.FC = () => {
   const { orgId } = useAuth();
   const [stats, setStats] = useState({ users: 0, orgs: 0, customers: 0 });
@@ -19,18 +26,34 @@ const DashboardPage: React.FC = () => {
     const load = async () => {
       setLoading(true);
       try {
+        // Use limit=1 to avoid fetching full lists just for counts.
+        // Extract total from paginated response metadata when available,
+        // otherwise fall back to array length.
         const [usersRes, orgsRes, custRes, auditRes, healthRes] = await Promise.allSettled([
-          identityService.getUsers(orgId),
-          identityService.getOrganizations(),
-          customerService.getCustomers(orgId),
+          identityService.getUsers(orgId, { limit: 1 }),
+          identityService.getOrganizations({ limit: 1 }),
+          customerService.getCustomers(orgId, { limit: 1 }),
           auditService.getEvents(orgId, { limit: 5 }),
           messagingService.getHealth(),
         ]);
 
+        const extractCount = (res: PromiseSettledResult<any>): number => {
+          if (res.status !== 'fulfilled') return 0;
+          const d = res.value.data;
+          // Prefer total/count from paginated envelope
+          if (d && typeof d === 'object' && !Array.isArray(d)) {
+            if (typeof d.total === 'number') return d.total;
+            if (typeof d.count === 'number') return d.count;
+            if (Array.isArray(d.data)) return d.total ?? d.data.length;
+          }
+          if (Array.isArray(d)) return d.length;
+          return 0;
+        };
+
         setStats({
-          users: usersRes.status === 'fulfilled' ? (Array.isArray(usersRes.value.data) ? usersRes.value.data.length : 0) : 0,
-          orgs: orgsRes.status === 'fulfilled' ? (Array.isArray(orgsRes.value.data) ? orgsRes.value.data.length : 0) : 0,
-          customers: custRes.status === 'fulfilled' ? (Array.isArray(custRes.value.data) ? custRes.value.data.length : 0) : 0,
+          users: extractCount(usersRes),
+          orgs: extractCount(orgsRes),
+          customers: extractCount(custRes),
         });
 
         if (auditRes.status === 'fulfilled') {
@@ -72,11 +95,11 @@ const DashboardPage: React.FC = () => {
           {recentEvents.map((evt, i) => (
             <div key={i} className="px-4 py-3 flex items-center justify-between">
               <div className="flex items-center space-x-3">
-                <StatusBadge label={evt.action || evt.eventType} />
-                <span className="text-sm">{evt.eventType}</span>
+                <StatusBadge label={typeof (evt.action || evt.eventType) === 'string' ? (evt.action || evt.eventType) : String(evt.action || evt.eventType || 'unknown')} />
+                <span className="text-sm">{typeof evt.eventType === 'string' ? evt.eventType : JSON.stringify(evt.eventType)}</span>
               </div>
               <div className="text-xs text-gray-500">
-                {evt.actor} &middot; {new Date(evt.timestamp).toLocaleString()}
+                {typeof evt.actor === 'string' ? evt.actor : (evt.actor as unknown as { hashId?: string })?.hashId || JSON.stringify(evt.actor)} &middot; {formatDate(evt.timestamp)}
               </div>
             </div>
           ))}

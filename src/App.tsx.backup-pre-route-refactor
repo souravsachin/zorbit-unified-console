@@ -1,0 +1,410 @@
+import React from 'react';
+import { Routes, Route, Navigate, useParams } from 'react-router-dom';
+import { ToastProvider } from './components/shared/Toast';
+import { ErrorBoundary } from './components/shared/ErrorBoundary';
+import Layout from './components/layout/Layout';
+import LoginPage from './pages/auth/LoginPage';
+import RegisterPage from './pages/auth/RegisterPage';
+import AuthCallback from './pages/auth/AuthCallback';
+import DashboardPage from './pages/dashboard/DashboardPage';
+import UsersPage from './pages/users/UsersPage';
+import OrganizationsPage from './pages/organizations/OrganizationsPage';
+import RolesPage from './pages/roles/RolesPage';
+import PrivilegesPage from './pages/privileges/PrivilegesPage';
+import CustomersPage from './pages/customers/CustomersPage';
+import AuditPage from './pages/audit/AuditPage';
+import MessagingPage from './pages/messaging/MessagingPage';
+import EventLogPage from './pages/messaging/EventLogPage';
+import NavigationAdminPage from './pages/navigation-admin/NavigationAdminPage';
+import RoutesPage from './pages/routes/RoutesPage';
+import PiiVaultPage from './pages/pii-vault/PiiVaultPage';
+import ApiDocsPage from './pages/api-docs/ApiDocsPage';
+import SettingsPage from './pages/settings/SettingsPage';
+import SecretsPage from './pages/settings/SecretsPage';
+import DemoPage from './pages/demo/DemoPage';
+import DemoTrainingCenter from './pages/DemoTrainingCenter/DemoTrainingCenter';
+import DemoSegmentEditor from './pages/DemoSegmentEditor/DemoSegmentEditor';
+import DashboardViewPage from './pages/DashboardView/DashboardViewPage';
+import DashboardDesignerPage from './pages/DashboardDesigner/DashboardDesignerPage';
+import DataTableDemoPage from './pages/data-table-demo/DataTableDemoPage';
+import StepperDemoPage from './pages/stepper-demo/StepperDemoPage';
+import TreePickerDemoPage from './pages/tree-picker-demo/TreePickerDemoPage';
+import NotFoundPage from './pages/NotFoundPage';
+
+const PCG4DashboardPage = React.lazy(() => import('./pages/pcg4/PCG4DashboardPage'));
+const PCG4ConfiguratorPage = React.lazy(() => import('./pages/pcg4/PCG4ConfiguratorPage'));
+const PCG4AdminPage = React.lazy(() => import('./pages/pcg4/PCG4AdminPage'));
+const PCG4SetupPage = React.lazy(() => import('./pages/pcg4/PCG4SetupPage'));
+const PCG4OverviewPage = React.lazy(() => import('./pages/pcg4/PCG4OverviewPage'));
+const PCG4ReferenceLibraryPage = React.lazy(() => import('./pages/pcg4/PCG4ReferenceLibraryPage'));
+const PCG4CoverageMapperPage = React.lazy(() => import('./pages/pcg4/PCG4CoverageMapperPage'));
+const PCG4DeploymentsPage = React.lazy(() => import('./pages/pcg4/PCG4DeploymentsPage'));
+const PCG4PricingPage = React.lazy(() => import('./pages/pcg4/PCG4PricingPage'));
+// PCG4HelpPage removed — Video Tutorials tab in PCG4 Hub replaces it
+const PIIShowcasePage = React.lazy(() => import('./pages/pii-showcase/PIIShowcasePage'));
+const PIIDashboardPage = React.lazy(() => import('./pages/pii-showcase/PIIDashboardPage'));
+const PIIUploadPage = React.lazy(() => import('./pages/pii-showcase/PIIUploadPage'));
+const PIIConfigPage = React.lazy(() => import('./pages/pii-showcase/PIIConfigPage'));
+const DirectoryPage = React.lazy(() => import('./pages/directory/DirectoryPage'));
+const SupportCenterPage = React.lazy(() => import('./pages/support-center/SupportCenterPage'));
+const FormTemplatesPage = React.lazy(() => import('./pages/form-builder/FormTemplatesPage'));
+const FormCreatePage = React.lazy(() => import('./pages/form-builder/FormCreatePage'));
+const FormSubmissionsPage = React.lazy(() => import('./pages/form-builder/FormSubmissionsPage'));
+const FormEditorPage = React.lazy(() => import('./pages/form-builder/FormEditorPage'));
+const FormBuilderHelpPage = React.lazy(() => import('./pages/form-builder/FormBuilderHelpPage'));
+const FormBuilderOverviewPage = React.lazy(() => import('./pages/form-builder/FormBuilderOverviewPage'));
+const ModuleRegistryPage = React.lazy(() => import('./pages/admin/ModuleRegistryPage'));
+const LicensingPage = React.lazy(() => import('./pages/admin/LicensingPage'));
+const SitemapPage = React.lazy(() => import('./pages/admin/SitemapPage'));
+const UWWorkflowPage = React.lazy(() => import('./pages/uw-workflow/UWWorkflowPage'));
+const HIDecisioningPage = React.lazy(() => import('./pages/hi-decisioning/HIDecisioningPage'));
+const HIQuotationPage = React.lazy(() => import('./pages/hi-quotation/HIQuotationPage'));
+const MIQuotationPage = React.lazy(() => import('./pages/mi-quotation/MIQuotationPage'));
+const NewHIApplicationPage = React.lazy(() => import('./pages/hi-quotation/NewApplicationPage'));
+const RegionSelectorPage = React.lazy(() => import('./pages/hi-quotation/RegionSelectorPage'));
+const NewApplicationIndiaPage = React.lazy(() => import('./pages/hi-quotation/NewApplicationIndiaPage'));
+const NewApplicationUAEPage = React.lazy(() => import('./pages/hi-quotation/NewApplicationUAEPage'));
+const NewApplicationUSPage = React.lazy(() => import('./pages/hi-quotation/NewApplicationUSPage'));
+const HIQuotationHelpPage = React.lazy(() => import('./pages/hi-quotation/HIQuotationHelpPage'));
+const UWWorkflowHelpPage = React.lazy(() => import('./pages/uw-workflow/UWWorkflowHelpPage'));
+const HIDecisioningHelpPage = React.lazy(() => import('./pages/hi-decisioning/HIDecisioningHelpPage'));
+const MIQuotationHelpPage = React.lazy(() => import('./pages/mi-quotation/MIQuotationHelpPage'));
+const VerificationHelpPage = React.lazy(() => import('./pages/verification/VerificationHelpPage'));
+
+// Module Setup Pages (reusable ModuleSetupPage wrappers)
+const IdentitySetupPage = React.lazy(() => import('./pages/identity/IdentitySetupPage'));
+const IdentityDeploymentsPage = React.lazy(() => import('./pages/identity/IdentityDeploymentsPage'));
+const AuthorizationSetupPage = React.lazy(() => import('./pages/authorization/AuthorizationSetupPage'));
+const AuthorizationDeploymentsPage = React.lazy(() => import('./pages/authorization/AuthorizationDeploymentsPage'));
+const NavigationSetupPage = React.lazy(() => import('./pages/navigation-admin/NavigationSetupPage'));
+const NavigationDeploymentsPage = React.lazy(() => import('./pages/navigation-admin/NavigationDeploymentsPage'));
+const MessagingSetupPage = React.lazy(() => import('./pages/messaging/MessagingSetupPage'));
+const MessagingDeploymentsPage = React.lazy(() => import('./pages/messaging/MessagingDeploymentsPage'));
+const AuditSetupPage = React.lazy(() => import('./pages/audit/AuditSetupPage'));
+const AuditDeploymentsPage = React.lazy(() => import('./pages/audit/AuditDeploymentsPage'));
+const PiiVaultSetupPage = React.lazy(() => import('./pages/pii-vault/PiiVaultSetupPage'));
+const PiiVaultDeploymentsPage = React.lazy(() => import('./pages/pii-vault/PiiVaultDeploymentsPage'));
+const FormBuilderSetupPage = React.lazy(() => import('./pages/form-builder/FormBuilderSetupPage'));
+const FormBuilderDeploymentsPage = React.lazy(() => import('./pages/form-builder/FormBuilderDeploymentsPage'));
+const DashboardSetupPage = React.lazy(() => import('./pages/dashboard/DashboardSetupPage'));
+const DashboardDeploymentsPage = React.lazy(() => import('./pages/dashboard/DashboardDeploymentsPage'));
+const HIQuotationSetupPage = React.lazy(() => import('./pages/hi-quotation/HIQuotationSetupPage'));
+const HIQuotationDeploymentsPage = React.lazy(() => import('./pages/hi-quotation/HIQuotationDeploymentsPage'));
+const UWWorkflowSetupPage = React.lazy(() => import('./pages/uw-workflow/UWWorkflowSetupPage'));
+const UWWorkflowDeploymentsPage = React.lazy(() => import('./pages/uw-workflow/UWWorkflowDeploymentsPage'));
+const HIDecisioningSetupPage = React.lazy(() => import('./pages/hi-decisioning/HIDecisioningSetupPage'));
+const HIDecisioningDeploymentsPage = React.lazy(() => import('./pages/hi-decisioning/HIDecisioningDeploymentsPage'));
+const MIQuotationSetupPage = React.lazy(() => import('./pages/mi-quotation/MIQuotationSetupPage'));
+const MIQuotationDeploymentsPage = React.lazy(() => import('./pages/mi-quotation/MIQuotationDeploymentsPage'));
+const FeeManagementSetupPage = React.lazy(() => import('./pages/fee-management/FeeManagementSetupPage'));
+const FeeManagementDeploymentsPage = React.lazy(() => import('./pages/fee-management/FeeManagementDeploymentsPage'));
+const ClaimsSetupPage = React.lazy(() => import('./pages/claims/ClaimsSetupPage'));
+const ClaimsDeploymentsPage = React.lazy(() => import('./pages/claims/ClaimsDeploymentsPage'));
+const AdminSetupPage = React.lazy(() => import('./pages/admin/AdminSetupPage'));
+const AdminDeploymentsPage = React.lazy(() => import('./pages/admin/AdminDeploymentsPage'));
+
+// Module Hub Pages — Platform Core
+const IdentityHubPage = React.lazy(() => import('./pages/identity/IdentityHubPage'));
+const AuthorizationHubPage = React.lazy(() => import('./pages/authorization/AuthorizationHubPage'));
+const NavigationHubPage = React.lazy(() => import('./pages/navigation-admin/NavigationHubPage'));
+const MessagingHubPage = React.lazy(() => import('./pages/messaging/MessagingHubPage'));
+const AuditHubPage = React.lazy(() => import('./pages/audit/AuditHubPage'));
+const PIIVaultHubPage = React.lazy(() => import('./pages/pii-vault/PIIVaultHubPage'));
+const DashboardHubPage = React.lazy(() => import('./pages/dashboard/DashboardHubPage'));
+
+// Module Hub Pages — Business & Feature Services
+const PCG4HubPage = React.lazy(() => import('./pages/pcg4/PCG4HubPage'));
+const HIQuotationHubPage = React.lazy(() => import('./pages/hi-quotation/HIQuotationHubPage'));
+const MIQuotationHubPage = React.lazy(() => import('./pages/mi-quotation/MIQuotationHubPage'));
+const UWWorkflowHubPage = React.lazy(() => import('./pages/uw-workflow/UWWorkflowHubPage'));
+const HIDecisioningHubPage = React.lazy(() => import('./pages/hi-decisioning/HIDecisioningHubPage'));
+const FeeManagementHubPage = React.lazy(() => import('./pages/fee-management/FeeManagementHubPage'));
+const ClaimsHubPage = React.lazy(() => import('./pages/claims/ClaimsHubPage'));
+const FormBuilderHubPage = React.lazy(() => import('./pages/form-builder/FormBuilderHubPage'));
+
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const token = localStorage.getItem('zorbit_token');
+  if (!token) {
+    // Preserve the intended URL so login can redirect back
+    const intended = window.location.pathname + window.location.search;
+    return <Navigate to={`/login?returnTo=${encodeURIComponent(intended)}`} replace />;
+  }
+  return <>{children}</>;
+}
+
+/** Redirect helper that preserves URL params */
+function PCG4ConfigRedirect() {
+  const { configId } = useParams<{ configId: string }>();
+  return <Navigate to={`/app/pcg4/configurations/${configId}`} replace />;
+}
+
+const SuspenseFallback = (
+  <div className="flex items-center justify-center h-64">
+    <span className="text-gray-400">Loading...</span>
+  </div>
+);
+
+/** Wraps lazy-loaded pages in ErrorBoundary + Suspense */
+function SafeLazy({ children }: { children: React.ReactNode }) {
+  return (
+    <ErrorBoundary>
+      <React.Suspense fallback={SuspenseFallback}>{children}</React.Suspense>
+    </ErrorBoundary>
+  );
+}
+
+/**
+ * Shared page routes — mounted at /, /O/:orgId/, and (legacy) /org/:orgId/.
+ * The navigation service returns namespace-prefixed routes (e.g. /O/O-OZPY/users)
+ * following the Zorbit REST API grammar (/api/v1/O/:orgId/...).
+ * Legacy /org/... routes redirect to /O/... for backward compatibility.
+ * The org context comes from the JWT, not the URL.
+ */
+function PageRoutes() {
+  return (
+    <>
+      <Route index element={<DashboardPage />} />
+      <Route path="dashboard" element={<DashboardPage />} />
+      <Route path="dashboard/designer" element={<DashboardDesignerPage />} />
+      <Route path="users" element={<UsersPage />} />
+      <Route path="organizations" element={<OrganizationsPage />} />
+      <Route path="roles" element={<RolesPage />} />
+      <Route path="privileges" element={<PrivilegesPage />} />
+      <Route path="customers" element={<CustomersPage />} />
+      <Route path="audit" element={<AuditPage />} />
+      <Route path="audit/logs" element={<AuditPage />} />
+      <Route path="messaging" element={<MessagingPage />} />
+      <Route path="messaging/topics" element={<MessagingPage />} />
+      <Route path="messaging/events" element={<EventLogPage />} />
+      <Route path="navigation/menus" element={<NavigationAdminPage />} />
+      <Route path="navigation/routes" element={<RoutesPage />} />
+      <Route path="navigation" element={<NavigationAdminPage />} />
+      <Route path="pii-vault" element={<PiiVaultPage />} />
+      <Route path="pii-vault/tokens" element={<PiiVaultPage />} />
+      <Route path="api-docs" element={<ApiDocsPage />} />
+      <Route path="settings" element={<SettingsPage />} />
+      <Route path="settings/general" element={<SettingsPage />} />
+      <Route path="settings/secrets" element={<SecretsPage />} />
+      <Route path="admin/platform" element={<DashboardPage />} />
+      <Route path="admin/guide" element={<DashboardPage />} />
+      <Route path="admin/licensing" element={<SafeLazy><LicensingPage /></SafeLazy>} />
+      <Route path="settings/guide" element={<SettingsPage />} />
+
+      {/* Platform Core — Guide (renamed from Overview) & Hub Pages */}
+      <Route path="identity/guide" element={<SafeLazy><IdentityHubPage /></SafeLazy>} />
+      <Route path="identity/hub" element={<SafeLazy><IdentityHubPage /></SafeLazy>} />
+      <Route path="identity/overview" element={<Navigate to="identity/guide" replace />} />
+      <Route path="authorization/guide" element={<SafeLazy><AuthorizationHubPage /></SafeLazy>} />
+      <Route path="authorization/hub" element={<SafeLazy><AuthorizationHubPage /></SafeLazy>} />
+      <Route path="authorization/overview" element={<Navigate to="authorization/guide" replace />} />
+      <Route path="navigation/guide" element={<SafeLazy><NavigationHubPage /></SafeLazy>} />
+      <Route path="navigation/hub" element={<SafeLazy><NavigationHubPage /></SafeLazy>} />
+      <Route path="navigation/overview" element={<Navigate to="navigation/guide" replace />} />
+      <Route path="messaging/guide" element={<SafeLazy><MessagingHubPage /></SafeLazy>} />
+      <Route path="messaging/hub" element={<SafeLazy><MessagingHubPage /></SafeLazy>} />
+      <Route path="messaging/overview" element={<Navigate to="messaging/guide" replace />} />
+      <Route path="audit/guide" element={<SafeLazy><AuditHubPage /></SafeLazy>} />
+      <Route path="audit/hub" element={<SafeLazy><AuditHubPage /></SafeLazy>} />
+      <Route path="audit/overview" element={<Navigate to="audit/guide" replace />} />
+      <Route path="pii-vault/guide" element={<SafeLazy><PIIVaultHubPage /></SafeLazy>} />
+      <Route path="pii-vault/hub" element={<SafeLazy><PIIVaultHubPage /></SafeLazy>} />
+      <Route path="pii-vault/overview" element={<Navigate to="pii-vault/guide" replace />} />
+      <Route path="dashboard/guide" element={<SafeLazy><DashboardHubPage /></SafeLazy>} />
+      <Route path="dashboard/hub" element={<SafeLazy><DashboardHubPage /></SafeLazy>} />
+      <Route path="dashboard/overview" element={<Navigate to="dashboard/guide" replace />} />
+
+      {/* PII Showcase */}
+      <Route path="pii-showcase" element={<SafeLazy><PIIShowcasePage /></SafeLazy>} />
+      <Route path="pii-showcase/dashboard" element={<SafeLazy><PIIDashboardPage /></SafeLazy>} />
+      <Route path="pii-showcase/upload" element={<SafeLazy><PIIUploadPage /></SafeLazy>} />
+      <Route path="pii-showcase/config" element={<SafeLazy><PIIConfigPage /></SafeLazy>} />
+
+      {/* PCG4 routes — new /app/pcg4/* convention with lazy loading */}
+      <Route path="app/pcg4/hub" element={<SafeLazy><PCG4HubPage /></SafeLazy>} />
+      <Route path="app/pcg4/guide" element={<SafeLazy><PCG4HubPage /></SafeLazy>} />
+      <Route path="app/pcg4/overview" element={<Navigate to="/app/pcg4/guide" replace />} />
+      <Route path="app/pcg4/configurations" element={<SafeLazy><PCG4DashboardPage /></SafeLazy>} />
+      <Route path="app/pcg4/configurations/new" element={<SafeLazy><PCG4ConfiguratorPage /></SafeLazy>} />
+      <Route path="app/pcg4/configurations/:configId" element={<SafeLazy><PCG4ConfiguratorPage /></SafeLazy>} />
+      <Route path="app/pcg4/reference-library" element={<SafeLazy><PCG4ReferenceLibraryPage /></SafeLazy>} />
+      <Route path="app/pcg4/coverage-mapper" element={<SafeLazy><PCG4CoverageMapperPage /></SafeLazy>} />
+      <Route path="app/pcg4/encounters" element={<SafeLazy><PCG4AdminPage /></SafeLazy>} />
+      <Route path="app/pcg4/deployments" element={<SafeLazy><PCG4DeploymentsPage /></SafeLazy>} />
+      <Route path="app/pcg4/setup" element={<SafeLazy><PCG4SetupPage /></SafeLazy>} />
+      <Route path="app/pcg4/pricing" element={<SafeLazy><PCG4PricingPage /></SafeLazy>} />
+      {/* PCG4 Help removed — Video Tutorials tab in PCG4 Hub replaces it */}
+      <Route path="app/pcg4/help" element={<Navigate to="/app/pcg4/hub" replace />} />
+
+      {/* Organization Directory */}
+      <Route path="directory" element={<SafeLazy><DirectoryPage /></SafeLazy>} />
+
+      {/* Platform Support Center */}
+      <Route path="support-center" element={<SafeLazy><SupportCenterPage /></SafeLazy>} />
+
+      {/* Form Builder */}
+      <Route path="form-builder/templates" element={<SafeLazy><FormTemplatesPage /></SafeLazy>} />
+      <Route path="form-builder/create" element={<SafeLazy><FormCreatePage /></SafeLazy>} />
+      <Route path="form-builder/submissions" element={<SafeLazy><FormSubmissionsPage /></SafeLazy>} />
+      <Route path="form-builder/edit/:slug" element={<SafeLazy><FormEditorPage /></SafeLazy>} />
+      <Route path="form-builder/help" element={<SafeLazy><FormBuilderHelpPage /></SafeLazy>} />
+      <Route path="form-builder/guide" element={<SafeLazy><FormBuilderOverviewPage /></SafeLazy>} />
+      <Route path="form-builder/overview" element={<Navigate to="form-builder/guide" replace />} />
+      <Route path="form-builder/hub" element={<SafeLazy><FormBuilderHubPage /></SafeLazy>} />
+
+      {/* Admin */}
+      <Route path="admin/modules" element={<SafeLazy><ModuleRegistryPage /></SafeLazy>} />
+      <Route path="admin/sitemap" element={<SafeLazy><SitemapPage /></SafeLazy>} />
+
+      {/* ============================================================ */}
+      {/* Module Setup & Deployments Pages                             */}
+      {/* (Must be before wildcard routes like uw-workflow/*)           */}
+      {/* ============================================================ */}
+
+      {/* Platform Services — Setup & Deployments */}
+      <Route path="identity/setup" element={<SafeLazy><IdentitySetupPage /></SafeLazy>} />
+      <Route path="identity/deployments" element={<SafeLazy><IdentityDeploymentsPage /></SafeLazy>} />
+      <Route path="authorization/setup" element={<SafeLazy><AuthorizationSetupPage /></SafeLazy>} />
+      <Route path="authorization/deployments" element={<SafeLazy><AuthorizationDeploymentsPage /></SafeLazy>} />
+      <Route path="navigation/setup" element={<SafeLazy><NavigationSetupPage /></SafeLazy>} />
+      <Route path="navigation/deployments" element={<SafeLazy><NavigationDeploymentsPage /></SafeLazy>} />
+      <Route path="messaging/setup" element={<SafeLazy><MessagingSetupPage /></SafeLazy>} />
+      <Route path="messaging/deployments" element={<SafeLazy><MessagingDeploymentsPage /></SafeLazy>} />
+      <Route path="audit/setup" element={<SafeLazy><AuditSetupPage /></SafeLazy>} />
+      <Route path="audit/deployments" element={<SafeLazy><AuditDeploymentsPage /></SafeLazy>} />
+      <Route path="pii-vault/setup" element={<SafeLazy><PiiVaultSetupPage /></SafeLazy>} />
+      <Route path="pii-vault/deployments" element={<SafeLazy><PiiVaultDeploymentsPage /></SafeLazy>} />
+
+      {/* Platform Capabilities — Setup & Deployments */}
+      <Route path="form-builder/setup" element={<SafeLazy><FormBuilderSetupPage /></SafeLazy>} />
+      <Route path="form-builder/deployments" element={<SafeLazy><FormBuilderDeploymentsPage /></SafeLazy>} />
+      <Route path="dashboard/setup" element={<SafeLazy><DashboardSetupPage /></SafeLazy>} />
+      <Route path="dashboard/deployments" element={<SafeLazy><DashboardDeploymentsPage /></SafeLazy>} />
+
+      {/* Business Modules — Setup & Deployments */}
+      <Route path="hi-quotation/setup" element={<SafeLazy><HIQuotationSetupPage /></SafeLazy>} />
+      <Route path="hi-quotation/deployments" element={<SafeLazy><HIQuotationDeploymentsPage /></SafeLazy>} />
+      <Route path="uw-workflow/setup" element={<SafeLazy><UWWorkflowSetupPage /></SafeLazy>} />
+      <Route path="uw-workflow/deployments" element={<SafeLazy><UWWorkflowDeploymentsPage /></SafeLazy>} />
+      <Route path="hi-decisioning/setup" element={<SafeLazy><HIDecisioningSetupPage /></SafeLazy>} />
+      <Route path="hi-decisioning/deployments" element={<SafeLazy><HIDecisioningDeploymentsPage /></SafeLazy>} />
+      <Route path="mi-quotation/setup" element={<SafeLazy><MIQuotationSetupPage /></SafeLazy>} />
+      <Route path="mi-quotation/deployments" element={<SafeLazy><MIQuotationDeploymentsPage /></SafeLazy>} />
+      <Route path="fee-management/setup" element={<SafeLazy><FeeManagementSetupPage /></SafeLazy>} />
+      <Route path="fee-management/deployments" element={<SafeLazy><FeeManagementDeploymentsPage /></SafeLazy>} />
+      <Route path="claims/setup" element={<SafeLazy><ClaimsSetupPage /></SafeLazy>} />
+      <Route path="claims/deployments" element={<SafeLazy><ClaimsDeploymentsPage /></SafeLazy>} />
+
+      {/* Admin — Setup & Deployments */}
+      <Route path="admin/setup" element={<SafeLazy><AdminSetupPage /></SafeLazy>} />
+      <Route path="admin/deployments" element={<SafeLazy><AdminDeploymentsPage /></SafeLazy>} />
+
+      {/* Business Modules — Retail Insurance */}
+      <Route path="uw-workflow" element={<SafeLazy><UWWorkflowPage /></SafeLazy>} />
+      <Route path="uw-workflow/guide" element={<SafeLazy><UWWorkflowHubPage /></SafeLazy>} />
+      <Route path="uw-workflow/hub" element={<SafeLazy><UWWorkflowHubPage /></SafeLazy>} />
+      <Route path="uw-workflow/help" element={<SafeLazy><UWWorkflowHelpPage /></SafeLazy>} />
+      <Route path="uw-workflow/*" element={<SafeLazy><UWWorkflowPage /></SafeLazy>} />
+      <Route path="hi-decisioning" element={<SafeLazy><HIDecisioningPage /></SafeLazy>} />
+      <Route path="hi-decisioning/guide" element={<SafeLazy><HIDecisioningHubPage /></SafeLazy>} />
+      <Route path="hi-decisioning/hub" element={<SafeLazy><HIDecisioningHubPage /></SafeLazy>} />
+      <Route path="hi-decisioning/help" element={<SafeLazy><HIDecisioningHelpPage /></SafeLazy>} />
+      <Route path="hi-decisioning/*" element={<SafeLazy><HIDecisioningPage /></SafeLazy>} />
+      <Route path="hi-quotation" element={<SafeLazy><HIQuotationPage /></SafeLazy>} />
+      <Route path="hi-quotation/guide" element={<SafeLazy><HIQuotationHubPage /></SafeLazy>} />
+      <Route path="hi-quotation/hub" element={<SafeLazy><HIQuotationHubPage /></SafeLazy>} />
+      <Route path="hi-quotation/help" element={<SafeLazy><HIQuotationHelpPage /></SafeLazy>} />
+      <Route path="hi-quotation/new" element={<SafeLazy><RegionSelectorPage /></SafeLazy>} />
+      <Route path="hi-quotation/new/india" element={<SafeLazy><NewApplicationIndiaPage /></SafeLazy>} />
+      <Route path="hi-quotation/new/uae" element={<SafeLazy><NewApplicationUAEPage /></SafeLazy>} />
+      <Route path="hi-quotation/new/us" element={<SafeLazy><NewApplicationUSPage /></SafeLazy>} />
+      <Route path="hi-quotation/new/legacy" element={<SafeLazy><NewHIApplicationPage /></SafeLazy>} />
+      <Route path="hi-quotation/*" element={<SafeLazy><HIQuotationPage /></SafeLazy>} />
+
+      {/* Business Modules — Motor Insurance */}
+      <Route path="mi-quotation" element={<SafeLazy><MIQuotationPage /></SafeLazy>} />
+      <Route path="mi-quotation/guide" element={<SafeLazy><MIQuotationHubPage /></SafeLazy>} />
+      <Route path="mi-quotation/hub" element={<SafeLazy><MIQuotationHubPage /></SafeLazy>} />
+      <Route path="mi-quotation/help" element={<SafeLazy><MIQuotationHelpPage /></SafeLazy>} />
+      <Route path="mi-quotation/*" element={<SafeLazy><MIQuotationPage /></SafeLazy>} />
+
+      {/* Business Modules — Fee Management */}
+      <Route path="fee-management" element={<SafeLazy><FeeManagementHubPage /></SafeLazy>} />
+      <Route path="fee-management/hub" element={<SafeLazy><FeeManagementHubPage /></SafeLazy>} />
+
+      {/* Business Modules — Claims */}
+      <Route path="claims" element={<SafeLazy><ClaimsHubPage /></SafeLazy>} />
+      <Route path="claims/hub" element={<SafeLazy><ClaimsHubPage /></SafeLazy>} />
+
+      {/* Verification */}
+      <Route path="verification/help" element={<SafeLazy><VerificationHelpPage /></SafeLazy>} />
+
+      {/* Legacy redirects: old /products/* and /pcg4/* routes */}
+      <Route path="products" element={<Navigate to="/app/pcg4/configurations" replace />} />
+      <Route path="products/designer" element={<Navigate to="/app/pcg4/configurations/new" replace />} />
+      <Route path="products/encounters" element={<Navigate to="/app/pcg4/encounters" replace />} />
+      <Route path="products/rating" element={<NotFoundPage />} />
+      <Route path="products/rules" element={<NotFoundPage />} />
+      <Route path="products/forms" element={<NotFoundPage />} />
+      <Route path="pcg4" element={<Navigate to="/app/pcg4/configurations" replace />} />
+      <Route path="pcg4/configurator" element={<Navigate to="/app/pcg4/configurations/new" replace />} />
+      <Route path="pcg4/configurator/:configId" element={<PCG4ConfigRedirect />} />
+
+      <Route path="demo" element={<DemoPage />} />
+      <Route path="demo/:id" element={<DemoPage />} />
+      <Route path="dashboard-view" element={<DashboardViewPage />} />
+      <Route path="dashboard-designer" element={<DashboardDesignerPage />} />
+      <Route path="demo-training" element={<DemoTrainingCenter />} />
+      <Route path="demo-training/segments/new" element={<DemoSegmentEditor />} />
+      <Route path="demo-training/segments/:id/edit" element={<DemoSegmentEditor />} />
+      <Route path="data-table-demo" element={<DataTableDemoPage />} />
+      <Route path="stepper-demo" element={<StepperDemoPage />} />
+      <Route path="tree-picker-demo" element={<TreePickerDemoPage />} />
+      {/* Catch-all: show Not Found page instead of silent redirect */}
+      <Route path="*" element={<NotFoundPage />} />
+    </>
+  );
+}
+
+/** Redirect /org/:orgId/* → /O/:orgId/* for backward compatibility */
+function OrgLegacyRedirect() {
+  const { orgId, '*': rest } = useParams<{ orgId: string; '*': string }>();
+  return <Navigate to={`/O/${orgId}/${rest || ''}`} replace />;
+}
+
+const App: React.FC = () => {
+  return (
+    <ToastProvider>
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/auth/callback" element={<AuthCallback />} />
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <Layout />
+            </ProtectedRoute>
+          }
+        >
+          {PageRoutes()}
+        </Route>
+        {/* Namespace-prefixed routes: /O/:orgId/... (matches REST API grammar) */}
+        <Route
+          path="/O/:orgId"
+          element={
+            <ProtectedRoute>
+              <Layout />
+            </ProtectedRoute>
+          }
+        >
+          {PageRoutes()}
+        </Route>
+        {/* Backward compatibility: /org/:orgId/* → /O/:orgId/* */}
+        <Route path="/org/:orgId/*" element={<OrgLegacyRedirect />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </ToastProvider>
+  );
+};
+
+export default App;

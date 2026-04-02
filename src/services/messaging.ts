@@ -2,10 +2,12 @@ import { API_CONFIG } from '../config';
 import api from './api';
 
 export interface Topic {
+  hashId: string;
   name: string;
   partitions: number;
-  replicas: number;
-  messageCount: number;
+  replicationFactor: number;
+  retentionMs: number;
+  createdAt: string;
 }
 
 export interface DLQEntry {

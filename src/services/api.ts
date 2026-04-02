@@ -20,7 +20,7 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       // Don't redirect if already on login/register/callback pages — prevents infinite loop
       const path = window.location.pathname;
-      if (!path.startsWith('/login') && !path.startsWith('/register') && !path.startsWith('/auth/callback')) {
+      if (!path.startsWith('/login') && !path.startsWith('/register') && !path.startsWith('/auth/callback') && !path.startsWith('/payments/')) {
         localStorage.removeItem('zorbit_token');
         localStorage.removeItem('zorbit_user');
         window.location.href = '/login';

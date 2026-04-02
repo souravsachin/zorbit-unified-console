@@ -8,10 +8,12 @@ import { messagingService, Topic, DLQEntry, HealthStatus } from '../../services/
 type Tab = 'topics' | 'dlq';
 
 const topicColumns: Column<Topic>[] = [
+  { key: 'hashId', header: 'Hash ID', render: (t) => <code className="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded">{t.hashId}</code> },
   { key: 'name', header: 'Topic Name' },
   { key: 'partitions', header: 'Partitions' },
-  { key: 'replicas', header: 'Replicas' },
-  { key: 'messageCount', header: 'Messages' },
+  { key: 'replicationFactor', header: 'Replication' },
+  { key: 'retentionMs', header: 'Retention', render: (t) => `${Math.round(t.retentionMs / 86400000)}d` },
+  { key: 'createdAt', header: 'Created', render: (t) => new Date(t.createdAt).toLocaleDateString() },
 ];
 
 const dlqColumns: Column<DLQEntry>[] = [

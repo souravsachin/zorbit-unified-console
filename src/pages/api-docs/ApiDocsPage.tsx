@@ -4,19 +4,26 @@ import { ExternalLink } from 'lucide-react';
 interface ServiceDoc {
   name: string;
   description: string;
-  port: number;
-  path: string;
+  proxyPath: string;
+  swaggerPath: string;
 }
 
 const services: ServiceDoc[] = [
-  { name: 'Identity Service', description: 'Authentication, users, organizations, JWT tokens', port: 3099, path: '/api-docs' },
-  { name: 'Authorization Service', description: 'Roles, privileges, access control policies', port: 3098, path: '/api-docs' },
-  { name: 'Navigation Service', description: 'Dynamic menu management, route registration', port: 3097, path: '/api-docs' },
-  { name: 'Messaging Service', description: 'Kafka topics, dead letter queue, event routing', port: 3096, path: '/api-docs' },
-  { name: 'PII Vault', description: 'Tokenization of sensitive PII data', port: 3095, path: '/api-docs' },
-  { name: 'Audit Service', description: 'Event audit logging and compliance', port: 3094, path: '/api-docs' },
-  { name: 'Customer Service', description: 'Sample business service for customer management', port: 3093, path: '/api-docs' },
+  { name: 'Identity Service', description: 'Authentication, users, organizations, JWT tokens', proxyPath: '/api/identity', swaggerPath: '/api-docs' },
+  { name: 'Authorization Service', description: 'Roles, privileges, access control policies', proxyPath: '/api/authorization', swaggerPath: '/api-docs' },
+  { name: 'Navigation Service', description: 'Dynamic menu management, route registration', proxyPath: '/api/navigation', swaggerPath: '/api-docs' },
+  { name: 'Event Bus', description: 'Kafka topics, dead letter queue, event routing', proxyPath: '/api/messaging', swaggerPath: '/api-docs' },
+  { name: 'PII Vault', description: 'Tokenization of sensitive PII data', proxyPath: '/api/pii-vault', swaggerPath: '/api-docs' },
+  { name: 'Audit Service', description: 'Event audit logging and compliance', proxyPath: '/api/audit', swaggerPath: '/api-docs' },
+  { name: 'Customer Service', description: 'Sample business service for customer management', proxyPath: '/api/customer', swaggerPath: '/api-docs' },
+  { name: 'PCG4 - Product Configurator', description: 'Product definition, variants, encounter types', proxyPath: '/api/app/pcg4', swaggerPath: '/api-docs' },
 ];
+
+function getSwaggerUrl(svc: ServiceDoc): string {
+  // Use the nginx proxy path + swagger path for production access
+  const base = window.location.origin;
+  return `${base}${svc.proxyPath}${svc.swaggerPath}`;
+}
 
 const ApiDocsPage: React.FC = () => {
   return (
@@ -30,9 +37,9 @@ const ApiDocsPage: React.FC = () => {
             <h3 className="font-semibold text-lg mb-2">{svc.name}</h3>
             <p className="text-sm text-gray-500 mb-4">{svc.description}</p>
             <div className="flex items-center justify-between">
-              <span className="text-xs text-gray-400">Port {svc.port}</span>
+              <span className="text-xs text-gray-400 font-mono">{svc.proxyPath}</span>
               <a
-                href={`http://localhost:${svc.port}${svc.path}`}
+                href={getSwaggerUrl(svc)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center space-x-1 text-primary-600 hover:text-primary-700 text-sm font-medium"

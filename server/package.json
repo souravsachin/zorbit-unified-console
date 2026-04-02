@@ -1,7 +1,7 @@
 {
   "name": "zorbit-admin-console-server",
   "version": "0.1.0",
-  "description": "Zorbit Admin Console — NestJS backend for dashboard configurator and demo engine",
+  "description": "Zorbit Unified Console — NestJS backend for dashboard configurator and demo engine",
   "author": "Zorbit Platform",
   "private": true,
   "license": "UNLICENSED",

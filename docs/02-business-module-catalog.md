@@ -2,7 +2,7 @@
 
 | Version | Date | Status | Author |
 |---------|------|--------|--------|
-| 0.1 | 2026-03-13 | Draft — Pending Review | Platform Team |
+| 1.0 | 2026-03-13 | Released — Internal Distribution | Platform Team |
 
 ---
 
@@ -22,15 +22,13 @@ Zorbit organizes business applications in a five-level hierarchy:
 Edition > Business Line > Capability Area > Module > Feature
 ```
 
-> **Note on terminology:** The original working names were Suite > Product Category > Product Line > Module > Sub-module. See [Section 9: Terminology Review](#9-terminology-review) for the rationale behind the standardized names used in this document.
-
-| Level | Original Term | Standardized Term | Purpose |
-|-------|---------------|-------------------|---------|
-| 1 | Suite | **Edition** | Top-level packaging sold to a specific buyer type |
-| 2 | Product Category | **Business Line** | Maps to revenue model (revenue vs. cost center) |
-| 3 | Product Line | **Capability Area** | Functional grouping of modules |
-| 4 | Module | **Module** | Deployable unit of business functionality |
-| 5 | Sub-module | **Feature** | Granular capability within a module |
+| Level | Term | Purpose |
+|-------|------|---------|
+| 1 | **Edition** | Top-level packaging sold to a specific buyer type |
+| 2 | **Business Line** | Maps to revenue model (revenue vs. cost center) |
+| 3 | **Capability Area** | Functional grouping of modules |
+| 4 | **Module** | Deployable unit of business functionality |
+| 5 | **Feature** | Granular capability within a module |
 
 ---
 
@@ -58,10 +56,10 @@ Each edition targets a distinct buyer type and packages modules accordingly.
 
 Business lines map to the revenue model and determine business ownership.
 
-| Business Line | Original Term | Purpose | Business Owner | Financial Model |
-|---------------|---------------|---------|----------------|-----------------|
-| **Distribution** | Product Category: Distribution | Revenue generation — activities that produce revenue | Sales / Distribution | Revenue center |
-| **Servicing** | Product Category: Servicing | Service delivery — activities that fulfill the promise | Operations / Service | Cost center |
+| Business Line | Purpose | Business Owner | Financial Model |
+|---------------|---------|----------------|-----------------|
+| **Distribution** | Revenue generation — activities that produce revenue | Sales / Distribution | Revenue center |
+| **Servicing** | Service delivery — activities that fulfill the promise | Operations / Service | Cost center |
 
 These two business lines have different business owners with their own expertise, competence, and authorities. This separation drives organizational structure, pricing, and packaging.
 
@@ -221,57 +219,32 @@ The module catalog is linked to a pricing model with the following characteristi
 - **Packaging:** Modules are bundled and priced differently per edition
 - **Unbundling:** Individual modules can be sold separately with adjusted pricing
 
-This pricing model drives how modules are packaged and sold per edition. Detailed pricing data is maintained separately from this catalog.
+Detailed pricing data is maintained separately from this catalog.
 
 ---
 
-## 9. Terminology Review and Recommendations
+## 9. Relationship to Platform
 
-The original working terms were reviewed for industry alignment, sales clarity, and market recognition.
-
-### Analysis
-
-| Original Term | Concern | Alternatives Considered | Recommendation | Rationale |
-|---------------|---------|------------------------|----------------|-----------|
-| **Suite** | Common in enterprise software (e.g., Oracle Suite, Microsoft Suite) but implies a fixed bundle. Can feel monolithic. | Edition, Solution, Offering, Package | **Edition** | "Edition" is widely used in enterprise SaaS (Salesforce editions, ServiceNow editions). It clearly communicates buyer-specific packaging without implying a rigid bundle. Supports tiered selling. |
-| **Product Category** | Ambiguous — could mean anything in a product catalog. Not self-describing. | Business Line, Revenue Stream, Segment | **Business Line** | "Business Line" is standard in insurance and financial services. Immediately understood by C-suite buyers. Maps naturally to P&L ownership. |
-| **Product Line** | Overloaded — conflicts with the insurance industry meaning of "product line" (e.g., "health product line", "motor product line"). | Capability Area, Service Line, Function Area, Domain | **Capability Area** | Avoids collision with insurance product line terminology. "Capability Area" is used in TOGAF and enterprise architecture. Clear in sales conversations: "Which capability areas do you need?" |
-| **Module** | Industry standard. Universally understood. | — | **Module** (no change) | Standard across enterprise software. SAP modules, Oracle modules, etc. No change needed. |
-| **Sub-module** | Less standard. Can feel like internal jargon. Buyers think in terms of features. | Feature, Component, Function, Capability | **Feature** | "Feature" is the most natural term for buyers. "Does this module include feature X?" is a standard sales conversation. "Component" is too technical. |
-
-### Recommended Hierarchy
-
-```
-Edition > Business Line > Capability Area > Module > Feature
-```
-
-This hierarchy is used throughout this document.
-
----
-
-## 10. Additional Data Sources
-
-> **Reminder:** Additional module details, pricing weights, and feature-level breakdowns can be extracted from the source spreadsheet:
->
-> `/Users/s/workspace/zorbit-inspirations/04_resources/OneZippy Coverage.xlsx` (Working Copy sheet)
->
-> TODO: Schedule a follow-up session to extract remaining data from this spreadsheet and populate feature-level details for each module.
-
----
-
-## 11. Relationship to Platform
-
-This catalog describes **business domain modules only**. The Zorbit platform provides the shared infrastructure these modules run on:
-
-| Concern | Owned By |
-|---------|----------|
-| Identity, Auth, RBAC | Platform (zorbit-identity, zorbit-authorization) |
-| Navigation, Routing | Platform (zorbit-navigation) |
-| Messaging, Events | Platform (zorbit-messaging) |
-| PII Protection | Platform (zorbit-pii-vault) |
-| Audit Trail | Platform (zorbit-audit) |
-| Observability | Platform (zorbit-observability) |
-| AI Gateway | Platform (zorbit-ai-gateway) |
-| **Business Modules** | **This catalog — domain-specific applications** |
+This catalog describes **business domain modules only**. The Zorbit platform provides the shared infrastructure these modules run on.
 
 Business modules consume platform services via the Zorbit SDK. They never implement their own identity, authorization, messaging, or audit logic.
+
+| Platform Service | Repo | What It Does |
+|-----------------|------|--------------|
+| **Identity** | zorbit-identity | Central authentication authority. Handles user registration, login (email/password, OAuth, SAML, RADIUS, Diameter), JWT issuance, user profile management, and organization management. All services and modules delegate authentication here. |
+| **Authorization** | zorbit-authorization | Role-based access control (RBAC) and privilege management. Defines roles, assigns privileges, and provides the privilege resolution API that determines what each user can see and do across all modules. |
+| **Navigation** | zorbit-navigation | Dynamic navigation menu assembly. Stores menu items contributed by each module, resolves per-user menus based on privileges, and serves the assembled menu to the frontend. Modules register their menu items here via manifests. |
+| **Messaging** | zorbit-messaging | Asynchronous event bus backed by Kafka. Provides topic management, event publishing/consuming, and dead letter queue handling. All inter-service communication flows through here using the canonical event envelope. |
+| **PII Vault** | zorbit-pii-vault | Sensitive data protection. Stores personally identifiable information (emails, phone numbers, addresses) and returns opaque tokens. Operational databases never contain raw PII — only vault tokens. |
+| **Audit** | zorbit-audit | Immutable audit trail. Captures and stores all significant actions across the platform (API calls, data changes, login events) with full context including who, what, when, and from where. |
+| **Observability** | zorbit-observability | Centralized telemetry collection using OpenTelemetry. Provides distributed tracing, metrics aggregation, and log correlation across all services and modules. |
+| **AI Gateway** | zorbit-ai-gateway | Unified interface for AI/ML capabilities. Routes AI requests to appropriate models, manages prompt templates, enforces usage policies, and provides a consistent API for modules that need AI features. |
+| **Secrets** | zorbit-secrets | Secure credential and configuration management. Stores API keys, database passwords, and other sensitive configuration values. Services retrieve secrets at runtime rather than storing them in environment files. |
+| **Data Platform** | zorbit-data-platform | Centralized data lake and analytics infrastructure. Provides data ingestion pipelines, transformation workflows, and query interfaces for cross-module business intelligence and reporting. |
+| **Licensing** | zorbit-licensing | Module and edition license enforcement. Tracks which modules each organization has licensed, enforces entitlements at runtime, and provides the licensing API used during module injection to determine availability. |
+| **Interaction Recorder** | zorbit-interaction-recorder | Captures and replays user interactions across the platform. Records screen sessions, API call sequences, and user journeys for support, training, and compliance purposes. |
+| **Seeding** | zorbit-seeding | Demo data provisioning and environment setup. Provides idempotent seed scripts that populate consistent test data across all services for development, QA, and sales demos. |
+
+---
+
+*Zorbit Business Module Catalog v1.0 — 2026-03-13*

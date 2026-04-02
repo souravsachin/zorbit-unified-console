@@ -1,16 +1,18 @@
-# Zorbit Service: Admin Console
+# Zorbit Service: Unified Console
 
 ## Purpose
 
-This repository implements the Admin Console for the Zorbit platform.
+This repository implements the Unified Console for the Zorbit platform.
+
+> **Note:** The repository folder is still named `zorbit-admin-console` for backward compatibility. The displayed name everywhere is "Zorbit Unified Console".
 
 Zorbit is a MACH-compliant shared platform infrastructure used to build enterprise applications.
 
-The Admin Console is a React single-page application (SPA) that provides a unified management UI for all Zorbit platform services. It is a frontend application, not a backend service.
+The Unified Console is a React single-page application (SPA) that provides a unified management UI for all Zorbit platform services. It is a frontend application, not a backend service.
 
 ## Responsibilities
 
-- Provide a centralized admin UI for managing the Zorbit platform
+- Provide a centralized unified UI for managing the Zorbit platform
 - Authenticate users via the Identity service (JWT-based)
 - Display and manage users, organizations, roles, and privileges
 - Manage customers from the sample-customer-service (demonstrating a business app)

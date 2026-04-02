@@ -18,6 +18,9 @@ const RegisterPage: React.FC = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  // Security note: password is sent over HTTPS (wire encryption) and hashed
+  // server-side with bcrypt (12 rounds). Client-side hashing is a Phase 2
+  // backlog item for defense-in-depth.
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);

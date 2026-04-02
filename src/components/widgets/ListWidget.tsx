@@ -20,7 +20,7 @@ const ListWidget: React.FC<ListWidgetProps> = ({ widget }) => {
         <ListTag className={`space-y-1.5 text-sm ${ordered ? 'list-decimal' : 'list-disc'} list-inside`}>
           {items.map((item, i) => (
             <li key={i} className="text-gray-700 dark:text-gray-300">
-              {item}
+              {typeof item === 'object' ? JSON.stringify(item) : item}
             </li>
           ))}
         </ListTag>

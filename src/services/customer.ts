@@ -18,8 +18,8 @@ export interface CreateCustomerPayload {
 }
 
 export const customerService = {
-  getCustomers: (orgId: string) =>
-    api.get<Customer[]>(`${API_CONFIG.CUSTOMER_URL}/api/v1/O/${orgId}/customers`),
+  getCustomers: (orgId: string, params?: Record<string, unknown>) =>
+    api.get<Customer[]>(`${API_CONFIG.CUSTOMER_URL}/api/v1/O/${orgId}/customers`, { params }),
 
   getCustomer: (orgId: string, customerId: string) =>
     api.get<Customer>(`${API_CONFIG.CUSTOMER_URL}/api/v1/O/${orgId}/customers/${customerId}`),

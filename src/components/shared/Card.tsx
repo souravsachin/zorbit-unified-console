@@ -15,7 +15,7 @@ const Card: React.FC<CardProps> = ({ icon: Icon, label, value, trend, color = 't
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm font-medium text-gray-500 dark:text-gray-400">{label}</p>
-          <p className="text-2xl font-bold mt-1">{value}</p>
+          <p className="text-2xl font-bold mt-1">{typeof value === 'object' ? JSON.stringify(value) : value}</p>
           {trend && <p className="text-xs text-gray-400 mt-1">{trend}</p>}
         </div>
         <div className={`p-3 rounded-lg bg-primary-50 dark:bg-primary-900/20 ${color}`}>
