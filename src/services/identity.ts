@@ -101,4 +101,48 @@ export const identityService = {
 
   mfaStatus: () =>
     api.get(`${API_CONFIG.IDENTITY_URL}/api/v1/G/auth/mfa/status`),
+
+  // ─── WebAuthn / Passkeys ────────────────────────────────────────
+  webauthnRegisterOptions: () =>
+    api.post(`${API_CONFIG.IDENTITY_URL}/api/v1/G/auth/webauthn/register-options`),
+
+  webauthnRegisterVerify: (credential: any, deviceName?: string) =>
+    api.post(`${API_CONFIG.IDENTITY_URL}/api/v1/G/auth/webauthn/register-verify`, { credential, deviceName }),
+
+  webauthnLoginOptions: (email: string) =>
+    api.post(`${API_CONFIG.IDENTITY_URL}/api/v1/G/auth/webauthn/login-options`, { email }),
+
+  webauthnLoginVerify: (email: string, credential: any) =>
+    api.post(`${API_CONFIG.IDENTITY_URL}/api/v1/G/auth/webauthn/login-verify`, { email, credential }),
+
+  webauthnListCredentials: () =>
+    api.get(`${API_CONFIG.IDENTITY_URL}/api/v1/G/auth/webauthn/credentials`),
+
+  webauthnRemoveCredential: (credentialId: string) =>
+    api.delete(`${API_CONFIG.IDENTITY_URL}/api/v1/G/auth/webauthn/credentials/${encodeURIComponent(credentialId)}`),
+
+  // ─── QR Code Login ──────────────────────────────────────────────
+  qrGenerate: () =>
+    api.get(`${API_CONFIG.IDENTITY_URL}/api/v1/G/auth/qr/generate`),
+
+  qrConfirm: (sessionId: string) =>
+    api.post(`${API_CONFIG.IDENTITY_URL}/api/v1/G/auth/qr/confirm`, { sessionId }),
+
+  qrStatus: (sessionId: string) =>
+    api.get(`${API_CONFIG.IDENTITY_URL}/api/v1/G/auth/qr/status/${sessionId}`),
+
+  // ─── Magic Link ─────────────────────────────────────────────────
+  magicLinkSend: (email: string) =>
+    api.post(`${API_CONFIG.IDENTITY_URL}/api/v1/G/auth/magic-link/send`, { email }),
+
+  // ─── Email OTP ──────────────────────────────────────────────────
+  emailOtpSend: (email: string) =>
+    api.post(`${API_CONFIG.IDENTITY_URL}/api/v1/G/auth/email-otp/send`, { email }),
+
+  emailOtpVerify: (email: string, otp: string) =>
+    api.post(`${API_CONFIG.IDENTITY_URL}/api/v1/G/auth/email-otp/verify`, { email, otp }),
+
+  // ─── Auth Methods (admin) ──────────────────────────────────────
+  updateAuthMethods: (orgId: string, userId: string, methods: Record<string, boolean>) =>
+    api.put(`${API_CONFIG.IDENTITY_URL}/api/v1/O/${orgId}/users/${userId}/auth-methods`, methods),
 };

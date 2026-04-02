@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { Lock, Shield, Eye, EyeOff, ShieldCheck, KeyRound } from 'lucide-react';
+import { Lock, Shield, Eye, EyeOff, ShieldCheck, KeyRound, Fingerprint, QrCode, Smartphone, Mail, ChevronDown, ChevronUp } from 'lucide-react';
+import { startAuthentication } from '@simplewebauthn/browser';
 import { useAuth } from '../../hooks/useAuth';
 import { identityService, hashPassword } from '../../services/identity';
 import { useToast } from '../../components/shared/Toast';
@@ -32,6 +33,26 @@ const LoginPage: React.FC = () => {
   const [useBackupCode, setUseBackupCode] = useState(false);
   const [backupCode, setBackupCode] = useState('');
   const mfaInputRef = useRef<HTMLInputElement>(null);
+
+  // Passkey login state
+  const [passkeyLoading, setPasskeyLoading] = useState(false);
+
+  // QR login state
+  const [showQrLogin, setShowQrLogin] = useState(false);
+  const [qrCodeDataUrl, setQrCodeDataUrl] = useState('');
+  const [qrSessionId, setQrSessionId] = useState('');
+  const [qrStatus, setQrStatus] = useState<'loading' | 'pending' | 'expired'>('loading');
+  const qrPollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Passwordless login state
+  const [showMoreOptions, setShowMoreOptions] = useState(false);
+  const [passwordlessMode, setPasswordlessMode] = useState<'none' | 'magic-link' | 'email-otp'>('none');
+  const [passwordlessEmail, setPasswordlessEmail] = useState('');
+  const [passwordlessSending, setPasswordlessSending] = useState(false);
+  const [magicLinkSent, setMagicLinkSent] = useState(false);
+  const [otpSent, setOtpSent] = useState(false);
+  const [otpCode, setOtpCode] = useState('');
+  const [otpVerifying, setOtpVerifying] = useState(false);
 
   useEffect(() => {
     const fetchProviders = async () => {
@@ -124,9 +145,141 @@ const LoginPage: React.FC = () => {
     }
   };
 
+  // ─── Passkey Login ─────────────────────────────────────────────
+  const handlePasskeyLogin = async () => {
+    if (!email) {
+      toast('Please enter your email first', 'error');
+      return;
+    }
+    setPasskeyLoading(true);
+    try {
+      const optionsRes = await identityService.webauthnLoginOptions(email);
+      const { userHashId, ...options } = optionsRes.data;
+      const credential = await startAuthentication({ optionsJSON: options });
+      const verifyRes = await identityService.webauthnLoginVerify(email, credential);
+      if (verifyRes.data.requiresMfa) {
+        setTempToken(verifyRes.data.tempToken);
+        setMfaRequired(true);
+        return;
+      }
+      const token = verifyRes.data.accessToken || verifyRes.data.token;
+      completeLogin(token, verifyRes.data.user);
+    } catch (err: any) {
+      const msg = err?.response?.data?.message || err?.message || 'Passkey login failed';
+      if (msg !== 'The operation either timed out or was not allowed.') {
+        toast(msg, 'error');
+      }
+    } finally {
+      setPasskeyLoading(false);
+    }
+  };
+
+  // ─── QR Code Login ──────────────────────────────────────────────
+  const startQrLogin = useCallback(async () => {
+    setQrStatus('loading');
+    try {
+      const res = await identityService.qrGenerate();
+      setQrCodeDataUrl(res.data.qrCodeDataUrl);
+      setQrSessionId(res.data.sessionId);
+      setQrStatus('pending');
+    } catch {
+      toast('Failed to generate QR code', 'error');
+      setShowQrLogin(false);
+    }
+  }, [toast]);
+
+  // Poll QR status
+  useEffect(() => {
+    if (!showQrLogin || !qrSessionId || qrStatus !== 'pending') return;
+
+    qrPollRef.current = setInterval(async () => {
+      try {
+        const res = await identityService.qrStatus(qrSessionId);
+        if (res.data.status === 'confirmed' && res.data.tokens) {
+          if (qrPollRef.current) clearInterval(qrPollRef.current);
+          const token = res.data.tokens.accessToken;
+          completeLogin(token);
+        } else if (res.data.status === 'expired') {
+          if (qrPollRef.current) clearInterval(qrPollRef.current);
+          setQrStatus('expired');
+        }
+      } catch {
+        // Ignore polling errors
+      }
+    }, 2000);
+
+    return () => {
+      if (qrPollRef.current) clearInterval(qrPollRef.current);
+    };
+  }, [showQrLogin, qrSessionId, qrStatus]);
+
   const handleOAuthClick = (providerId: string) => {
     const url = `${API_CONFIG.IDENTITY_URL}/api/v1/G/auth/${providerId}`;
     window.location.href = url;
+  };
+
+  // ─── Magic Link ────────────────────────────────────────────────
+  const handleMagicLinkSend = async () => {
+    if (!passwordlessEmail) {
+      toast('Please enter your email', 'error');
+      return;
+    }
+    setPasswordlessSending(true);
+    try {
+      await identityService.magicLinkSend(passwordlessEmail);
+      setMagicLinkSent(true);
+      toast('Magic link sent! Check your email.', 'success');
+    } catch {
+      toast('Failed to send magic link', 'error');
+    } finally {
+      setPasswordlessSending(false);
+    }
+  };
+
+  // ─── Email OTP ─────────────────────────────────────────────────
+  const handleEmailOtpSend = async () => {
+    if (!passwordlessEmail) {
+      toast('Please enter your email', 'error');
+      return;
+    }
+    setPasswordlessSending(true);
+    try {
+      await identityService.emailOtpSend(passwordlessEmail);
+      setOtpSent(true);
+      toast('OTP sent! Check your email.', 'success');
+    } catch {
+      toast('Failed to send OTP', 'error');
+    } finally {
+      setPasswordlessSending(false);
+    }
+  };
+
+  const handleEmailOtpVerify = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!otpCode || otpCode.length !== 6) {
+      toast('Please enter the 6-digit code', 'error');
+      return;
+    }
+    setOtpVerifying(true);
+    try {
+      const res = await identityService.emailOtpVerify(passwordlessEmail, otpCode);
+      const token = res.data.accessToken || res.data.token;
+      completeLogin(token, res.data.user);
+    } catch {
+      toast('Invalid or expired OTP', 'error');
+    } finally {
+      setOtpVerifying(false);
+    }
+  };
+
+  const resetPasswordlessState = () => {
+    setPasswordlessMode('none');
+    setPasswordlessEmail('');
+    setPasswordlessSending(false);
+    setMagicLinkSent(false);
+    setOtpSent(false);
+    setOtpCode('');
+    setOtpVerifying(false);
   };
 
   const providerButton = (provider: AuthProvider) => {
@@ -211,8 +364,8 @@ const LoginPage: React.FC = () => {
       );
     }
 
-    // Skip credentials-based providers (RADIUS, Diameter) — they use the main login form
-    if (provider.type === 'credentials') {
+    // Skip credentials-based and passwordless providers — they have dedicated UI
+    if (provider.type === 'credentials' || provider.type === 'passwordless') {
       return null;
     }
 
@@ -250,6 +403,78 @@ const LoginPage: React.FC = () => {
   const matchedContext = Object.entries(contextMap).find(([key]) => returnToParam.includes(key));
   const pageTitle = matchedContext ? matchedContext[1].title : 'Zorbit Platform';
   const pageSubtitle = matchedContext ? matchedContext[1].subtitle : 'Sign in to your account';
+
+  // ─── QR Code Login Screen ───────────────────────────────────────
+  if (showQrLogin) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4">
+        <div className="w-full max-w-md">
+          <div className="text-center mb-8">
+            <div className="w-16 h-16 bg-violet-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <QrCode className="w-8 h-8 text-white" />
+            </div>
+            <h1 className="text-2xl font-bold">Scan to Sign In</h1>
+            <p className="text-gray-500 mt-1">
+              Scan this QR code with your phone to sign in
+            </p>
+          </div>
+
+          <div className="card p-6 space-y-4">
+            <div className="flex justify-center">
+              {qrStatus === 'loading' ? (
+                <div className="w-64 h-64 flex items-center justify-center bg-gray-50 dark:bg-gray-800 rounded-xl">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-violet-600" />
+                </div>
+              ) : qrStatus === 'expired' ? (
+                <div className="w-64 h-64 flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-800 rounded-xl gap-3">
+                  <p className="text-sm text-gray-500">QR code expired</p>
+                  <button
+                    onClick={startQrLogin}
+                    className="px-4 py-2 bg-violet-600 text-white text-sm rounded-lg hover:bg-violet-700 transition-colors"
+                  >
+                    Generate New Code
+                  </button>
+                </div>
+              ) : (
+                <div className="bg-white p-3 rounded-xl shadow-sm border border-gray-200">
+                  <img src={qrCodeDataUrl} alt="QR Login Code" className="w-56 h-56" />
+                </div>
+              )}
+            </div>
+
+            {qrStatus === 'pending' && (
+              <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
+                <Smartphone className="w-4 h-4" />
+                <span>Waiting for confirmation from your phone...</span>
+                <div className="animate-pulse w-2 h-2 rounded-full bg-violet-500" />
+              </div>
+            )}
+
+            <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-3 space-y-1">
+              <p className="text-xs text-gray-500 font-medium">How it works:</p>
+              <ol className="text-xs text-gray-500 list-decimal list-inside space-y-0.5">
+                <li>Open Zorbit on your phone (where you're already signed in)</li>
+                <li>Go to Settings &gt; Scan QR Code</li>
+                <li>Point your camera at this QR code</li>
+                <li>Confirm the sign-in on your phone</li>
+              </ol>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => {
+                setShowQrLogin(false);
+                if (qrPollRef.current) clearInterval(qrPollRef.current);
+              }}
+              className="w-full text-center text-sm text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+            >
+              Back to login
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   // ─── MFA Verification Screen ────────────────────────────────────
   if (mfaRequired) {
@@ -394,6 +619,31 @@ const LoginPage: React.FC = () => {
             {loading ? 'Signing in...' : 'Sign In'}
           </button>
 
+          {/* Passkey + QR Login buttons */}
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={handlePasskeyLogin}
+              disabled={passkeyLoading || !email}
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-sm font-medium text-gray-700 dark:text-gray-200 disabled:opacity-50"
+              title={!email ? 'Enter your email first' : 'Sign in with your fingerprint or face'}
+            >
+              <Fingerprint className="w-5 h-5 text-emerald-600" />
+              {passkeyLoading ? 'Verifying...' : 'Passkey'}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setShowQrLogin(true);
+                startQrLogin();
+              }}
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-sm font-medium text-gray-700 dark:text-gray-200"
+            >
+              <QrCode className="w-5 h-5 text-violet-600" />
+              QR Code
+            </button>
+          </div>
+
           {providersLoaded && providers.length > 0 && (
             <>
               <div className="relative my-2">
@@ -412,6 +662,194 @@ const LoginPage: React.FC = () => {
               </div>
             </>
           )}
+
+          {/* ─── More Sign-in Options (Magic Link + Email OTP) ──────── */}
+          <div className="border-t border-gray-200 dark:border-gray-700 pt-3">
+            <button
+              type="button"
+              onClick={() => {
+                setShowMoreOptions(!showMoreOptions);
+                if (showMoreOptions) resetPasswordlessState();
+              }}
+              className="w-full flex items-center justify-center gap-2 text-sm text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+            >
+              {showMoreOptions ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+              {showMoreOptions ? 'Fewer sign-in options' : 'More sign-in options'}
+            </button>
+
+            {showMoreOptions && (
+              <div className="mt-3 space-y-3">
+                {passwordlessMode === 'none' && (
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setPasswordlessMode('magic-link')}
+                      className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-sm font-medium text-gray-700 dark:text-gray-200"
+                    >
+                      <Mail className="w-4 h-4 text-blue-600" />
+                      Magic Link
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPasswordlessMode('email-otp')}
+                      className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-sm font-medium text-gray-700 dark:text-gray-200"
+                    >
+                      <KeyRound className="w-4 h-4 text-amber-600" />
+                      Email OTP
+                    </button>
+                  </div>
+                )}
+
+                {/* Magic Link Flow */}
+                {passwordlessMode === 'magic-link' && !magicLinkSent && (
+                  <div className="space-y-3">
+                    <div>
+                      <label className="block text-sm font-medium mb-1">Email for Magic Link</label>
+                      <input
+                        type="email"
+                        value={passwordlessEmail}
+                        onChange={(e) => setPasswordlessEmail(e.target.value)}
+                        className="input-field"
+                        placeholder="Enter your email"
+                        required
+                      />
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        type="button"
+                        onClick={handleMagicLinkSend}
+                        disabled={passwordlessSending || !passwordlessEmail}
+                        className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 transition-colors text-sm font-medium text-white disabled:opacity-50"
+                      >
+                        <Mail className="w-4 h-4" />
+                        {passwordlessSending ? 'Sending...' : 'Send Magic Link'}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={resetPasswordlessState}
+                        className="px-4 py-2.5 text-sm text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {passwordlessMode === 'magic-link' && magicLinkSent && (
+                  <div className="text-center space-y-3 py-2">
+                    <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto">
+                      <Mail className="w-6 h-6 text-blue-600" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium">Check your email</p>
+                      <p className="text-xs text-gray-500 mt-1">
+                        We sent a magic link to <strong>{passwordlessEmail}</strong>.
+                        Click the link in the email to sign in.
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => { setMagicLinkSent(false); handleMagicLinkSend(); }}
+                      className="text-xs text-primary-600 hover:text-primary-700 font-medium"
+                    >
+                      Resend link
+                    </button>
+                    <div>
+                      <button
+                        type="button"
+                        onClick={resetPasswordlessState}
+                        className="text-xs text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+                      >
+                        Back
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Email OTP Flow */}
+                {passwordlessMode === 'email-otp' && !otpSent && (
+                  <div className="space-y-3">
+                    <div>
+                      <label className="block text-sm font-medium mb-1">Email for OTP</label>
+                      <input
+                        type="email"
+                        value={passwordlessEmail}
+                        onChange={(e) => setPasswordlessEmail(e.target.value)}
+                        className="input-field"
+                        placeholder="Enter your email"
+                        required
+                      />
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        type="button"
+                        onClick={handleEmailOtpSend}
+                        disabled={passwordlessSending || !passwordlessEmail}
+                        className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-amber-600 hover:bg-amber-700 transition-colors text-sm font-medium text-white disabled:opacity-50"
+                      >
+                        <KeyRound className="w-4 h-4" />
+                        {passwordlessSending ? 'Sending...' : 'Send OTP'}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={resetPasswordlessState}
+                        className="px-4 py-2.5 text-sm text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {passwordlessMode === 'email-otp' && otpSent && (
+                  <form onSubmit={handleEmailOtpVerify} className="space-y-3">
+                    <div className="text-center">
+                      <p className="text-sm text-gray-500">
+                        Enter the 6-digit code sent to <strong>{passwordlessEmail}</strong>
+                      </p>
+                    </div>
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      autoComplete="one-time-code"
+                      value={otpCode}
+                      onChange={(e) => {
+                        const val = e.target.value.replace(/\D/g, '').slice(0, 6);
+                        setOtpCode(val);
+                      }}
+                      className="input-field text-center text-2xl tracking-[0.5em] font-mono"
+                      placeholder="000000"
+                      maxLength={6}
+                      autoFocus
+                    />
+                    <div className="flex gap-2">
+                      <button
+                        type="submit"
+                        disabled={otpVerifying || otpCode.length !== 6}
+                        className="flex-1 px-4 py-2.5 rounded-lg bg-amber-600 hover:bg-amber-700 transition-colors text-sm font-medium text-white disabled:opacity-50"
+                      >
+                        {otpVerifying ? 'Verifying...' : 'Verify & Sign In'}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => { setOtpSent(false); handleEmailOtpSend(); }}
+                        className="px-4 py-2.5 text-xs text-primary-600 hover:text-primary-700 font-medium"
+                      >
+                        Resend
+                      </button>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={resetPasswordlessState}
+                      className="w-full text-xs text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 text-center"
+                    >
+                      Back
+                    </button>
+                  </form>
+                )}
+              </div>
+            )}
+          </div>
 
           <p className="text-center text-sm text-gray-500">
             Don't have an account?{' '}

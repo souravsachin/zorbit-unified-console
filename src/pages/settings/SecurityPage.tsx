@@ -9,11 +9,21 @@ import {
   KeyRound,
   Loader2,
   Download,
+  Fingerprint,
+  Trash2,
+  Plus,
 } from 'lucide-react';
+import { startRegistration } from '@simplewebauthn/browser';
 import { identityService } from '../../services/identity';
 import { useToast } from '../../components/shared/Toast';
 
 type MfaState = 'loading' | 'disabled' | 'setup' | 'verify' | 'enabled';
+
+interface PasskeyCredential {
+  credentialId: string;
+  deviceName?: string;
+  createdAt: string;
+}
 
 const SecurityPage: React.FC = () => {
   const { toast } = useToast();
@@ -36,8 +46,16 @@ const SecurityPage: React.FC = () => {
 
   const verifyInputRef = useRef<HTMLInputElement>(null);
 
+  // Passkey state
+  const [passkeys, setPasskeys] = useState<PasskeyCredential[]>([]);
+  const [passkeysLoading, setPasskeysLoading] = useState(true);
+  const [registeringPasskey, setRegisteringPasskey] = useState(false);
+  const [newPasskeyName, setNewPasskeyName] = useState('');
+  const [showPasskeyNameInput, setShowPasskeyNameInput] = useState(false);
+
   useEffect(() => {
     loadStatus();
+    loadPasskeys();
   }, []);
 
   const loadStatus = async () => {
@@ -51,6 +69,48 @@ const SecurityPage: React.FC = () => {
       }
     } catch {
       setState('disabled');
+    }
+  };
+
+  const loadPasskeys = async () => {
+    try {
+      const res = await identityService.webauthnListCredentials();
+      setPasskeys(Array.isArray(res.data) ? res.data : []);
+    } catch {
+      setPasskeys([]);
+    } finally {
+      setPasskeysLoading(false);
+    }
+  };
+
+  const handleRegisterPasskey = async () => {
+    setRegisteringPasskey(true);
+    try {
+      const optionsRes = await identityService.webauthnRegisterOptions();
+      const credential = await startRegistration({ optionsJSON: optionsRes.data });
+      const deviceName = newPasskeyName.trim() || undefined;
+      await identityService.webauthnRegisterVerify(credential, deviceName);
+      toast('Passkey registered successfully!', 'success');
+      setNewPasskeyName('');
+      setShowPasskeyNameInput(false);
+      loadPasskeys();
+    } catch (err: any) {
+      const msg = err?.response?.data?.message || err?.message || 'Failed to register passkey';
+      if (msg !== 'The operation either timed out or was not allowed.') {
+        toast(msg, 'error');
+      }
+    } finally {
+      setRegisteringPasskey(false);
+    }
+  };
+
+  const handleRemovePasskey = async (credentialId: string) => {
+    try {
+      await identityService.webauthnRemoveCredential(credentialId);
+      toast('Passkey removed', 'success');
+      loadPasskeys();
+    } catch (err: any) {
+      toast(err.response?.data?.message || 'Failed to remove passkey', 'error');
     }
   };
 
@@ -422,6 +482,106 @@ const SecurityPage: React.FC = () => {
           )}
         </div>
       )}
+
+      {/* ─── Passkeys Section ─────────────────────────────────────── */}
+      <div className="card p-6 space-y-4">
+        <div className="flex items-start gap-4">
+          <div className="w-12 h-12 bg-emerald-100 dark:bg-emerald-900/30 rounded-xl flex items-center justify-center flex-shrink-0">
+            <Fingerprint className="w-6 h-6 text-emerald-600" />
+          </div>
+          <div className="flex-1">
+            <h2 className="text-lg font-semibold">Passkeys</h2>
+            <p className="text-sm text-gray-500 mt-1">
+              Sign in with your fingerprint, face, or device PIN. Passkeys are more secure and convenient than passwords.
+            </p>
+          </div>
+        </div>
+
+        {/* Registered passkeys list */}
+        {passkeysLoading ? (
+          <div className="flex items-center justify-center py-4">
+            <Loader2 className="w-5 h-5 animate-spin text-gray-400" />
+          </div>
+        ) : passkeys.length > 0 ? (
+          <div className="space-y-2">
+            {passkeys.map((pk) => (
+              <div
+                key={pk.credentialId}
+                className="flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700"
+              >
+                <div className="flex items-center gap-3">
+                  <Fingerprint className="w-5 h-5 text-emerald-500" />
+                  <div>
+                    <p className="text-sm font-medium">{pk.deviceName || 'Passkey'}</p>
+                    <p className="text-xs text-gray-500">
+                      Added {new Date(pk.createdAt).toLocaleDateString()}
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => handleRemovePasskey(pk.credentialId)}
+                  className="p-1.5 rounded-md text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                  title="Remove passkey"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 text-center">
+            <Fingerprint className="w-8 h-8 text-gray-300 mx-auto mb-2" />
+            <p className="text-sm text-gray-500">No passkeys registered yet</p>
+            <p className="text-xs text-gray-400 mt-1">
+              Register a passkey to enable fingerprint or face login
+            </p>
+          </div>
+        )}
+
+        {/* Register new passkey */}
+        {showPasskeyNameInput ? (
+          <div className="flex gap-2">
+            <input
+              type="text"
+              value={newPasskeyName}
+              onChange={(e) => setNewPasskeyName(e.target.value)}
+              placeholder="Name this passkey (e.g. MacBook Pro)"
+              className="input-field flex-1 text-sm"
+              autoFocus
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') handleRegisterPasskey();
+                if (e.key === 'Escape') { setShowPasskeyNameInput(false); setNewPasskeyName(''); }
+              }}
+            />
+            <button
+              onClick={handleRegisterPasskey}
+              disabled={registeringPasskey}
+              className="btn-primary flex items-center gap-1.5 text-sm px-4"
+            >
+              {registeringPasskey ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <Fingerprint className="w-4 h-4" />
+              )}
+              {registeringPasskey ? 'Registering...' : 'Register'}
+            </button>
+            <button
+              onClick={() => { setShowPasskeyNameInput(false); setNewPasskeyName(''); }}
+              className="px-3 py-1.5 border border-gray-300 dark:border-gray-600 rounded-lg text-sm hover:bg-gray-50 dark:hover:bg-gray-700"
+            >
+              Cancel
+            </button>
+          </div>
+        ) : (
+          <button
+            onClick={() => setShowPasskeyNameInput(true)}
+            className="flex items-center gap-2 text-sm font-medium text-emerald-600 hover:text-emerald-700"
+          >
+            <Plus className="w-4 h-4" />
+            Register a new passkey
+          </button>
+        )}
+      </div>
     </div>
   );
 };
