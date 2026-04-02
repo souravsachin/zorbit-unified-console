@@ -17,7 +17,6 @@ export async function hashPassword(password: string): Promise<string> {
 export interface LoginPayload {
   email: string;
   password: string;
-  clientHashed?: boolean;
 }
 
 export interface RegisterPayload {
@@ -25,7 +24,6 @@ export interface RegisterPayload {
   password: string;
   displayName: string;
   organizationId?: string;
-  clientHashed?: boolean;
 }
 
 export interface User {

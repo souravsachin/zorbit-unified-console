@@ -22,4 +22,6 @@ export const API_CONFIG = {
   NOTIFICATION_URL: import.meta.env.VITE_NOTIFICATION_URL || '/api/notification',
   VOICE_ENGINE_URL: import.meta.env.VITE_VOICE_ENGINE_URL || '/api/voice-engine',
   JAYNA_URL: import.meta.env.VITE_JAYNA_URL || '/api/jayna',
+  REALTIME_URL: import.meta.env.VITE_REALTIME_URL || '/api/realtime',
+  REALTIME_WS_URL: import.meta.env.VITE_REALTIME_WS_URL || '',
 };

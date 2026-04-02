@@ -117,6 +117,17 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api\/jayna/, ''),
       },
+      '/api/realtime': {
+        target: 'http://localhost:3029',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/realtime/, ''),
+      },
+      '/socket.io/realtime': {
+        target: 'http://localhost:3029',
+        changeOrigin: true,
+        ws: true,
+        rewrite: (path) => path.replace(/^\/socket\.io\/realtime/, '/socket.io'),
+      },
       '/socket.io/chat': {
         target: 'http://localhost:3108',
         changeOrigin: true,

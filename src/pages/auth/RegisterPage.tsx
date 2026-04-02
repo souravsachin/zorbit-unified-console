@@ -23,7 +23,7 @@ const RegisterPage: React.FC = () => {
     setLoading(true);
     try {
       const hashed = await hashPassword(form.password);
-      await identityService.register({ ...form, password: hashed, clientHashed: true });
+      await identityService.register({ ...form, password: hashed });
       toast('Account created. Please sign in.', 'success');
       navigate('/login');
     } catch {

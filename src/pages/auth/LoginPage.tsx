@@ -84,16 +84,12 @@ const LoginPage: React.FC = () => {
     toast('Logged in successfully', 'success');
   };
 
-  // Password is SHA-256 hashed client-side before sending (defense-in-depth).
-  // The backend stores bcrypt(sha256(password)). Legacy v1 users are migrated
-  // transparently: on PASSWORD_SCHEME_MISMATCH the frontend retries with
-  // plaintext so the server can verify and upgrade the stored hash to v2.
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
       const hashed = await hashPassword(password);
-      const res = await identityService.login({ email, password: hashed, clientHashed: true });
+      const res = await identityService.login({ email, password: hashed });
       if (res.data.requiresMfa) {
         setTempToken(res.data.tempToken);
         setMfaRequired(true);
@@ -102,26 +98,8 @@ const LoginPage: React.FC = () => {
       }
       const token = res.data.accessToken || res.data.token;
       completeLogin(token, res.data.user);
-    } catch (err: any) {
-      const msg = err?.response?.data?.message || '';
-      if (msg === 'PASSWORD_SCHEME_MISMATCH') {
-        // Legacy v1 user — retry with plaintext so server can verify & migrate
-        try {
-          const res = await identityService.login({ email, password });
-          if (res.data.requiresMfa) {
-            setTempToken(res.data.tempToken);
-            setMfaRequired(true);
-            setLoading(false);
-            return;
-          }
-          const token = res.data.accessToken || res.data.token;
-          completeLogin(token, res.data.user);
-        } catch {
-          toast('Invalid email or password', 'error');
-        }
-      } else {
-        toast('Invalid email or password', 'error');
-      }
+    } catch {
+      toast('Invalid email or password', 'error');
     } finally {
       setLoading(false);
     }

@@ -18,6 +18,7 @@ import {
   markAllAsRead,
   NotificationItem,
 } from '../../services/notifications';
+import { useRealtime } from '../../hooks/useRealtime';
 
 const CATEGORY_ICONS: Record<string, React.ReactNode> = {
   quotation: <FileText size={16} className="text-blue-500" />,
@@ -57,6 +58,7 @@ const NotificationBell: React.FC = () => {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const userId = user?.id || 'U-DEMO';
+  const { connected: wsConnected, subscribe, emit } = useRealtime();
 
   const fetchUnreadCount = useCallback(async () => {
     try {
@@ -79,15 +81,48 @@ const NotificationBell: React.FC = () => {
     }
   }, [userId]);
 
-  // Poll unread count every 60 seconds.
-  // TODO: migrate to WebSocket push for real-time notifications.
+  // WebSocket: listen for real-time notification pushes.
+  // Falls back to HTTP polling every 60s if WebSocket is not connected.
   useEffect(() => {
     fetchUnreadCount();
+
+    // If WebSocket connected, listen for live pushes
+    if (wsConnected) {
+      const unsubNew = subscribe('notification:new', (data: unknown) => {
+        const payload = data as { data: NotificationItem };
+        if (payload?.data) {
+          setNotifications((prev) => [payload.data, ...prev].slice(0, 15));
+          setUnreadCount((c) => c + 1);
+        }
+      });
+      const unsubRead = subscribe('notification:read', (data: unknown) => {
+        const payload = data as { notificationId: string };
+        if (payload?.notificationId) {
+          setNotifications((prev) =>
+            prev.map((n) =>
+              n.hashId === payload.notificationId ? { ...n, read: true } : n,
+            ),
+          );
+          setUnreadCount((c) => Math.max(0, c - 1));
+        }
+      });
+
+      // Slower fallback poll when WS is active (every 5 min as safety net)
+      intervalRef.current = setInterval(fetchUnreadCount, 300000);
+
+      return () => {
+        unsubNew();
+        unsubRead();
+        if (intervalRef.current) clearInterval(intervalRef.current);
+      };
+    }
+
+    // No WebSocket — poll every 60s (original behavior)
     intervalRef.current = setInterval(fetchUnreadCount, 60000);
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, [fetchUnreadCount]);
+  }, [fetchUnreadCount, wsConnected, subscribe]);
 
   // Fetch notifications when dropdown opens
   useEffect(() => {
@@ -113,6 +148,10 @@ const NotificationBell: React.FC = () => {
           prev.map((n) => (n.hashId === notif.hashId ? { ...n, read: true } : n)),
         );
         setUnreadCount((c) => Math.max(0, c - 1));
+        // Notify other tabs/sessions via WebSocket
+        if (wsConnected) {
+          emit('notification:mark_read', { notificationId: notif.hashId });
+        }
       } catch {
         // silent
       }
