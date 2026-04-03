@@ -1,8 +1,6 @@
 import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  loadLocalPrefs,
-  savePrefsToServer,
   clearAllLocalPrefs,
 } from '../services/preferences';
 import { clearMenuCache } from '../components/HamburgerMenu/useMenu';
@@ -67,19 +65,6 @@ export function useAuth() {
   );
 
   const logout = useCallback(async () => {
-    // Sync preferences to backend before clearing (token still valid here)
-    const currentUser = user;
-    if (currentUser?.id) {
-      try {
-        const prefs = loadLocalPrefs(currentUser.id);
-        if (Object.keys(prefs).length > 0) {
-          await savePrefsToServer(currentUser.id, prefs);
-        }
-      } catch {
-        // Best-effort — don't block logout
-      }
-    }
-
     // Clear auth state
     localStorage.removeItem('zorbit_token');
     localStorage.removeItem('zorbit_user');

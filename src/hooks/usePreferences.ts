@@ -1,91 +1,74 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   UserPreferences,
   loadLocalPrefs,
   saveLocalPrefs,
   clearAllLocalPrefs,
-  fetchPrefsFromServer,
-  savePrefsToServer,
 } from '../services/preferences';
-
-const SYNC_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
+import { useRealtime } from './useRealtime';
 
 /**
  * Central preferences hook.
  *
- * Flow:
- *  1. On mount (login): load from localStorage instantly, then fetch from
- *     backend and merge (backend wins). Save merged result to localStorage.
- *  2. During session: all reads/writes go to localStorage (instant).
- *     update() deep-merges the provided partial into the current prefs.
- *  3. Every 5 minutes: sync localStorage → backend (PUT).
- *  4. On logout: sync to backend, then clear ALL zorbit_prefs_* from localStorage.
+ * ZERO HTTP calls. Flow:
+ *  1. On mount (login): load from localStorage instantly.
+ *  2. When WebSocket connects, server pushes preferences:init with any
+ *     remote prefs. Merge (remote wins) and save to localStorage.
+ *  3. On update: save to localStorage, emit via WebSocket to sync
+ *     other tabs/devices.
+ *  4. On logout: clear all zorbit_prefs_* from localStorage.
  */
 export function usePreferences(userId: string | undefined) {
   const [prefs, setPrefs] = useState<UserPreferences>(() => {
     if (!userId) return {};
     return loadLocalPrefs(userId);
   });
-  const [syncing, setSyncing] = useState(false);
-  const dirtyRef = useRef(false);
-  const userIdRef = useRef(userId);
+  const { connected, subscribe, emit } = useRealtime();
 
   // Reload when userId changes
   useEffect(() => {
-    userIdRef.current = userId;
     if (!userId) {
       setPrefs({});
       return;
     }
-
-    // Load local first (instant)
-    const local = loadLocalPrefs(userId);
-    setPrefs(local);
-
-    // Then fetch from backend and merge
-    fetchPrefsFromServer(userId)
-      .then((remote) => {
-        // Backend wins for conflicts — deep merge at namespace level
-        const merged = mergePrefs(local, remote);
-        setPrefs(merged);
-        saveLocalPrefs(userId, merged);
-        dirtyRef.current = false;
-      })
-      .catch(() => {
-        // Backend unavailable — use local. Will sync later.
-      });
+    setPrefs(loadLocalPrefs(userId));
   }, [userId]);
 
-  // Periodic sync (every 5 min)
+  // Listen for WebSocket preference pushes (init from server + changes from other tabs)
   useEffect(() => {
-    if (!userId) return;
+    if (!connected || !userId) return;
 
-    const timer = setInterval(() => {
-      if (dirtyRef.current && userIdRef.current) {
-        syncToServer(userIdRef.current);
+    const unsubInit = subscribe('preferences:init', (data: unknown) => {
+      const payload = data as { preferences: UserPreferences };
+      if (payload?.preferences) {
+        setPrefs((prev) => {
+          const merged = mergePrefs(prev, payload.preferences);
+          saveLocalPrefs(userId, merged);
+          return merged;
+        });
       }
-    }, SYNC_INTERVAL_MS);
+    });
 
-    return () => clearInterval(timer);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userId]);
+    const unsubChanged = subscribe('preferences:changed', (data: unknown) => {
+      const payload = data as { preferences: UserPreferences; from: string };
+      if (payload?.preferences) {
+        setPrefs((prev) => {
+          const merged = mergePrefs(prev, payload.preferences);
+          saveLocalPrefs(userId, merged);
+          return merged;
+        });
+      }
+    });
 
-  const syncToServer = useCallback(async (uid: string) => {
-    try {
-      setSyncing(true);
-      const current = loadLocalPrefs(uid);
-      await savePrefsToServer(uid, current);
-      dirtyRef.current = false;
-    } catch {
-      // Silent fail — will retry on next interval or logout
-    } finally {
-      setSyncing(false);
-    }
-  }, []);
+    return () => {
+      unsubInit();
+      unsubChanged();
+    };
+  }, [connected, subscribe, userId]);
 
   /**
    * Update preferences (deep merge at namespace level).
-   * Writes to localStorage immediately. Marks dirty for next sync.
+   * Writes to localStorage immediately. Emits via WebSocket to sync other sessions.
    */
   const update = useCallback(
     (partial: Partial<UserPreferences>) => {
@@ -93,31 +76,26 @@ export function usePreferences(userId: string | undefined) {
       setPrefs((prev) => {
         const next = mergePrefs(prev, partial);
         saveLocalPrefs(userId, next);
-        dirtyRef.current = true;
+        // Emit via WebSocket so other tabs/devices receive the change
+        if (connected) {
+          emit('preferences:update', { preferences: next });
+        }
         return next;
       });
     },
-    [userId],
+    [userId, connected, emit],
   );
 
   /**
-   * Sync to backend and clear all local preferences.
-   * Call this on explicit logout.
+   * Clear all local preferences on logout.
+   * No HTTP sync needed.
    */
   const flushAndClear = useCallback(async () => {
-    if (userId) {
-      try {
-        await syncToServer(userId);
-      } catch {
-        // Best-effort
-      }
-    }
     clearAllLocalPrefs();
     setPrefs({});
-    dirtyRef.current = false;
-  }, [userId, syncToServer]);
+  }, []);
 
-  return { prefs, update, flushAndClear, syncing };
+  return { prefs, update, flushAndClear, syncing: false };
 }
 
 /**
@@ -142,7 +120,6 @@ function mergePrefs(
       typeof baseVal === 'object' &&
       !Array.isArray(baseVal)
     ) {
-      // Deep merge one more level
       (result as Record<string, unknown>)[key] = { ...baseVal, ...overVal };
     } else {
       (result as Record<string, unknown>)[key] = overVal;

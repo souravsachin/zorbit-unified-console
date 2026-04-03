@@ -12,7 +12,6 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import {
-  getUnreadCount,
   getNotifications,
   markAsRead,
   markAllAsRead,
@@ -55,20 +54,54 @@ const NotificationBell: React.FC = () => {
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [loading, setLoading] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const userId = user?.id || 'U-DEMO';
   const { connected: wsConnected, subscribe, emit } = useRealtime();
 
-  const fetchUnreadCount = useCallback(async () => {
-    try {
-      const count = await getUnreadCount(userId);
-      setUnreadCount(count);
-    } catch {
-      // silent — notification service may not be running
-    }
-  }, [userId]);
+  // WebSocket: listen for real-time notification pushes and initial count.
+  // ZERO HTTP polling — server pushes unread count on connection.
+  useEffect(() => {
+    if (!wsConnected) return;
 
+    // Server pushes initial unread count on connect via notification:init
+    const unsubInit = subscribe('notification:init', (data: unknown) => {
+      const payload = data as { unreadCount: number; recent?: NotificationItem[] };
+      if (typeof payload?.unreadCount === 'number') {
+        setUnreadCount(payload.unreadCount);
+      }
+      if (payload?.recent) {
+        setNotifications(payload.recent);
+      }
+    });
+
+    const unsubNew = subscribe('notification:new', (data: unknown) => {
+      const payload = data as { data: NotificationItem };
+      if (payload?.data) {
+        setNotifications((prev) => [payload.data, ...prev].slice(0, 15));
+        setUnreadCount((c) => c + 1);
+      }
+    });
+
+    const unsubRead = subscribe('notification:read', (data: unknown) => {
+      const payload = data as { notificationId: string };
+      if (payload?.notificationId) {
+        setNotifications((prev) =>
+          prev.map((n) =>
+            n.hashId === payload.notificationId ? { ...n, read: true } : n,
+          ),
+        );
+        setUnreadCount((c) => Math.max(0, c - 1));
+      }
+    });
+
+    return () => {
+      unsubInit();
+      unsubNew();
+      unsubRead();
+    };
+  }, [wsConnected, subscribe]);
+
+  // Fetch full notification list when dropdown opens (this is on-demand, not polling)
   const fetchNotifications = useCallback(async () => {
     setLoading(true);
     try {
@@ -81,50 +114,6 @@ const NotificationBell: React.FC = () => {
     }
   }, [userId]);
 
-  // WebSocket: listen for real-time notification pushes.
-  // Falls back to HTTP polling every 60s if WebSocket is not connected.
-  useEffect(() => {
-    fetchUnreadCount();
-
-    // If WebSocket connected, listen for live pushes
-    if (wsConnected) {
-      const unsubNew = subscribe('notification:new', (data: unknown) => {
-        const payload = data as { data: NotificationItem };
-        if (payload?.data) {
-          setNotifications((prev) => [payload.data, ...prev].slice(0, 15));
-          setUnreadCount((c) => c + 1);
-        }
-      });
-      const unsubRead = subscribe('notification:read', (data: unknown) => {
-        const payload = data as { notificationId: string };
-        if (payload?.notificationId) {
-          setNotifications((prev) =>
-            prev.map((n) =>
-              n.hashId === payload.notificationId ? { ...n, read: true } : n,
-            ),
-          );
-          setUnreadCount((c) => Math.max(0, c - 1));
-        }
-      });
-
-      // Slower fallback poll when WS is active (every 5 min as safety net)
-      intervalRef.current = setInterval(fetchUnreadCount, 300000);
-
-      return () => {
-        unsubNew();
-        unsubRead();
-        if (intervalRef.current) clearInterval(intervalRef.current);
-      };
-    }
-
-    // No WebSocket — poll every 60s (original behavior)
-    intervalRef.current = setInterval(fetchUnreadCount, 60000);
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    };
-  }, [fetchUnreadCount, wsConnected, subscribe]);
-
-  // Fetch notifications when dropdown opens
   useEffect(() => {
     if (open) fetchNotifications();
   }, [open, fetchNotifications]);

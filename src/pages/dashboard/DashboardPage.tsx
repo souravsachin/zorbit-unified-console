@@ -1,11 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Users, Building2, UserCircle, Activity } from 'lucide-react';
 import Card from '../../components/shared/Card';
 import StatusBadge from '../../components/shared/StatusBadge';
-import { useAuth } from '../../hooks/useAuth';
-import { identityService, Organization } from '../../services/identity';
-import { auditService, AuditEvent } from '../../services/audit';
-import { messagingService } from '../../services/messaging';
+import { useChannel } from '../../hooks/useRealtime';
+
+interface DashboardMetrics {
+  users: number;
+  orgs: number;
+  customers: number;
+  health: string;
+  recentEvents?: AuditEventSummary[];
+}
+
+interface AuditEventSummary {
+  action?: string;
+  eventType?: string;
+  actor?: string | { hashId?: string };
+  timestamp?: string | number;
+}
 
 /** Safely format a date value — handles ISO strings, epoch numbers, and invalid values. */
 function formatDate(d: unknown): string {
@@ -15,78 +27,19 @@ function formatDate(d: unknown): string {
 }
 
 const DashboardPage: React.FC = () => {
-  const { orgId } = useAuth();
-  const [stats, setStats] = useState({ users: 0, orgs: 0, customers: 0 });
-  const [healthStatus, setHealthStatus] = useState('unknown');
-  const [recentEvents, setRecentEvents] = useState<AuditEvent[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data: metrics } = useChannel<DashboardMetrics>('dashboard:metrics');
 
-  useEffect(() => {
-    const load = async () => {
-      setLoading(true);
-      try {
-        // Fetch users (limit=1 for count), full org list (to derive customer count),
-        // recent audit events, and messaging health.
-        const [usersRes, orgsRes, auditRes, healthRes] = await Promise.allSettled([
-          identityService.getUsers(orgId, { limit: 1 }),
-          identityService.getOrganizations(),
-          auditService.getEvents(orgId, { limit: 5 }),
-          messagingService.getHealth(),
-        ]);
-
-        const extractCount = (res: PromiseSettledResult<any>): number => {
-          if (res.status !== 'fulfilled') return 0;
-          const d = res.value.data;
-          if (d && typeof d === 'object' && !Array.isArray(d)) {
-            if (typeof d.total === 'number') return d.total;
-            if (typeof d.count === 'number') return d.count;
-            if (Array.isArray(d.data)) return d.total ?? d.data.length;
-          }
-          if (Array.isArray(d)) return d.length;
-          return 0;
-        };
-
-        // Derive customer count from orgs with isCustomer flag
-        let customerCount = 0;
-        if (orgsRes.status === 'fulfilled') {
-          const orgList: Organization[] = Array.isArray(orgsRes.value.data)
-            ? orgsRes.value.data
-            : [];
-          customerCount = orgList.filter((o) => o.isCustomer).length;
-        }
-
-        setStats({
-          users: extractCount(usersRes),
-          orgs: extractCount(orgsRes),
-          customers: customerCount,
-        });
-
-        if (auditRes.status === 'fulfilled') {
-          const d = auditRes.value.data;
-          setRecentEvents(Array.isArray(d) ? d : (d as { data: AuditEvent[] }).data || []);
-        }
-
-        if (healthRes.status === 'fulfilled') {
-          setHealthStatus(healthRes.value.data.status || 'healthy');
-        }
-      } catch {
-        // ignore
-      } finally {
-        setLoading(false);
-      }
-    };
-    load();
-  }, [orgId]);
+  const recentEvents = metrics?.recentEvents ?? [];
 
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-bold">Dashboard</h1>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card icon={Users} label="Total Users" value={loading ? '...' : stats.users} />
-        <Card icon={Building2} label="Organizations" value={loading ? '...' : stats.orgs} />
-        <Card icon={UserCircle} label="Customers" value={loading ? '...' : stats.customers} />
-        <Card icon={Activity} label="System Health" value={healthStatus} />
+        <Card icon={Users} label="Total Users" value={metrics?.users ?? '...'} />
+        <Card icon={Building2} label="Organizations" value={metrics?.orgs ?? '...'} />
+        <Card icon={UserCircle} label="Customers" value={metrics?.customers ?? '...'} />
+        <Card icon={Activity} label="System Health" value={metrics?.health ?? '...'} />
       </div>
 
       <div className="card">
@@ -95,16 +48,18 @@ const DashboardPage: React.FC = () => {
         </div>
         <div className="divide-y divide-gray-200 dark:divide-gray-700">
           {recentEvents.length === 0 && (
-            <div className="p-4 text-center text-gray-500">No recent events</div>
+            <div className="p-4 text-center text-gray-500">
+              {metrics ? 'No recent events' : 'Waiting for data...'}
+            </div>
           )}
           {recentEvents.map((evt, i) => (
             <div key={i} className="px-4 py-3 flex items-center justify-between">
               <div className="flex items-center space-x-3">
-                <StatusBadge label={typeof (evt.action || evt.eventType) === 'string' ? (evt.action || evt.eventType) : String(evt.action || evt.eventType || 'unknown')} />
+                <StatusBadge label={typeof (evt.action || evt.eventType) === 'string' ? (evt.action || evt.eventType)! : String(evt.action || evt.eventType || 'unknown')} />
                 <span className="text-sm">{typeof evt.eventType === 'string' ? evt.eventType : JSON.stringify(evt.eventType)}</span>
               </div>
               <div className="text-xs text-gray-500">
-                {typeof evt.actor === 'string' ? evt.actor : (evt.actor as unknown as { hashId?: string })?.hashId || JSON.stringify(evt.actor)} &middot; {formatDate(evt.timestamp)}
+                {typeof evt.actor === 'string' ? evt.actor : (evt.actor as { hashId?: string })?.hashId || JSON.stringify(evt.actor)} &middot; {formatDate(evt.timestamp)}
               </div>
             </div>
           ))}

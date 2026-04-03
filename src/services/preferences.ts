@@ -1,6 +1,3 @@
-import api from './api';
-import { API_CONFIG } from '../config';
-
 /**
  * Preferences schema — namespaced for scalability.
  *
@@ -10,6 +7,8 @@ import { API_CONFIG } from '../config';
  *   a11y     — ttsEngine, ttsVoice, fontSize, contrast
  *   notify   — email, push, inApp
  *   modules  — per-module prefs keyed by module code
+ *
+ * ZERO HTTP calls. Preferences live in localStorage and sync via WebSocket.
  */
 export interface UserPreferences {
   ui?: {
@@ -88,33 +87,4 @@ export function clearAllLocalPrefs(): void {
     }
   }
   keysToRemove.forEach((k) => localStorage.removeItem(k));
-}
-
-/**
- * Fetch preferences from backend.
- */
-export async function fetchPrefsFromServer(userId: string): Promise<UserPreferences> {
-  const resp = await api.get<UserPreferences>(
-    `${API_CONFIG.ADMIN_CONSOLE_URL}/api/v1/U/${userId}/preferences`,
-  );
-  // Guard against HTML error pages (e.g. when the backend is down and nginx
-  // returns its default page). If the response is not a valid object, treat
-  // it as unavailable.
-  if (!resp.data || typeof resp.data !== 'object' || typeof resp.data === 'string') {
-    throw new Error('Preferences endpoint returned non-JSON response');
-  }
-  return resp.data;
-}
-
-/**
- * Save preferences to backend (full replace).
- */
-export async function savePrefsToServer(
-  userId: string,
-  prefs: UserPreferences,
-): Promise<void> {
-  await api.put(
-    `${API_CONFIG.ADMIN_CONSOLE_URL}/api/v1/U/${userId}/preferences`,
-    { preferences: prefs },
-  );
 }
