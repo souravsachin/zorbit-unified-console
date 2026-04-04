@@ -8,6 +8,7 @@ import { useToast } from '../../components/shared/Toast';
 import { identityService, User } from '../../services/identity';
 import api from '../../services/api';
 import { API_CONFIG } from '../../config';
+import PasswordField, { getPasswordScore } from '../../components/shared/PasswordField';
 
 interface Role {
   hashId: string;
@@ -75,6 +76,10 @@ const UsersPage: React.FC = () => {
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (getPasswordScore(form.password) < 3) {
+      toast('Please choose a stronger password', 'error');
+      return;
+    }
     setCreating(true);
     try {
       // Hash password client-side (sha256)
@@ -241,10 +246,14 @@ const UsersPage: React.FC = () => {
             <label className="block text-sm font-medium mb-1">Email <span className="text-red-500">*</span></label>
             <input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="input-field" required />
           </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Password <span className="text-red-500">*</span></label>
-            <input type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} className="input-field" required minLength={6} />
-          </div>
+          <PasswordField
+            label="Password"
+            value={form.password}
+            onChange={(v) => setForm({ ...form, password: v })}
+            required
+            showStrengthMeter
+            showAutoGenerate
+          />
           <div>
             <label className="block text-sm font-medium mb-1">Role <span className="text-red-500">*</span></label>
             <select
@@ -330,18 +339,16 @@ const UsersPage: React.FC = () => {
           <p className="text-sm text-gray-600 dark:text-gray-400">
             Set a new password for <strong>{showResetPassword?.displayName}</strong> ({showResetPassword?.email || showResetPassword?.emailToken || showResetPassword?.hashId}).
           </p>
-          <div>
-            <label className="block text-sm font-medium mb-1">New Password <span className="text-red-500">*</span></label>
-            <input
-              type="password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              className="input-field"
-              required
-              minLength={6}
-              placeholder="Minimum 6 characters"
-            />
-          </div>
+          <PasswordField
+            label="New Password"
+            value={newPassword}
+            onChange={setNewPassword}
+            required
+            minLength={6}
+            showStrengthMeter
+            showAutoGenerate
+            allowWeak
+          />
           <label className="flex items-center gap-2 cursor-pointer">
             <input
               type="checkbox"

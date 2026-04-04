@@ -164,4 +164,11 @@ export const identityService = {
 
   forceChangePassword: (tempToken: string, newPassword: string) =>
     api.post(`${API_CONFIG.IDENTITY_URL}/api/v1/G/auth/force-change-password`, { tempToken, newPassword }),
+
+  // ─── Sessions ───────────────────────────────────────────────────
+  getSessions: (userId: string) =>
+    api.get(`${API_CONFIG.IDENTITY_URL}/api/v1/U/${userId}/sessions`),
+
+  revokeSession: (userId: string, sessionId: string) =>
+    api.delete(`${API_CONFIG.IDENTITY_URL}/api/v1/U/${userId}/sessions/${sessionId}`),
 };

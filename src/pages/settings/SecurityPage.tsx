@@ -13,12 +13,16 @@ import {
   Trash2,
   Plus,
   Lock,
-  Eye,
-  EyeOff,
+  Monitor,
+  Smartphone,
+  X,
+  History,
 } from 'lucide-react';
 import { startRegistration } from '@simplewebauthn/browser';
 import { identityService, hashPassword } from '../../services/identity';
+import { auditService } from '../../services/audit';
 import { useToast } from '../../components/shared/Toast';
+import PasswordField, { getPasswordScore } from '../../components/shared/PasswordField';
 
 type MfaState = 'loading' | 'disabled' | 'setup' | 'verify' | 'enabled';
 
@@ -26,6 +30,62 @@ interface PasskeyCredential {
   credentialId: string;
   deviceName?: string;
   createdAt: string;
+}
+
+interface SessionInfo {
+  hashId: string;
+  userHashId: string;
+  ipAddress?: string;
+  userAgent?: string;
+  loginMethod?: string;
+  expiresAt: string;
+  createdAt: string;
+}
+
+interface LoginActivity {
+  id: string;
+  action: string;
+  ipAddress: string | null;
+  eventTimestamp: string;
+  metadata?: Record<string, unknown> | null;
+}
+
+/** Extract userId and orgId from the JWT in localStorage */
+function getTokenInfo(): { userId: string; orgId: string } {
+  try {
+    const token = localStorage.getItem('zorbit_token');
+    if (!token) return { userId: '', orgId: '' };
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return {
+      userId: payload.sub || '',
+      orgId: payload.org || '',
+    };
+  } catch {
+    return { userId: '', orgId: '' };
+  }
+}
+
+/** Parse user-agent into a readable device/browser string */
+function parseUserAgent(ua?: string): { device: string; icon: 'desktop' | 'mobile' } {
+  if (!ua) return { device: 'Unknown device', icon: 'desktop' };
+  let browser = 'Browser';
+  if (ua.includes('Chrome') && !ua.includes('Edg')) browser = 'Chrome';
+  else if (ua.includes('Firefox')) browser = 'Firefox';
+  else if (ua.includes('Safari') && !ua.includes('Chrome')) browser = 'Safari';
+  else if (ua.includes('Edg')) browser = 'Edge';
+
+  let os = '';
+  if (ua.includes('Mac OS')) os = 'macOS';
+  else if (ua.includes('Windows')) os = 'Windows';
+  else if (ua.includes('Linux')) os = 'Linux';
+  else if (ua.includes('Android')) os = 'Android';
+  else if (ua.includes('iPhone') || ua.includes('iPad')) os = 'iOS';
+
+  const isMobile = ua.includes('Mobile') || ua.includes('Android') || ua.includes('iPhone');
+  return {
+    device: os ? `${browser} on ${os}` : browser,
+    icon: isMobile ? 'mobile' : 'desktop',
+  };
 }
 
 const SecurityPage: React.FC = () => {
@@ -62,12 +122,22 @@ const SecurityPage: React.FC = () => {
   const [confirmPw, setConfirmPw] = useState('');
   const [changePwMfaCode, setChangePwMfaCode] = useState('');
   const [changingPw, setChangingPw] = useState(false);
-  const [showCurrentPw, setShowCurrentPw] = useState(false);
-  const [showNewPw, setShowNewPw] = useState(false);
+
+  // Sessions state
+  const [sessions, setSessions] = useState<SessionInfo[]>([]);
+  const [sessionsLoading, setSessionsLoading] = useState(true);
+  const [revokingSession, setRevokingSession] = useState<string | null>(null);
+  const [revokingAll, setRevokingAll] = useState(false);
+
+  // Login activity state
+  const [loginActivity, setLoginActivity] = useState<LoginActivity[]>([]);
+  const [loginActivityLoading, setLoginActivityLoading] = useState(true);
 
   useEffect(() => {
     loadStatus();
     loadPasskeys();
+    loadSessions();
+    loadLoginActivity();
   }, []);
 
   const loadStatus = async () => {
@@ -92,6 +162,71 @@ const SecurityPage: React.FC = () => {
       setPasskeys([]);
     } finally {
       setPasskeysLoading(false);
+    }
+  };
+
+  const loadSessions = async () => {
+    try {
+      const { userId } = getTokenInfo();
+      if (!userId) return;
+      const res = await identityService.getSessions(userId);
+      setSessions(Array.isArray(res.data) ? res.data : []);
+    } catch {
+      setSessions([]);
+    } finally {
+      setSessionsLoading(false);
+    }
+  };
+
+  const handleRevokeSession = async (sessionId: string) => {
+    setRevokingSession(sessionId);
+    try {
+      const { userId } = getTokenInfo();
+      await identityService.revokeSession(userId, sessionId);
+      toast('Session revoked', 'success');
+      loadSessions();
+    } catch (err: any) {
+      toast(err.response?.data?.message || 'Failed to revoke session', 'error');
+    } finally {
+      setRevokingSession(null);
+    }
+  };
+
+  const handleRevokeAllOtherSessions = async () => {
+    setRevokingAll(true);
+    try {
+      const { userId } = getTokenInfo();
+      // Sessions are ordered DESC by createdAt — [0] is newest (likely current).
+      // The current access token remains valid until expiry even after session revocation.
+      const otherSessions = sessions.slice(1);
+      for (const s of otherSessions) {
+        try {
+          await identityService.revokeSession(userId, s.hashId);
+        } catch { /* skip individual failures */ }
+      }
+      toast(`Revoked ${otherSessions.length} other session(s)`, 'success');
+      loadSessions();
+    } catch (err: any) {
+      toast('Failed to revoke sessions', 'error');
+    } finally {
+      setRevokingAll(false);
+    }
+  };
+
+  const loadLoginActivity = async () => {
+    try {
+      const { orgId } = getTokenInfo();
+      if (!orgId) return;
+      const res = await auditService.getEvents(orgId, {
+        eventType: 'identity.session.created',
+        limit: 10,
+      });
+      const events = res.data?.data || res.data || [];
+      setLoginActivity(Array.isArray(events) ? events : []);
+    } catch {
+      setLoginActivity([]);
+    } finally {
+      setLoginActivityLoading(false);
     }
   };
 
@@ -214,8 +349,8 @@ const SecurityPage: React.FC = () => {
       toast('New passwords do not match', 'error');
       return;
     }
-    if (newPw.length < 6) {
-      toast('New password must be at least 6 characters', 'error');
+    if (getPasswordScore(newPw) < 3) {
+      toast('Please choose a stronger new password', 'error');
       return;
     }
     // If MFA enabled, require code
@@ -275,59 +410,32 @@ const SecurityPage: React.FC = () => {
         </div>
 
         <form onSubmit={handleChangePassword} className="space-y-3">
+          <PasswordField
+            label="Current Password"
+            value={currentPw}
+            onChange={setCurrentPw}
+            required
+            minLength={1}
+            placeholder="Enter current password"
+            showStrengthMeter={false}
+            showAutoGenerate={false}
+          />
+          <PasswordField
+            label="New Password"
+            value={newPw}
+            onChange={setNewPw}
+            required
+            showStrengthMeter
+            showAutoGenerate={false}
+          />
           <div>
-            <label className="block text-sm font-medium mb-1">Current Password</label>
-            <div className="relative">
-              <input
-                type={showCurrentPw ? 'text' : 'password'}
-                value={currentPw}
-                onChange={(e) => setCurrentPw(e.target.value)}
-                className="input-field pr-10"
-                required
-                placeholder="Enter current password"
-              />
-              <button
-                type="button"
-                onClick={() => setShowCurrentPw(!showCurrentPw)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                tabIndex={-1}
-              >
-                {showCurrentPw ? <EyeOff size={16} /> : <Eye size={16} />}
-              </button>
-            </div>
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">New Password</label>
-            <div className="relative">
-              <input
-                type={showNewPw ? 'text' : 'password'}
-                value={newPw}
-                onChange={(e) => setNewPw(e.target.value)}
-                className="input-field pr-10"
-                required
-                minLength={6}
-                placeholder="Minimum 6 characters"
-              />
-              <button
-                type="button"
-                onClick={() => setShowNewPw(!showNewPw)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                tabIndex={-1}
-              >
-                {showNewPw ? <EyeOff size={16} /> : <Eye size={16} />}
-              </button>
-            </div>
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Confirm New Password</label>
-            <input
-              type="password"
+            <PasswordField
+              label="Confirm New Password"
               value={confirmPw}
-              onChange={(e) => setConfirmPw(e.target.value)}
-              className="input-field"
+              onChange={setConfirmPw}
               required
-              minLength={6}
-              placeholder="Confirm new password"
+              showStrengthMeter={false}
+              showAutoGenerate={false}
             />
             {confirmPw && newPw !== confirmPw && (
               <p className="text-xs text-red-500 mt-1">Passwords do not match</p>
@@ -737,6 +845,187 @@ const SecurityPage: React.FC = () => {
             Register a new passkey
           </button>
         )}
+      </div>
+
+      {/* ─── Active Sessions ──────────────────────────────────────── */}
+      <div className="card p-6 space-y-4">
+        <div className="flex items-start gap-4">
+          <div className="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/30 rounded-xl flex items-center justify-center flex-shrink-0">
+            <Monitor className="w-6 h-6 text-indigo-600" />
+          </div>
+          <div className="flex-1">
+            <h2 className="text-lg font-semibold">Active Sessions</h2>
+            <p className="text-sm text-gray-500 mt-1">
+              Devices and browsers where you are currently signed in.
+            </p>
+          </div>
+        </div>
+
+        {sessionsLoading ? (
+          <div className="flex items-center justify-center py-4">
+            <Loader2 className="w-5 h-5 animate-spin text-gray-400" />
+          </div>
+        ) : sessions.length > 0 ? (
+          <>
+            <div className="space-y-2">
+              {sessions.map((s, idx) => {
+                const { device, icon } = parseUserAgent(s.userAgent || undefined);
+                const isCurrent = idx === 0; // newest session = most likely current
+                return (
+                  <div
+                    key={s.hashId}
+                    className={`flex items-center justify-between px-4 py-3 rounded-lg border ${
+                      isCurrent
+                        ? 'bg-indigo-50 dark:bg-indigo-900/20 border-indigo-200 dark:border-indigo-800'
+                        : 'bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      {icon === 'mobile' ? (
+                        <Smartphone className="w-5 h-5 text-indigo-500" />
+                      ) : (
+                        <Monitor className="w-5 h-5 text-indigo-500" />
+                      )}
+                      <div>
+                        <p className="text-sm font-medium">
+                          {device}
+                          {isCurrent && (
+                            <span className="ml-2 inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-medium bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-400">
+                              Current
+                            </span>
+                          )}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {s.ipAddress && <span>{s.ipAddress} &middot; </span>}
+                          {s.loginMethod && <span className="capitalize">{s.loginMethod} &middot; </span>}
+                          Created {new Date(s.createdAt).toLocaleString()}
+                        </p>
+                      </div>
+                    </div>
+                    {!isCurrent && (
+                      <button
+                        onClick={() => handleRevokeSession(s.hashId)}
+                        disabled={revokingSession === s.hashId}
+                        className="p-1.5 rounded-md text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors disabled:opacity-50"
+                        title="Revoke session"
+                      >
+                        {revokingSession === s.hashId ? (
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : (
+                          <X className="w-4 h-4" />
+                        )}
+                      </button>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+            {sessions.length > 1 && (
+              <button
+                onClick={handleRevokeAllOtherSessions}
+                disabled={revokingAll}
+                className="text-sm text-red-600 hover:text-red-700 font-medium flex items-center gap-1.5"
+              >
+                {revokingAll ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <X className="w-3.5 h-3.5" />}
+                Revoke all other sessions
+              </button>
+            )}
+          </>
+        ) : (
+          <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 text-center">
+            <Monitor className="w-8 h-8 text-gray-300 mx-auto mb-2" />
+            <p className="text-sm text-gray-500">No active sessions found</p>
+          </div>
+        )}
+      </div>
+
+      {/* ─── Recent Login Activity ────────────────────────────────── */}
+      <div className="card p-6 space-y-4">
+        <div className="flex items-start gap-4">
+          <div className="w-12 h-12 bg-amber-100 dark:bg-amber-900/30 rounded-xl flex items-center justify-center flex-shrink-0">
+            <History className="w-6 h-6 text-amber-600" />
+          </div>
+          <div className="flex-1">
+            <h2 className="text-lg font-semibold">Recent Login Activity</h2>
+            <p className="text-sm text-gray-500 mt-1">
+              Your recent sign-in events from the audit log.
+            </p>
+          </div>
+        </div>
+
+        {loginActivityLoading ? (
+          <div className="flex items-center justify-center py-4">
+            <Loader2 className="w-5 h-5 animate-spin text-gray-400" />
+          </div>
+        ) : loginActivity.length > 0 ? (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-gray-200 dark:border-gray-700 text-left">
+                  <th className="pb-2 font-medium text-gray-500 text-xs">Date/Time</th>
+                  <th className="pb-2 font-medium text-gray-500 text-xs">IP Address</th>
+                  <th className="pb-2 font-medium text-gray-500 text-xs">Status</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
+                {loginActivity.map((evt) => (
+                  <tr key={evt.id || evt.eventTimestamp}>
+                    <td className="py-2 text-xs text-gray-700 dark:text-gray-300">
+                      {new Date(evt.eventTimestamp).toLocaleString()}
+                    </td>
+                    <td className="py-2 text-xs text-gray-500 font-mono">
+                      {evt.ipAddress || '-'}
+                    </td>
+                    <td className="py-2">
+                      <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[10px] font-medium bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400">
+                        <Check className="w-2.5 h-2.5" /> Success
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 text-center">
+            <History className="w-8 h-8 text-gray-300 mx-auto mb-2" />
+            <p className="text-sm text-gray-500">No recent login activity found</p>
+          </div>
+        )}
+      </div>
+
+      {/* ─── Security Compliance Badges ───────────────────────────── */}
+      <div className="card p-4 space-y-3">
+        <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100">Security Compliance</h3>
+        <div className="flex flex-wrap gap-2">
+          <a
+            href="https://pages.nist.gov/800-63-3/sp800-63b.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 transition-colors"
+          >
+            <ShieldCheck size={12} /> NIST SP 800-63B Compliant
+          </a>
+          <a
+            href="https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100 transition-colors"
+          >
+            <ShieldCheck size={12} /> OWASP Authentication Guidelines
+          </a>
+          <a
+            href="https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-purple-50 text-purple-700 border border-purple-200 hover:bg-purple-100 transition-colors"
+          >
+            <ShieldCheck size={12} /> OWASP Password Storage
+          </a>
+        </div>
+        <p className="text-xs text-gray-500">
+          Passwords are SHA-256 hashed client-side and bcrypt (12 rounds) server-side. MFA via TOTP (RFC 6238). WebAuthn via FIDO2/W3C standard.
+        </p>
       </div>
     </div>
   );

@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Lock, Shield, Eye, EyeOff, ShieldCheck, KeyRound, Fingerprint, QrCode, Smartphone, Mail, ChevronDown, ChevronUp } from 'lucide-react';
+import { Lock, Shield, ShieldCheck, KeyRound, Fingerprint, QrCode, Smartphone, Mail, ChevronDown, ChevronUp } from 'lucide-react';
 import { startAuthentication } from '@simplewebauthn/browser';
 import { useAuth } from '../../hooks/useAuth';
 import { identityService, hashPassword } from '../../services/identity';
 import { useToast } from '../../components/shared/Toast';
 import api from '../../services/api';
 import { API_CONFIG } from '../../config';
+import PasswordField from '../../components/shared/PasswordField';
 
 interface AuthProvider {
   id: string;
@@ -22,7 +23,6 @@ const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [providers, setProviders] = useState<AuthProvider[]>([]);
   const [providersLoaded, setProvidersLoaded] = useState(false);
@@ -124,8 +124,9 @@ const LoginPage: React.FC = () => {
       }
       const token = res.data.accessToken || res.data.token;
       completeLogin(token, res.data.user);
-    } catch {
-      toast('Invalid email or password', 'error');
+    } catch (err: any) {
+      const msg = err?.response?.data?.message || 'Invalid email or password';
+      toast(msg, 'error');
     } finally {
       setLoading(false);
     }
@@ -599,27 +600,16 @@ const LoginPage: React.FC = () => {
               required
             />
           </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Password</label>
-            <div className="relative">
-              <input
-                type={showPassword ? 'text' : 'password'}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="input-field pr-10"
-                placeholder="Enter password"
-                required
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
-                tabIndex={-1}
-              >
-                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-              </button>
-            </div>
-          </div>
+          <PasswordField
+            label="Password"
+            value={password}
+            onChange={setPassword}
+            required
+            minLength={1}
+            placeholder="Enter password"
+            showStrengthMeter={false}
+            showAutoGenerate={false}
+          />
           <button type="submit" disabled={loading} className="btn-primary w-full">
             {loading ? 'Signing in...' : 'Sign In'}
           </button>

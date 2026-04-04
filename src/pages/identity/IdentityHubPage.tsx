@@ -177,40 +177,50 @@ const IdentityHubPage: React.FC = () => {
     <ModuleHubPage
       moduleId="identity"
       moduleName="Identity Service"
-      moduleDescription="Central authentication authority for the Zorbit platform"
-      moduleIntro="The Identity Service is the single source of truth for user authentication across the Zorbit platform. It supports 8 authentication protocols -- from simple email/password to enterprise SAML 2.0 and telecom Diameter -- and issues JWT tokens that carry organization context, user claims, and privilege references. Every other service in the platform validates identity tokens against this service."
+      moduleDescription="Enterprise-grade identity, authentication & access management — NIST SP 800-63B and OWASP compliant"
+      moduleIntro="The Identity Service is the central authentication authority for the Zorbit platform. It supports 13 authentication methods — from passwords with SHA-256 client-side hashing to biometric WebAuthn passkeys and QR code cross-device login. Every session is protected by configurable MFA, password policies follow NIST SP 800-63B guidelines, and all actions are audit-logged. The service manages users, organizations, roles, and sessions with multi-tenant namespace isolation, geo-restriction, IP whitelisting, and account lockout policies."
       icon={Fingerprint}
       slides={IDENTITY_SLIDES}
       capabilities={[
         {
-          icon: Users,
-          title: 'User Management',
-          description: 'Create, update, suspend, and deactivate user accounts. Search and filter across organizations with role-based visibility.',
-        },
-        {
           icon: Shield,
-          title: '8 Auth Protocols',
-          description: 'Email/password, Google, GitHub, LinkedIn OAuth 2.0, generic OIDC/SSO, SAML 2.0, RADIUS (RFC 2865), and Diameter (RFC 6733).',
-        },
-        {
-          icon: Globe,
-          title: 'OAuth 2.0 Provider',
-          description: 'Acts as an OAuth 2.0 authorization server, issuing access and refresh tokens for third-party application integrations.',
-        },
-        {
-          icon: Building2,
-          title: 'Organization Management',
-          description: 'Multi-tenant organization lifecycle -- create, configure, and manage organizations with namespace isolation (O-xxxx).',
-        },
-        {
-          icon: Key,
-          title: 'JWT Sessions',
-          description: 'Stateless JWT tokens with embedded claims (userId, orgId, roles). Short-lived access tokens with refresh token rotation.',
+          title: '13 Authentication Methods',
+          description: 'Password (SHA-256 + bcrypt), TOTP MFA, WebAuthn/Passkeys (fingerprint/Face ID), QR code cross-device login, Magic Link, Email OTP, Google/GitHub/LinkedIn OAuth 2.0, SAML 2.0, RADIUS (RFC 2865), Diameter (RFC 6733), and Generic OIDC/SSO. Per-user auth method controls.',
         },
         {
           icon: Lock,
-          title: 'Password Policy',
-          description: 'Configurable password complexity, rotation, history checks, and account lockout rules per organization.',
+          title: 'Password Security (NIST SP 800-63B)',
+          description: 'SHA-256 client-side hashing, bcrypt (12 rounds) server-side. Password strength meter, auto-generate strong passwords, configurable rotation policies per org, password history prevention, and account lockout after failed attempts. Compliant with NIST SP 800-63B and OWASP Password Storage guidelines.',
+        },
+        {
+          icon: Users,
+          title: 'User & Role Management',
+          description: 'Super Admin → Org Admin → Users hierarchy. Create users with role assignment, reset passwords with force-change-on-next-login, admin impersonation with full audit trail (sudo mode). Self-service password change with MFA verification.',
+        },
+        {
+          icon: Building2,
+          title: 'Multi-Tenant Organizations',
+          description: 'Organization types (Insurer, Cedent, Broker, TPA, Regulator, Healthcare Provider). Customer flags, password policies, geo-restriction, and IP whitelisting per organization. Complete namespace isolation.',
+        },
+        {
+          icon: Globe,
+          title: 'Geo-Restriction & IP Whitelisting',
+          description: 'Restrict login by country/geography per organization. Whitelist specific IP address ranges for exceptions. GeoIP-based country detection. Configurable block messages.',
+        },
+        {
+          icon: Key,
+          title: 'Session Management & Security',
+          description: 'View and revoke active sessions across devices. Login history with IP, device, method, and status. Account lockout after configurable failed attempts (default: 5 attempts, 15-min cooldown). Concurrent session limits.',
+        },
+        {
+          icon: Clock,
+          title: 'Forgot Password & Recovery',
+          description: 'Magic link password recovery via email. Force password change on next login (admin-triggered). Email notification on password reset. Self-service with MFA gating.',
+        },
+        {
+          icon: Globe,
+          title: 'OAuth 2.0 Authorization Server',
+          description: 'Zorbit Identity acts as an OAuth 2.0 provider — third-party apps (Rocket.Chat, Grafana, etc.) authenticate users via Zorbit using Authorization Code flow.',
         },
       ]}
       targetUsers={[
@@ -230,16 +240,22 @@ const IdentityHubPage: React.FC = () => {
       videosBaseUrl="/demos/identity/"
       swaggerUrl="https://zorbit.scalatics.com/api/identity/api-docs"
       faqs={[
-        { question: 'How do I add a new OAuth provider?', answer: 'Configure the provider credentials (client ID, client secret, callback URL) in the Identity service environment variables. The service supports Google, GitHub, LinkedIn out of the box, and generic OIDC for any OpenID Connect provider.' },
-        { question: 'What happens when a JWT token expires?', answer: 'The client uses the refresh token to obtain a new access token. If the refresh token is also expired, the user must re-authenticate. The frontend automatically handles token refresh via an Axios interceptor.' },
-        { question: 'How does multi-org tenancy work?', answer: 'Each user belongs to an organization identified by a short hash (O-xxxx). The org ID is embedded in the JWT token and used by all downstream services to scope data access. Users cannot access data outside their organization.' },
-        { question: 'Can I configure password policies per organization?', answer: 'Yes. Password complexity rules, rotation periods, history depth, and lockout thresholds can be configured independently for each organization.' },
+        { question: 'What authentication methods are supported?', answer: '13 methods: Email/Password (SHA-256 + bcrypt), TOTP MFA (Google Authenticator), WebAuthn/Passkeys (fingerprint/Face ID), QR code cross-device login, Magic Link, Email OTP, Google OAuth, GitHub OAuth, LinkedIn OAuth, SAML 2.0, RADIUS (RFC 2865), Diameter (RFC 6733), and Generic OIDC/SSO. Each method can be enabled/disabled per user by the Org Admin.' },
+        { question: 'How are passwords stored?', answer: 'Passwords are SHA-256 hashed on the client side before transmission (never sent in plaintext). The server then applies bcrypt with 12 salt rounds. This dual-hashing follows OWASP Password Storage Cheat Sheet guidelines. Passwords are never logged or stored in plaintext anywhere in the system.' },
+        { question: 'What is the password rotation policy?', answer: 'Each organization can configure: rotation period (e.g., every 90 days), minimum password length, complexity requirements (uppercase, lowercase, numbers, special characters), strength score threshold, and password history (prevent reusing last N passwords). Users are forced to change their password on next login when the policy triggers.' },
+        { question: 'How does account lockout work?', answer: 'After a configurable number of failed login attempts (default: 5), the account is locked for a configurable cooldown period (default: 15 minutes). This is per-organization policy. Super admins can unlock accounts manually.' },
+        { question: 'Can I restrict logins by geography?', answer: 'Yes. Organizations can enable geo-restriction to allow logins only from specific countries (e.g., UAE only for a Dubai insurer). Additional IP address ranges can be whitelisted for exceptions (e.g., VPN addresses, partner offices).' },
+        { question: 'How does admin impersonation (sudo) work?', answer: 'Org Admins can impersonate any user within their organization to debug issues or provide support. Super Admins can impersonate anyone. All actions during impersonation are audit-logged with both the real user and the effective (impersonated) user identities.' },
+        { question: 'What security standards does this follow?', answer: 'NIST SP 800-63B (Digital Identity Guidelines), OWASP Authentication Cheat Sheet, OWASP Password Storage Cheat Sheet, RFC 6238 (TOTP), W3C WebAuthn (FIDO2), and OAuth 2.0 (RFC 6749). Compliance badges with links to the standard documents are displayed on the Security Settings page.' },
+        { question: 'How does the OrgAdmin → User hierarchy work?', answer: 'Super Admin creates organizations and Org Admins. Org Admins create and manage users within their organization — assigning roles, resetting passwords, and configuring auth methods. Regular users can only change their own password and manage their own MFA/passkeys.' },
       ]}
       resources={[
         { label: 'Identity API (Swagger)', url: 'https://zorbit.scalatics.com/api/identity/api-docs', icon: FileText },
         { label: 'User Management', url: '/users', icon: Users },
         { label: 'Organization Management', url: '/organizations', icon: Building2 },
-        { label: 'OAuth Configuration', url: '/settings', icon: Code },
+        { label: 'Security Settings (MFA + Passkeys)', url: '/settings/security', icon: Lock },
+        { label: 'NIST SP 800-63B (external)', url: 'https://pages.nist.gov/800-63-3/sp800-63b.html', icon: Shield },
+        { label: 'OWASP Auth Cheat Sheet (external)', url: 'https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html', icon: Shield },
       ]}
     />
   );

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { identityService, hashPassword } from '../../services/identity';
 import { useToast } from '../../components/shared/Toast';
+import PasswordField, { getPasswordScore } from '../../components/shared/PasswordField';
 
 const RegisterPage: React.FC = () => {
   const navigate = useNavigate();
@@ -20,6 +21,10 @@ const RegisterPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (getPasswordScore(form.password) < 3) {
+      toast('Please choose a stronger password', 'error');
+      return;
+    }
     setLoading(true);
     try {
       const hashed = await hashPassword(form.password);
@@ -67,18 +72,14 @@ const RegisterPage: React.FC = () => {
               required
             />
           </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Password</label>
-            <input
-              type="password"
-              name="password"
-              value={form.password}
-              onChange={handleChange}
-              className="input-field"
-              placeholder="Minimum 8 characters"
-              required
-            />
-          </div>
+          <PasswordField
+            label="Password"
+            value={form.password}
+            onChange={(v) => setForm({ ...form, password: v })}
+            required
+            showStrengthMeter
+            showAutoGenerate
+          />
           <div>
             <label className="block text-sm font-medium mb-1">Organization ID (optional)</label>
             <input

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { KeyRound, Loader2, AlertTriangle, Eye, EyeOff } from 'lucide-react';
+import { KeyRound, Loader2, AlertTriangle } from 'lucide-react';
 import { identityService, hashPassword } from '../../services/identity';
 import { useToast } from '../../components/shared/Toast';
+import PasswordField, { getPasswordScore } from '../../components/shared/PasswordField';
 
 const ForceChangePasswordPage: React.FC = () => {
   const { toast } = useToast();
@@ -12,7 +13,6 @@ const ForceChangePasswordPage: React.FC = () => {
 
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -21,8 +21,8 @@ const ForceChangePasswordPage: React.FC = () => {
       toast('Passwords do not match', 'error');
       return;
     }
-    if (newPassword.length < 6) {
-      toast('Password must be at least 6 characters', 'error');
+    if (getPasswordScore(newPassword) < 3) {
+      toast('Please choose a stronger password', 'error');
       return;
     }
     if (!tempToken) {
@@ -82,39 +82,23 @@ const ForceChangePasswordPage: React.FC = () => {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
+            <PasswordField
+              label="New Password"
+              value={newPassword}
+              onChange={setNewPassword}
+              required
+              showStrengthMeter
+              showAutoGenerate
+              autoFocus
+            />
             <div>
-              <label className="block text-sm font-medium mb-1">New Password</label>
-              <div className="relative">
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  className="input-field pr-10"
-                  required
-                  minLength={6}
-                  placeholder="Minimum 6 characters"
-                  autoFocus
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                  tabIndex={-1}
-                >
-                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-                </button>
-              </div>
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Confirm Password</label>
-              <input
-                type="password"
+              <PasswordField
+                label="Confirm Password"
                 value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                className="input-field"
+                onChange={setConfirmPassword}
                 required
-                minLength={6}
-                placeholder="Confirm new password"
+                showStrengthMeter={false}
+                showAutoGenerate={false}
               />
               {confirmPassword && newPassword !== confirmPassword && (
                 <p className="text-xs text-red-500 mt-1">Passwords do not match</p>
