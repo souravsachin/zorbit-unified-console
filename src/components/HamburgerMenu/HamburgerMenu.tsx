@@ -85,7 +85,6 @@ import {
   Sparkles,
   Plug,
   FolderOpen,
-  RefreshCw,
   type LucideIcon,
 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';

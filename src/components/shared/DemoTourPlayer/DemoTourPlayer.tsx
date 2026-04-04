@@ -373,6 +373,7 @@ interface LayoutProps {
   setSelected: (i: number) => void;
   vp: ReturnType<typeof useVideoPlayer>;
   containerRef: React.RefObject<HTMLDivElement | null>;
+  baseUrl: string;
 }
 
 /* ---- YouTube ---- */
@@ -382,6 +383,7 @@ function YouTubeLayout({
   setSelected,
   vp,
   containerRef,
+  baseUrl,
 }: LayoutProps) {
   const rec = recordings[selected];
   const activeIdx = activeChapterIndex(rec.chapters, vp.currentTime);
@@ -461,6 +463,7 @@ function NetflixLayout({
   setSelected,
   vp,
   containerRef,
+  baseUrl,
 }: LayoutProps) {
   const rec = recordings[selected];
   const activeIdx = activeChapterIndex(rec.chapters, vp.currentTime);
@@ -530,6 +533,7 @@ function TimelineLayout({
   setSelected,
   vp,
   containerRef,
+  baseUrl,
 }: LayoutProps) {
   const activeIdx = activeChapterIndex(recordings[selected].chapters, vp.currentTime);
 
@@ -615,6 +619,7 @@ function ChaptersLayout({
   setSelected,
   vp,
   containerRef,
+  baseUrl,
 }: LayoutProps) {
   const rec = recordings[selected];
   const activeIdx = activeChapterIndex(rec.chapters, vp.currentTime);
@@ -712,6 +717,7 @@ function PodcastLayout({
   setSelected,
   vp,
   containerRef,
+  baseUrl,
 }: LayoutProps) {
   const rec = recordings[selected];
   const activeIdx = activeChapterIndex(rec.chapters, vp.currentTime);
@@ -862,6 +868,7 @@ function MosaicLayout({
   setSelected,
   vp,
   containerRef,
+  baseUrl,
 }: LayoutProps) {
   const rec = recordings[selected];
   const activeIdx = activeChapterIndex(rec.chapters, vp.currentTime);

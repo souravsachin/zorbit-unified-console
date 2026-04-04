@@ -1,0 +1,92 @@
+{
+  "date": "2026-04-04T10:06:19.190Z",
+  "passCount": 0,
+  "failCount": 17,
+  "results": [
+    {
+      "route": "/identity/guide/videos",
+      "status": "FAIL",
+      "issues": "No Videos tab found"
+    },
+    {
+      "route": "/dashboard/guide/videos",
+      "status": "FAIL",
+      "issues": "No Videos tab found"
+    },
+    {
+      "route": "/authorization/guide/videos",
+      "status": "FAIL",
+      "issues": "No Videos tab found"
+    },
+    {
+      "route": "/navigation/guide/videos",
+      "status": "FAIL",
+      "issues": "No Videos tab found"
+    },
+    {
+      "route": "/messaging/guide/videos",
+      "status": "FAIL",
+      "issues": "No Videos tab found"
+    },
+    {
+      "route": "/audit/guide/videos",
+      "status": "FAIL",
+      "issues": "No Videos tab found"
+    },
+    {
+      "route": "/pii-vault/guide/videos",
+      "status": "FAIL",
+      "issues": "No Videos tab found"
+    },
+    {
+      "route": "/app/pcg4/guide/videos",
+      "status": "FAIL",
+      "issues": "No Videos tab found"
+    },
+    {
+      "route": "/product-pricing/guide/videos",
+      "status": "FAIL",
+      "issues": "No Videos tab found"
+    },
+    {
+      "route": "/uw-workflow/guide/videos",
+      "status": "FAIL",
+      "issues": "No Videos tab found"
+    },
+    {
+      "route": "/hi-decisioning/guide/videos",
+      "status": "FAIL",
+      "issues": "No Videos tab found"
+    },
+    {
+      "route": "/hi-quotation/guide/videos",
+      "status": "FAIL",
+      "issues": "No Videos tab found"
+    },
+    {
+      "route": "/support-center/guide/videos",
+      "status": "FAIL",
+      "issues": "No Videos tab found"
+    },
+    {
+      "route": "/voice-engine/guide/videos",
+      "status": "FAIL",
+      "issues": "No Videos tab found"
+    },
+    {
+      "route": "/jayna/guide/videos",
+      "status": "FAIL",
+      "issues": "No Videos tab found"
+    },
+    {
+      "route": "/secrets/guide/videos",
+      "status": "FAIL",
+      "issues": "No Videos tab found"
+    },
+    {
+      "route": "/workflow-engine/guide/videos",
+      "status": "FAIL",
+      "issues": "No Videos tab found"
+    }
+  ]
+}

@@ -23,6 +23,9 @@ export class ErrorBoundary extends React.Component<Props, State> {
 
   render() {
     if (this.state.hasError) {
+      const isChunkError = this.state.error?.message?.includes('Loading chunk') ||
+        this.state.error?.message?.includes('Failed to fetch') ||
+        this.state.error?.message?.includes('dynamically imported module');
       return (
         this.props.fallback || (
           <div className="flex flex-col items-center justify-center min-h-[400px] text-center p-8">
@@ -45,7 +48,9 @@ export class ErrorBoundary extends React.Component<Props, State> {
               Page Not Available
             </h2>
             <p className="text-gray-500 dark:text-gray-400 mb-2">
-              This module encountered an error or is not yet implemented.
+              {isChunkError
+                ? 'A newer version of the app is available. Please reload.'
+                : 'This module encountered an error or is not yet implemented.'}
             </p>
             <p className="text-gray-400 dark:text-gray-500 text-sm font-mono mb-4">
               {window.location.pathname}
@@ -61,6 +66,14 @@ export class ErrorBoundary extends React.Component<Props, State> {
                 className="flex items-center space-x-2 px-4 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               >
                 <span>Go Back</span>
+              </button>
+              <button
+                onClick={() => {
+                  this.setState({ hasError: false, error: undefined });
+                }}
+                className="flex items-center space-x-2 px-4 py-2 text-sm border border-blue-300 dark:border-blue-600 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
+              >
+                <span>Retry</span>
               </button>
               <button
                 onClick={() => {
