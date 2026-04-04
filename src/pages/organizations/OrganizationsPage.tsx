@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Plus } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Plus, GitBranch, Building2 } from 'lucide-react';
 import DataTable, { Column } from '../../components/shared/DataTable';
 import StatusBadge from '../../components/shared/StatusBadge';
 import Modal from '../../components/shared/Modal';
@@ -25,6 +26,30 @@ const columns: Column<Organization>[] = [
   { key: 'isPaying', header: 'Paying', render: (o) => o.isPaying ? <span className="text-green-600 font-medium">Yes</span> : <span className="text-gray-400">No</span> },
   { key: 'customerStatus', header: 'Customer Status', render: (o) => o.customerStatus ? <StatusBadge label={o.customerStatus} /> : <span className="text-gray-400">—</span> },
   { key: 'createdAt', header: 'Created', render: (o) => new Date(o.createdAt).toLocaleDateString() },
+  {
+    key: 'actions' as any,
+    header: 'Actions',
+    render: (o) => (
+      <div className="flex items-center space-x-2">
+        <Link
+          to={`/organizations/${o.hashId || o.id}/departments`}
+          className="text-xs text-blue-600 hover:underline flex items-center"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <Building2 size={12} className="mr-1" />
+          Depts
+        </Link>
+        <Link
+          to={`/organizations/${o.hashId || o.id}/org-chart`}
+          className="text-xs text-purple-600 hover:underline flex items-center"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <GitBranch size={12} className="mr-1" />
+          Chart
+        </Link>
+      </div>
+    ),
+  },
 ];
 
 const OrganizationsPage: React.FC = () => {

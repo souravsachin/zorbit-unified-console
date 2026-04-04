@@ -6,12 +6,40 @@ import Layout from './components/layout/Layout';
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
 import AuthCallback from './pages/auth/AuthCallback';
-const ForgotPasswordPage = React.lazy(() => import('./pages/auth/ForgotPasswordPage'));
-const ResetPasswordPage = React.lazy(() => import('./pages/auth/ResetPasswordPage'));
-const ForceChangePasswordPage = React.lazy(() => import('./pages/auth/ForceChangePasswordPage'));
+
+/**
+ * Wrapper around React.lazy that retries chunk loads on failure.
+ * Handles stale chunk hashes after deploys (browser has old index cached).
+ */
+function lazyWithRetry<T extends React.ComponentType<any>>(
+  factory: () => Promise<{ default: T }>,
+  retries = 2,
+): React.LazyExoticComponent<T> {
+  return React.lazy(() =>
+    factory().catch((err) => {
+      if (retries > 0) {
+        console.warn(`[Zorbit] Chunk load failed, retrying (${retries} left)...`, err?.message);
+        return new Promise<{ default: T }>((resolve) =>
+          setTimeout(() => resolve(lazyWithRetry(factory, retries - 1) as any), 500),
+        );
+      }
+      // Final failure — force reload to get fresh chunks
+      console.error('[Zorbit] Chunk load failed after retries, reloading page', err);
+      window.location.reload();
+      // Return a never-resolving promise so reload takes effect
+      return new Promise<{ default: T }>(() => {});
+    }),
+  );
+}
+
+const ForgotPasswordPage = lazyWithRetry(() => import('./pages/auth/ForgotPasswordPage'));
+const ResetPasswordPage = lazyWithRetry(() => import('./pages/auth/ResetPasswordPage'));
+const ForceChangePasswordPage = lazyWithRetry(() => import('./pages/auth/ForceChangePasswordPage'));
 import DashboardPage from './pages/dashboard/DashboardPage';
 import UsersPage from './pages/users/UsersPage';
 import OrganizationsPage from './pages/organizations/OrganizationsPage';
+const DepartmentsPage = lazyWithRetry(() => import('./pages/organizations/DepartmentsPage'));
+const OrgChartPage = lazyWithRetry(() => import('./pages/organizations/OrgChartPage'));
 import RolesPage from './pages/roles/RolesPage';
 import PrivilegesPage from './pages/privileges/PrivilegesPage';
 import CustomersPage from './pages/customers/CustomersPage';
@@ -24,7 +52,7 @@ import PiiVaultPage from './pages/pii-vault/PiiVaultPage';
 import ApiDocsPage from './pages/api-docs/ApiDocsPage';
 import SettingsPage from './pages/settings/SettingsPage';
 import SecretsPage from './pages/settings/SecretsPage';
-const SecurityPage = React.lazy(() => import('./pages/settings/SecurityPage'));
+const SecurityPage = lazyWithRetry(() => import('./pages/settings/SecurityPage'));
 import DemoPage from './pages/demo/DemoPage';
 import DemoTrainingCenter from './pages/DemoTrainingCenter/DemoTrainingCenter';
 import DemoSegmentEditor from './pages/DemoSegmentEditor/DemoSegmentEditor';
@@ -35,196 +63,196 @@ import StepperDemoPage from './pages/stepper-demo/StepperDemoPage';
 import TreePickerDemoPage from './pages/tree-picker-demo/TreePickerDemoPage';
 import NotFoundPage from './pages/NotFoundPage';
 
-const PCG4DashboardPage = React.lazy(() => import('./pages/pcg4/PCG4DashboardPage'));
-const PCG4ConfiguratorPage = React.lazy(() => import('./pages/pcg4/PCG4ConfiguratorPage'));
-const PCG4AdminPage = React.lazy(() => import('./pages/pcg4/PCG4AdminPage'));
-const PCG4SetupPage = React.lazy(() => import('./pages/pcg4/PCG4SetupPage'));
-const PCG4OverviewPage = React.lazy(() => import('./pages/pcg4/PCG4OverviewPage'));
-const PCG4ReferenceLibraryPage = React.lazy(() => import('./pages/pcg4/PCG4ReferenceLibraryPage'));
-const PCG4CoverageMapperPage = React.lazy(() => import('./pages/pcg4/PCG4CoverageMapperPage'));
-const PCG4DeploymentsPage = React.lazy(() => import('./pages/pcg4/PCG4DeploymentsPage'));
-const PCG4PricingPage = React.lazy(() => import('./pages/pcg4/PCG4PricingPage'));
-const PCG4ConfiguratorFBPage = React.lazy(() => import('./pages/pcg4/PCG4ConfiguratorFBPage'));
+const PCG4DashboardPage = lazyWithRetry(() => import('./pages/pcg4/PCG4DashboardPage'));
+const PCG4ConfiguratorPage = lazyWithRetry(() => import('./pages/pcg4/PCG4ConfiguratorPage'));
+const PCG4AdminPage = lazyWithRetry(() => import('./pages/pcg4/PCG4AdminPage'));
+const PCG4SetupPage = lazyWithRetry(() => import('./pages/pcg4/PCG4SetupPage'));
+const PCG4OverviewPage = lazyWithRetry(() => import('./pages/pcg4/PCG4OverviewPage'));
+const PCG4ReferenceLibraryPage = lazyWithRetry(() => import('./pages/pcg4/PCG4ReferenceLibraryPage'));
+const PCG4CoverageMapperPage = lazyWithRetry(() => import('./pages/pcg4/PCG4CoverageMapperPage'));
+const PCG4DeploymentsPage = lazyWithRetry(() => import('./pages/pcg4/PCG4DeploymentsPage'));
+const PCG4PricingPage = lazyWithRetry(() => import('./pages/pcg4/PCG4PricingPage'));
+const PCG4ConfiguratorFBPage = lazyWithRetry(() => import('./pages/pcg4/PCG4ConfiguratorFBPage'));
 // PCG4HelpPage removed — Video Tutorials tab in PCG4 Hub replaces it
-const PIIShowcasePage = React.lazy(() => import('./pages/pii-showcase/PIIShowcasePage'));
-const PIIDashboardPage = React.lazy(() => import('./pages/pii-showcase/PIIDashboardPage'));
-const PIIUploadPage = React.lazy(() => import('./pages/pii-showcase/PIIUploadPage'));
-const PIIConfigPage = React.lazy(() => import('./pages/pii-showcase/PIIConfigPage'));
-const DirectoryPage = React.lazy(() => import('./pages/directory/DirectoryPage'));
-const SupportCenterPage = React.lazy(() => import('./pages/support-center/SupportCenterPage'));
-const FormTemplatesPage = React.lazy(() => import('./pages/form-builder/FormTemplatesPage'));
-const FormCreatePage = React.lazy(() => import('./pages/form-builder/FormCreatePage'));
-const FormSubmissionsPage = React.lazy(() => import('./pages/form-builder/FormSubmissionsPage'));
-const FormEditorPage = React.lazy(() => import('./pages/form-builder/FormEditorPage'));
-const FormBuilderHelpPage = React.lazy(() => import('./pages/form-builder/FormBuilderHelpPage'));
-const FormBuilderOverviewPage = React.lazy(() => import('./pages/form-builder/FormBuilderOverviewPage'));
-const FormRenderPage = React.lazy(() => import('./pages/form-builder/FormRenderPage'));
-const ModuleRegistryPage = React.lazy(() => import('./pages/admin/ModuleRegistryPage'));
-const LicensingPage = React.lazy(() => import('./pages/admin/LicensingPage'));
-const SitemapPage = React.lazy(() => import('./pages/admin/SitemapPage'));
-const DeveloperPage = React.lazy(() => import('./pages/admin/DeveloperPage'));
-const UWWorkflowPage = React.lazy(() => import('./pages/uw-workflow/UWWorkflowPage'));
-const HIDecisioningPage = React.lazy(() => import('./pages/hi-decisioning/HIDecisioningPage'));
-const HIQuotationPage = React.lazy(() => import('./pages/hi-quotation/HIQuotationPage'));
-const MIQuotationPage = React.lazy(() => import('./pages/mi-quotation/MIQuotationPage'));
-const NewHIApplicationPage = React.lazy(() => import('./pages/hi-quotation/NewApplicationPage'));
-const RegionSelectorPage = React.lazy(() => import('./pages/hi-quotation/RegionSelectorPage'));
-const NewApplicationIndiaPage = React.lazy(() => import('./pages/hi-quotation/NewApplicationIndiaPage'));
-const NewApplicationUAEPage = React.lazy(() => import('./pages/hi-quotation/NewApplicationUAEPage'));
-const NewApplicationUSPage = React.lazy(() => import('./pages/hi-quotation/NewApplicationUSPage'));
-const HIQuotationHelpPage = React.lazy(() => import('./pages/hi-quotation/HIQuotationHelpPage'));
-const UWWorkflowHelpPage = React.lazy(() => import('./pages/uw-workflow/UWWorkflowHelpPage'));
-const HIDecisioningHelpPage = React.lazy(() => import('./pages/hi-decisioning/HIDecisioningHelpPage'));
-const MIQuotationHelpPage = React.lazy(() => import('./pages/mi-quotation/MIQuotationHelpPage'));
-const VerificationHelpPage = React.lazy(() => import('./pages/verification/VerificationHelpPage'));
-const PaymentGatewayPage = React.lazy(() => import('./pages/payments/PaymentGatewayPage'));
+const PIIShowcasePage = lazyWithRetry(() => import('./pages/pii-showcase/PIIShowcasePage'));
+const PIIDashboardPage = lazyWithRetry(() => import('./pages/pii-showcase/PIIDashboardPage'));
+const PIIUploadPage = lazyWithRetry(() => import('./pages/pii-showcase/PIIUploadPage'));
+const PIIConfigPage = lazyWithRetry(() => import('./pages/pii-showcase/PIIConfigPage'));
+const DirectoryPage = lazyWithRetry(() => import('./pages/directory/DirectoryPage'));
+const SupportCenterPage = lazyWithRetry(() => import('./pages/support-center/SupportCenterPage'));
+const FormTemplatesPage = lazyWithRetry(() => import('./pages/form-builder/FormTemplatesPage'));
+const FormCreatePage = lazyWithRetry(() => import('./pages/form-builder/FormCreatePage'));
+const FormSubmissionsPage = lazyWithRetry(() => import('./pages/form-builder/FormSubmissionsPage'));
+const FormEditorPage = lazyWithRetry(() => import('./pages/form-builder/FormEditorPage'));
+const FormBuilderHelpPage = lazyWithRetry(() => import('./pages/form-builder/FormBuilderHelpPage'));
+const FormBuilderOverviewPage = lazyWithRetry(() => import('./pages/form-builder/FormBuilderOverviewPage'));
+const FormRenderPage = lazyWithRetry(() => import('./pages/form-builder/FormRenderPage'));
+const ModuleRegistryPage = lazyWithRetry(() => import('./pages/admin/ModuleRegistryPage'));
+const LicensingPage = lazyWithRetry(() => import('./pages/admin/LicensingPage'));
+const SitemapPage = lazyWithRetry(() => import('./pages/admin/SitemapPage'));
+const DeveloperPage = lazyWithRetry(() => import('./pages/admin/DeveloperPage'));
+const UWWorkflowPage = lazyWithRetry(() => import('./pages/uw-workflow/UWWorkflowPage'));
+const HIDecisioningPage = lazyWithRetry(() => import('./pages/hi-decisioning/HIDecisioningPage'));
+const HIQuotationPage = lazyWithRetry(() => import('./pages/hi-quotation/HIQuotationPage'));
+const MIQuotationPage = lazyWithRetry(() => import('./pages/mi-quotation/MIQuotationPage'));
+const NewHIApplicationPage = lazyWithRetry(() => import('./pages/hi-quotation/NewApplicationPage'));
+const RegionSelectorPage = lazyWithRetry(() => import('./pages/hi-quotation/RegionSelectorPage'));
+const NewApplicationIndiaPage = lazyWithRetry(() => import('./pages/hi-quotation/NewApplicationIndiaPage'));
+const NewApplicationUAEPage = lazyWithRetry(() => import('./pages/hi-quotation/NewApplicationUAEPage'));
+const NewApplicationUSPage = lazyWithRetry(() => import('./pages/hi-quotation/NewApplicationUSPage'));
+const HIQuotationHelpPage = lazyWithRetry(() => import('./pages/hi-quotation/HIQuotationHelpPage'));
+const UWWorkflowHelpPage = lazyWithRetry(() => import('./pages/uw-workflow/UWWorkflowHelpPage'));
+const HIDecisioningHelpPage = lazyWithRetry(() => import('./pages/hi-decisioning/HIDecisioningHelpPage'));
+const MIQuotationHelpPage = lazyWithRetry(() => import('./pages/mi-quotation/MIQuotationHelpPage'));
+const VerificationHelpPage = lazyWithRetry(() => import('./pages/verification/VerificationHelpPage'));
+const PaymentGatewayPage = lazyWithRetry(() => import('./pages/payments/PaymentGatewayPage'));
 
 // Module Setup Pages (reusable ModuleSetupPage wrappers)
-const IdentitySetupPage = React.lazy(() => import('./pages/identity/IdentitySetupPage'));
-const IdentityDeploymentsPage = React.lazy(() => import('./pages/identity/IdentityDeploymentsPage'));
-const AuthorizationSetupPage = React.lazy(() => import('./pages/authorization/AuthorizationSetupPage'));
-const AuthorizationDeploymentsPage = React.lazy(() => import('./pages/authorization/AuthorizationDeploymentsPage'));
-const NavigationSetupPage = React.lazy(() => import('./pages/navigation-admin/NavigationSetupPage'));
-const NavigationDeploymentsPage = React.lazy(() => import('./pages/navigation-admin/NavigationDeploymentsPage'));
-const MessagingSetupPage = React.lazy(() => import('./pages/messaging/MessagingSetupPage'));
-const MessagingDeploymentsPage = React.lazy(() => import('./pages/messaging/MessagingDeploymentsPage'));
-const AuditSetupPage = React.lazy(() => import('./pages/audit/AuditSetupPage'));
-const AuditDeploymentsPage = React.lazy(() => import('./pages/audit/AuditDeploymentsPage'));
-const PiiVaultSetupPage = React.lazy(() => import('./pages/pii-vault/PiiVaultSetupPage'));
-const PiiVaultDeploymentsPage = React.lazy(() => import('./pages/pii-vault/PiiVaultDeploymentsPage'));
-const FormBuilderSetupPage = React.lazy(() => import('./pages/form-builder/FormBuilderSetupPage'));
-const FormBuilderDeploymentsPage = React.lazy(() => import('./pages/form-builder/FormBuilderDeploymentsPage'));
-const DashboardSetupPage = React.lazy(() => import('./pages/dashboard/DashboardSetupPage'));
-const DashboardDeploymentsPage = React.lazy(() => import('./pages/dashboard/DashboardDeploymentsPage'));
-const HIQuotationSetupPage = React.lazy(() => import('./pages/hi-quotation/HIQuotationSetupPage'));
-const HIQuotationDeploymentsPage = React.lazy(() => import('./pages/hi-quotation/HIQuotationDeploymentsPage'));
-const UWWorkflowSetupPage = React.lazy(() => import('./pages/uw-workflow/UWWorkflowSetupPage'));
-const UWWorkflowDeploymentsPage = React.lazy(() => import('./pages/uw-workflow/UWWorkflowDeploymentsPage'));
-const HIDecisioningSetupPage = React.lazy(() => import('./pages/hi-decisioning/HIDecisioningSetupPage'));
-const HIDecisioningDeploymentsPage = React.lazy(() => import('./pages/hi-decisioning/HIDecisioningDeploymentsPage'));
-const MIQuotationSetupPage = React.lazy(() => import('./pages/mi-quotation/MIQuotationSetupPage'));
-const MIQuotationDeploymentsPage = React.lazy(() => import('./pages/mi-quotation/MIQuotationDeploymentsPage'));
-const FeeManagementSetupPage = React.lazy(() => import('./pages/fee-management/FeeManagementSetupPage'));
-const FeeManagementDeploymentsPage = React.lazy(() => import('./pages/fee-management/FeeManagementDeploymentsPage'));
-const ClaimsSetupPage = React.lazy(() => import('./pages/claims/ClaimsSetupPage'));
-const ClaimsDeploymentsPage = React.lazy(() => import('./pages/claims/ClaimsDeploymentsPage'));
-const AdminSetupPage = React.lazy(() => import('./pages/admin/AdminSetupPage'));
-const AdminDeploymentsPage = React.lazy(() => import('./pages/admin/AdminDeploymentsPage'));
+const IdentitySetupPage = lazyWithRetry(() => import('./pages/identity/IdentitySetupPage'));
+const IdentityDeploymentsPage = lazyWithRetry(() => import('./pages/identity/IdentityDeploymentsPage'));
+const AuthorizationSetupPage = lazyWithRetry(() => import('./pages/authorization/AuthorizationSetupPage'));
+const AuthorizationDeploymentsPage = lazyWithRetry(() => import('./pages/authorization/AuthorizationDeploymentsPage'));
+const NavigationSetupPage = lazyWithRetry(() => import('./pages/navigation-admin/NavigationSetupPage'));
+const NavigationDeploymentsPage = lazyWithRetry(() => import('./pages/navigation-admin/NavigationDeploymentsPage'));
+const MessagingSetupPage = lazyWithRetry(() => import('./pages/messaging/MessagingSetupPage'));
+const MessagingDeploymentsPage = lazyWithRetry(() => import('./pages/messaging/MessagingDeploymentsPage'));
+const AuditSetupPage = lazyWithRetry(() => import('./pages/audit/AuditSetupPage'));
+const AuditDeploymentsPage = lazyWithRetry(() => import('./pages/audit/AuditDeploymentsPage'));
+const PiiVaultSetupPage = lazyWithRetry(() => import('./pages/pii-vault/PiiVaultSetupPage'));
+const PiiVaultDeploymentsPage = lazyWithRetry(() => import('./pages/pii-vault/PiiVaultDeploymentsPage'));
+const FormBuilderSetupPage = lazyWithRetry(() => import('./pages/form-builder/FormBuilderSetupPage'));
+const FormBuilderDeploymentsPage = lazyWithRetry(() => import('./pages/form-builder/FormBuilderDeploymentsPage'));
+const DashboardSetupPage = lazyWithRetry(() => import('./pages/dashboard/DashboardSetupPage'));
+const DashboardDeploymentsPage = lazyWithRetry(() => import('./pages/dashboard/DashboardDeploymentsPage'));
+const HIQuotationSetupPage = lazyWithRetry(() => import('./pages/hi-quotation/HIQuotationSetupPage'));
+const HIQuotationDeploymentsPage = lazyWithRetry(() => import('./pages/hi-quotation/HIQuotationDeploymentsPage'));
+const UWWorkflowSetupPage = lazyWithRetry(() => import('./pages/uw-workflow/UWWorkflowSetupPage'));
+const UWWorkflowDeploymentsPage = lazyWithRetry(() => import('./pages/uw-workflow/UWWorkflowDeploymentsPage'));
+const HIDecisioningSetupPage = lazyWithRetry(() => import('./pages/hi-decisioning/HIDecisioningSetupPage'));
+const HIDecisioningDeploymentsPage = lazyWithRetry(() => import('./pages/hi-decisioning/HIDecisioningDeploymentsPage'));
+const MIQuotationSetupPage = lazyWithRetry(() => import('./pages/mi-quotation/MIQuotationSetupPage'));
+const MIQuotationDeploymentsPage = lazyWithRetry(() => import('./pages/mi-quotation/MIQuotationDeploymentsPage'));
+const FeeManagementSetupPage = lazyWithRetry(() => import('./pages/fee-management/FeeManagementSetupPage'));
+const FeeManagementDeploymentsPage = lazyWithRetry(() => import('./pages/fee-management/FeeManagementDeploymentsPage'));
+const ClaimsSetupPage = lazyWithRetry(() => import('./pages/claims/ClaimsSetupPage'));
+const ClaimsDeploymentsPage = lazyWithRetry(() => import('./pages/claims/ClaimsDeploymentsPage'));
+const AdminSetupPage = lazyWithRetry(() => import('./pages/admin/AdminSetupPage'));
+const AdminDeploymentsPage = lazyWithRetry(() => import('./pages/admin/AdminDeploymentsPage'));
 
 // MUW-52 Ported Modules — Setup & Deployments
-const EndorsementsSetupPage = React.lazy(() => import('./pages/endorsements/EndorsementsSetupPage'));
-const EndorsementsDeploymentsPage = React.lazy(() => import('./pages/endorsements/EndorsementsDeploymentsPage'));
-const RenewalsSetupPage = React.lazy(() => import('./pages/renewals/RenewalsSetupPage'));
-const RenewalsDeploymentsPage = React.lazy(() => import('./pages/renewals/RenewalsDeploymentsPage'));
-const SMECorporateSetupPage = React.lazy(() => import('./pages/sme-corporate/SMECorporateSetupPage'));
-const SMECorporateDeploymentsPage = React.lazy(() => import('./pages/sme-corporate/SMECorporateDeploymentsPage'));
-const ReinsuranceSetupPage = React.lazy(() => import('./pages/reinsurance/ReinsuranceSetupPage'));
-const ReinsuranceDeploymentsPage = React.lazy(() => import('./pages/reinsurance/ReinsuranceDeploymentsPage'));
-const ClaimsTPASetupPage = React.lazy(() => import('./pages/claims-tpa/ClaimsTPASetupPage'));
-const ClaimsTPADeploymentsPage = React.lazy(() => import('./pages/claims-tpa/ClaimsTPADeploymentsPage'));
-const MedicalCodingSetupPage = React.lazy(() => import('./pages/medical-coding/MedicalCodingSetupPage'));
-const MedicalCodingDeploymentsPage = React.lazy(() => import('./pages/medical-coding/MedicalCodingDeploymentsPage'));
-const MAFEngineSetupPage = React.lazy(() => import('./pages/maf-engine/MAFEngineSetupPage'));
-const MAFEngineDeploymentsPage = React.lazy(() => import('./pages/maf-engine/MAFEngineDeploymentsPage'));
-const RPAIntegrationSetupPage = React.lazy(() => import('./pages/rpa-integration/RPAIntegrationSetupPage'));
-const RPAIntegrationDeploymentsPage = React.lazy(() => import('./pages/rpa-integration/RPAIntegrationDeploymentsPage'));
-const APIIntegrationSetupPage = React.lazy(() => import('./pages/api-integration/APIIntegrationSetupPage'));
-const APIIntegrationDeploymentsPage = React.lazy(() => import('./pages/api-integration/APIIntegrationDeploymentsPage'));
-const ReportingSetupPage = React.lazy(() => import('./pages/reporting/ReportingSetupPage'));
-const ReportingDeploymentsPage = React.lazy(() => import('./pages/reporting/ReportingDeploymentsPage'));
-const PolicyIssuanceSetupPage = React.lazy(() => import('./pages/policy-issuance/PolicyIssuanceSetupPage'));
-const PolicyIssuanceDeploymentsPage = React.lazy(() => import('./pages/policy-issuance/PolicyIssuanceDeploymentsPage'));
-const DocumentManagementSetupPage = React.lazy(() => import('./pages/document-management/DocumentManagementSetupPage'));
-const DocumentManagementDeploymentsPage = React.lazy(() => import('./pages/document-management/DocumentManagementDeploymentsPage'));
+const EndorsementsSetupPage = lazyWithRetry(() => import('./pages/endorsements/EndorsementsSetupPage'));
+const EndorsementsDeploymentsPage = lazyWithRetry(() => import('./pages/endorsements/EndorsementsDeploymentsPage'));
+const RenewalsSetupPage = lazyWithRetry(() => import('./pages/renewals/RenewalsSetupPage'));
+const RenewalsDeploymentsPage = lazyWithRetry(() => import('./pages/renewals/RenewalsDeploymentsPage'));
+const SMECorporateSetupPage = lazyWithRetry(() => import('./pages/sme-corporate/SMECorporateSetupPage'));
+const SMECorporateDeploymentsPage = lazyWithRetry(() => import('./pages/sme-corporate/SMECorporateDeploymentsPage'));
+const ReinsuranceSetupPage = lazyWithRetry(() => import('./pages/reinsurance/ReinsuranceSetupPage'));
+const ReinsuranceDeploymentsPage = lazyWithRetry(() => import('./pages/reinsurance/ReinsuranceDeploymentsPage'));
+const ClaimsTPASetupPage = lazyWithRetry(() => import('./pages/claims-tpa/ClaimsTPASetupPage'));
+const ClaimsTPADeploymentsPage = lazyWithRetry(() => import('./pages/claims-tpa/ClaimsTPADeploymentsPage'));
+const MedicalCodingSetupPage = lazyWithRetry(() => import('./pages/medical-coding/MedicalCodingSetupPage'));
+const MedicalCodingDeploymentsPage = lazyWithRetry(() => import('./pages/medical-coding/MedicalCodingDeploymentsPage'));
+const MAFEngineSetupPage = lazyWithRetry(() => import('./pages/maf-engine/MAFEngineSetupPage'));
+const MAFEngineDeploymentsPage = lazyWithRetry(() => import('./pages/maf-engine/MAFEngineDeploymentsPage'));
+const RPAIntegrationSetupPage = lazyWithRetry(() => import('./pages/rpa-integration/RPAIntegrationSetupPage'));
+const RPAIntegrationDeploymentsPage = lazyWithRetry(() => import('./pages/rpa-integration/RPAIntegrationDeploymentsPage'));
+const APIIntegrationSetupPage = lazyWithRetry(() => import('./pages/api-integration/APIIntegrationSetupPage'));
+const APIIntegrationDeploymentsPage = lazyWithRetry(() => import('./pages/api-integration/APIIntegrationDeploymentsPage'));
+const ReportingSetupPage = lazyWithRetry(() => import('./pages/reporting/ReportingSetupPage'));
+const ReportingDeploymentsPage = lazyWithRetry(() => import('./pages/reporting/ReportingDeploymentsPage'));
+const PolicyIssuanceSetupPage = lazyWithRetry(() => import('./pages/policy-issuance/PolicyIssuanceSetupPage'));
+const PolicyIssuanceDeploymentsPage = lazyWithRetry(() => import('./pages/policy-issuance/PolicyIssuanceDeploymentsPage'));
+const DocumentManagementSetupPage = lazyWithRetry(() => import('./pages/document-management/DocumentManagementSetupPage'));
+const DocumentManagementDeploymentsPage = lazyWithRetry(() => import('./pages/document-management/DocumentManagementDeploymentsPage'));
 
 // Module Hub Pages — Platform Core
-const IdentityHubPage = React.lazy(() => import('./pages/identity/IdentityHubPage'));
-const AuthorizationHubPage = React.lazy(() => import('./pages/authorization/AuthorizationHubPage'));
-const NavigationHubPage = React.lazy(() => import('./pages/navigation-admin/NavigationHubPage'));
-const MessagingHubPage = React.lazy(() => import('./pages/messaging/MessagingHubPage'));
-const AuditHubPage = React.lazy(() => import('./pages/audit/AuditHubPage'));
-const PIIVaultHubPage = React.lazy(() => import('./pages/pii-vault/PIIVaultHubPage'));
-const DashboardHubPage = React.lazy(() => import('./pages/dashboard/DashboardHubPage'));
+const IdentityHubPage = lazyWithRetry(() => import('./pages/identity/IdentityHubPage'));
+const AuthorizationHubPage = lazyWithRetry(() => import('./pages/authorization/AuthorizationHubPage'));
+const NavigationHubPage = lazyWithRetry(() => import('./pages/navigation-admin/NavigationHubPage'));
+const MessagingHubPage = lazyWithRetry(() => import('./pages/messaging/MessagingHubPage'));
+const AuditHubPage = lazyWithRetry(() => import('./pages/audit/AuditHubPage'));
+const PIIVaultHubPage = lazyWithRetry(() => import('./pages/pii-vault/PIIVaultHubPage'));
+const DashboardHubPage = lazyWithRetry(() => import('./pages/dashboard/DashboardHubPage'));
 
 // Module Hub Pages — Business & Feature Services
-const PCG4HubPage = React.lazy(() => import('./pages/pcg4/PCG4HubPage'));
-const HIQuotationHubPage = React.lazy(() => import('./pages/hi-quotation/HIQuotationHubPage'));
-const MIQuotationHubPage = React.lazy(() => import('./pages/mi-quotation/MIQuotationHubPage'));
-const UWWorkflowHubPage = React.lazy(() => import('./pages/uw-workflow/UWWorkflowHubPage'));
-const HIDecisioningHubPage = React.lazy(() => import('./pages/hi-decisioning/HIDecisioningHubPage'));
-const FeeManagementHubPage = React.lazy(() => import('./pages/fee-management/FeeManagementHubPage'));
-const ClaimsHubPage = React.lazy(() => import('./pages/claims/ClaimsHubPage'));
-const ProductPricingHubPage = React.lazy(() => import('./pages/product-pricing/ProductPricingHubPage'));
-const RateTablesPage = React.lazy(() => import('./pages/product-pricing/RateTablesPage'));
-const RateCardImportPage = React.lazy(() => import('./pages/product-pricing/RateCardImportPage'));
-const ProductPricingSetupPage = React.lazy(() => import('./pages/product-pricing/ProductPricingSetupPage'));
-const ProductPricingDeploymentsPage = React.lazy(() => import('./pages/product-pricing/ProductPricingDeploymentsPage'));
-const FormBuilderHubPage = React.lazy(() => import('./pages/form-builder/FormBuilderHubPage'));
+const PCG4HubPage = lazyWithRetry(() => import('./pages/pcg4/PCG4HubPage'));
+const HIQuotationHubPage = lazyWithRetry(() => import('./pages/hi-quotation/HIQuotationHubPage'));
+const MIQuotationHubPage = lazyWithRetry(() => import('./pages/mi-quotation/MIQuotationHubPage'));
+const UWWorkflowHubPage = lazyWithRetry(() => import('./pages/uw-workflow/UWWorkflowHubPage'));
+const HIDecisioningHubPage = lazyWithRetry(() => import('./pages/hi-decisioning/HIDecisioningHubPage'));
+const FeeManagementHubPage = lazyWithRetry(() => import('./pages/fee-management/FeeManagementHubPage'));
+const ClaimsHubPage = lazyWithRetry(() => import('./pages/claims/ClaimsHubPage'));
+const ProductPricingHubPage = lazyWithRetry(() => import('./pages/product-pricing/ProductPricingHubPage'));
+const RateTablesPage = lazyWithRetry(() => import('./pages/product-pricing/RateTablesPage'));
+const RateCardImportPage = lazyWithRetry(() => import('./pages/product-pricing/RateCardImportPage'));
+const ProductPricingSetupPage = lazyWithRetry(() => import('./pages/product-pricing/ProductPricingSetupPage'));
+const ProductPricingDeploymentsPage = lazyWithRetry(() => import('./pages/product-pricing/ProductPricingDeploymentsPage'));
+const FormBuilderHubPage = lazyWithRetry(() => import('./pages/form-builder/FormBuilderHubPage'));
 
 // MUW-52 Ported Module Hub Pages
-const EndorsementsHubPage = React.lazy(() => import('./pages/endorsements/EndorsementsHubPage'));
-const RenewalsHubPage = React.lazy(() => import('./pages/renewals/RenewalsHubPage'));
-const SMECorporateHubPage = React.lazy(() => import('./pages/sme-corporate/SMECorporateHubPage'));
-const ReinsuranceHubPage = React.lazy(() => import('./pages/reinsurance/ReinsuranceHubPage'));
-const ClaimsTPAHubPage = React.lazy(() => import('./pages/claims-tpa/ClaimsTPAHubPage'));
-const MedicalCodingHubPage = React.lazy(() => import('./pages/medical-coding/MedicalCodingHubPage'));
-const MAFEngineHubPage = React.lazy(() => import('./pages/maf-engine/MAFEngineHubPage'));
-const RPAIntegrationHubPage = React.lazy(() => import('./pages/rpa-integration/RPAIntegrationHubPage'));
-const APIIntegrationHubPage = React.lazy(() => import('./pages/api-integration/APIIntegrationHubPage'));
-const ReportingHubPage = React.lazy(() => import('./pages/reporting/ReportingHubPage'));
-const PolicyIssuanceHubPage = React.lazy(() => import('./pages/policy-issuance/PolicyIssuanceHubPage'));
-const DocumentManagementHubPage = React.lazy(() => import('./pages/document-management/DocumentManagementHubPage'));
+const EndorsementsHubPage = lazyWithRetry(() => import('./pages/endorsements/EndorsementsHubPage'));
+const RenewalsHubPage = lazyWithRetry(() => import('./pages/renewals/RenewalsHubPage'));
+const SMECorporateHubPage = lazyWithRetry(() => import('./pages/sme-corporate/SMECorporateHubPage'));
+const ReinsuranceHubPage = lazyWithRetry(() => import('./pages/reinsurance/ReinsuranceHubPage'));
+const ClaimsTPAHubPage = lazyWithRetry(() => import('./pages/claims-tpa/ClaimsTPAHubPage'));
+const MedicalCodingHubPage = lazyWithRetry(() => import('./pages/medical-coding/MedicalCodingHubPage'));
+const MAFEngineHubPage = lazyWithRetry(() => import('./pages/maf-engine/MAFEngineHubPage'));
+const RPAIntegrationHubPage = lazyWithRetry(() => import('./pages/rpa-integration/RPAIntegrationHubPage'));
+const APIIntegrationHubPage = lazyWithRetry(() => import('./pages/api-integration/APIIntegrationHubPage'));
+const ReportingHubPage = lazyWithRetry(() => import('./pages/reporting/ReportingHubPage'));
+const PolicyIssuanceHubPage = lazyWithRetry(() => import('./pages/policy-issuance/PolicyIssuanceHubPage'));
+const DocumentManagementHubPage = lazyWithRetry(() => import('./pages/document-management/DocumentManagementHubPage'));
 
 // PII Showcase — Hub, Setup, Deployments
-const PIIShowcaseHubPage = React.lazy(() => import('./pages/pii-showcase/PIIShowcaseHubPage'));
-const PIIShowcaseSetupPage = React.lazy(() => import('./pages/pii-showcase/PIIShowcaseSetupPage'));
-const PIIShowcaseDeploymentsPage = React.lazy(() => import('./pages/pii-showcase/PIIShowcaseDeploymentsPage'));
+const PIIShowcaseHubPage = lazyWithRetry(() => import('./pages/pii-showcase/PIIShowcaseHubPage'));
+const PIIShowcaseSetupPage = lazyWithRetry(() => import('./pages/pii-showcase/PIIShowcaseSetupPage'));
+const PIIShowcaseDeploymentsPage = lazyWithRetry(() => import('./pages/pii-showcase/PIIShowcaseDeploymentsPage'));
 
 // Directory — Hub, Setup, Deployments
-const DirectoryHubPage = React.lazy(() => import('./pages/directory/DirectoryHubPage'));
-const DirectorySetupPage = React.lazy(() => import('./pages/directory/DirectorySetupPage'));
-const DirectoryDeploymentsPage = React.lazy(() => import('./pages/directory/DirectoryDeploymentsPage'));
+const DirectoryHubPage = lazyWithRetry(() => import('./pages/directory/DirectoryHubPage'));
+const DirectorySetupPage = lazyWithRetry(() => import('./pages/directory/DirectorySetupPage'));
+const DirectoryDeploymentsPage = lazyWithRetry(() => import('./pages/directory/DirectoryDeploymentsPage'));
 
 // Support Center — Hub, Setup, Deployments
-const SupportCenterHubPage = React.lazy(() => import('./pages/support-center/SupportCenterHubPage'));
-const SupportCenterSetupPage = React.lazy(() => import('./pages/support-center/SupportCenterSetupPage'));
-const SupportCenterDeploymentsPage = React.lazy(() => import('./pages/support-center/SupportCenterDeploymentsPage'));
+const SupportCenterHubPage = lazyWithRetry(() => import('./pages/support-center/SupportCenterHubPage'));
+const SupportCenterSetupPage = lazyWithRetry(() => import('./pages/support-center/SupportCenterSetupPage'));
+const SupportCenterDeploymentsPage = lazyWithRetry(() => import('./pages/support-center/SupportCenterDeploymentsPage'));
 
 // Voice Engine — Hub, Setup, Deployments, Demo
-const VoiceEngineHubPage = React.lazy(() => import('./pages/voice-engine/VoiceEngineHubPage'));
-const VoiceEngineSetupPage = React.lazy(() => import('./pages/voice-engine/VoiceEngineSetupPage'));
-const VoiceEngineDeploymentsPage = React.lazy(() => import('./pages/voice-engine/VoiceEngineDeploymentsPage'));
-const VoiceEngineDemoPage = React.lazy(() => import('./pages/voice-engine/VoiceEngineDemoPage'));
+const VoiceEngineHubPage = lazyWithRetry(() => import('./pages/voice-engine/VoiceEngineHubPage'));
+const VoiceEngineSetupPage = lazyWithRetry(() => import('./pages/voice-engine/VoiceEngineSetupPage'));
+const VoiceEngineDeploymentsPage = lazyWithRetry(() => import('./pages/voice-engine/VoiceEngineDeploymentsPage'));
+const VoiceEngineDemoPage = lazyWithRetry(() => import('./pages/voice-engine/VoiceEngineDemoPage'));
 
 // Jayna AI Calling — Hub, Agents, Workflows, Calls, Test Call, Setup, Deployments
-const JaynaHubPage = React.lazy(() => import('./pages/jayna/JaynaHubPage'));
-const JaynaAgentsPage = React.lazy(() => import('./pages/jayna/JaynaAgentsPage'));
-const JaynaAgentCreatePage = React.lazy(() => import('./pages/jayna/JaynaAgentCreatePage'));
-const JaynaAgentDetailPage = React.lazy(() => import('./pages/jayna/JaynaAgentDetailPage'));
-const JaynaAgentEditPage = React.lazy(() => import('./pages/jayna/JaynaAgentEditPage'));
-const JaynaWorkflowsPage = React.lazy(() => import('./pages/jayna/JaynaWorkflowsPage'));
-const JaynaWorkflowCreatePage = React.lazy(() => import('./pages/jayna/JaynaWorkflowCreatePage'));
-const JaynaWorkflowDetailPage = React.lazy(() => import('./pages/jayna/JaynaWorkflowDetailPage'));
-const JaynaCallHistoryPage = React.lazy(() => import('./pages/jayna/JaynaCallHistoryPage'));
-const JaynaTestCallPage = React.lazy(() => import('./pages/jayna/JaynaTestCallPage'));
-const JaynaSetupPage = React.lazy(() => import('./pages/jayna/JaynaSetupPage'));
-const JaynaDeploymentsPage = React.lazy(() => import('./pages/jayna/JaynaDeploymentsPage'));
+const JaynaHubPage = lazyWithRetry(() => import('./pages/jayna/JaynaHubPage'));
+const JaynaAgentsPage = lazyWithRetry(() => import('./pages/jayna/JaynaAgentsPage'));
+const JaynaAgentCreatePage = lazyWithRetry(() => import('./pages/jayna/JaynaAgentCreatePage'));
+const JaynaAgentDetailPage = lazyWithRetry(() => import('./pages/jayna/JaynaAgentDetailPage'));
+const JaynaAgentEditPage = lazyWithRetry(() => import('./pages/jayna/JaynaAgentEditPage'));
+const JaynaWorkflowsPage = lazyWithRetry(() => import('./pages/jayna/JaynaWorkflowsPage'));
+const JaynaWorkflowCreatePage = lazyWithRetry(() => import('./pages/jayna/JaynaWorkflowCreatePage'));
+const JaynaWorkflowDetailPage = lazyWithRetry(() => import('./pages/jayna/JaynaWorkflowDetailPage'));
+const JaynaCallHistoryPage = lazyWithRetry(() => import('./pages/jayna/JaynaCallHistoryPage'));
+const JaynaTestCallPage = lazyWithRetry(() => import('./pages/jayna/JaynaTestCallPage'));
+const JaynaSetupPage = lazyWithRetry(() => import('./pages/jayna/JaynaSetupPage'));
+const JaynaDeploymentsPage = lazyWithRetry(() => import('./pages/jayna/JaynaDeploymentsPage'));
 
 // Workflow Engine (FQP) — Hub, Filters, Queues, Pipelines, Setup, Deployments
-const WorkflowEngineHubPage = React.lazy(() => import('./pages/workflow-engine/WorkflowEngineHubPage'));
-const WorkflowFiltersPage = React.lazy(() => import('./pages/workflow-engine/WorkflowFiltersPage'));
-const WorkflowQueuesPage = React.lazy(() => import('./pages/workflow-engine/WorkflowQueuesPage'));
-const WorkflowPipelinesPage = React.lazy(() => import('./pages/workflow-engine/WorkflowPipelinesPage'));
-const WorkflowSetupPage = React.lazy(() => import('./pages/workflow-engine/WorkflowSetupPage'));
-const WorkflowDeploymentsPage = React.lazy(() => import('./pages/workflow-engine/WorkflowDeploymentsPage'));
+const WorkflowEngineHubPage = lazyWithRetry(() => import('./pages/workflow-engine/WorkflowEngineHubPage'));
+const WorkflowFiltersPage = lazyWithRetry(() => import('./pages/workflow-engine/WorkflowFiltersPage'));
+const WorkflowQueuesPage = lazyWithRetry(() => import('./pages/workflow-engine/WorkflowQueuesPage'));
+const WorkflowPipelinesPage = lazyWithRetry(() => import('./pages/workflow-engine/WorkflowPipelinesPage'));
+const WorkflowSetupPage = lazyWithRetry(() => import('./pages/workflow-engine/WorkflowSetupPage'));
+const WorkflowDeploymentsPage = lazyWithRetry(() => import('./pages/workflow-engine/WorkflowDeploymentsPage'));
 
 // Secrets Vault — Hub, List, Create, Audit, Setup, Deployments
-const SecretsHubPage = React.lazy(() => import('./pages/secrets/SecretsHubPage'));
-const SecretsListPage = React.lazy(() => import('./pages/secrets/SecretsListPage'));
-const SecretsCreatePage = React.lazy(() => import('./pages/secrets/SecretsCreatePage'));
-const SecretsAuditPage = React.lazy(() => import('./pages/secrets/SecretsAuditPage'));
-const SecretsSetupPage = React.lazy(() => import('./pages/secrets/SecretsSetupPage'));
-const SecretsDeploymentsPage = React.lazy(() => import('./pages/secrets/SecretsDeploymentsPage'));
+const SecretsHubPage = lazyWithRetry(() => import('./pages/secrets/SecretsHubPage'));
+const SecretsListPage = lazyWithRetry(() => import('./pages/secrets/SecretsListPage'));
+const SecretsCreatePage = lazyWithRetry(() => import('./pages/secrets/SecretsCreatePage'));
+const SecretsAuditPage = lazyWithRetry(() => import('./pages/secrets/SecretsAuditPage'));
+const SecretsSetupPage = lazyWithRetry(() => import('./pages/secrets/SecretsSetupPage'));
+const SecretsDeploymentsPage = lazyWithRetry(() => import('./pages/secrets/SecretsDeploymentsPage'));
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const token = localStorage.getItem('zorbit_token');
@@ -272,6 +300,8 @@ function PageRoutes() {
       <Route path="dashboard/designer" element={<DashboardDesignerPage />} />
       <Route path="users" element={<UsersPage />} />
       <Route path="organizations" element={<OrganizationsPage />} />
+      <Route path="organizations/:orgId/departments" element={<SafeLazy><DepartmentsPage /></SafeLazy>} />
+      <Route path="organizations/:orgId/org-chart" element={<SafeLazy><OrgChartPage /></SafeLazy>} />
       <Route path="roles" element={<RolesPage />} />
       <Route path="privileges" element={<PrivilegesPage />} />
       <Route path="customers" element={<CustomersPage />} />

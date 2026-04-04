@@ -26,7 +26,13 @@ const UsersPage: React.FC = () => {
   const [showAssignRole, setShowAssignRole] = useState<User | null>(null);
   const [showResetPassword, setShowResetPassword] = useState<User | null>(null);
   const [showNonAdminWarning, setShowNonAdminWarning] = useState(false);
-  const [form, setForm] = useState({ email: '', displayName: '', password: '', role: '' });
+  const [organizations, setOrganizations] = useState<Array<{hashId: string; name: string}>>([]);
+  const [form, setForm] = useState({ email: '', displayName: '', password: '', role: '', organizationId: '' });
+  const [selectedOrg, setSelectedOrg] = useState<string>('');
+  const [selectedDept, setSelectedDept] = useState<string>('');
+  const [selectedSubDept, setSelectedSubDept] = useState<string>('');
+  const [hierarchy, setHierarchy] = useState<any>(null);
+  const [loadingHierarchy, setLoadingHierarchy] = useState(false);
   const [newPassword, setNewPassword] = useState('');
   const [forceChange, setForceChange] = useState(false);
   const [sendEmailNotif, setSendEmailNotif] = useState(false);
@@ -57,7 +63,55 @@ const UsersPage: React.FC = () => {
     }
   };
 
-  useEffect(() => { loadUsers(); loadRoles(); }, [orgId]);
+  const loadOrganizations = async () => {
+    try {
+      const res = await identityService.getOrganizations();
+      setOrganizations(Array.isArray(res.data) ? res.data : []);
+    } catch {}
+  };
+
+  useEffect(() => { loadUsers(); loadRoles(); loadOrganizations(); }, [orgId]);
+
+  // Cascading org dropdown: top-level orgs only
+  const topLevelOrgs = organizations.filter((o: any) => o.orgType !== 'department');
+
+  // Fetch hierarchy when top-level org changes
+  useEffect(() => {
+    if (!selectedOrg) {
+      setHierarchy(null);
+      return;
+    }
+    let cancelled = false;
+    const fetchHierarchy = async () => {
+      setLoadingHierarchy(true);
+      try {
+        const res = await identityService.getOrgHierarchy(selectedOrg);
+        if (!cancelled) setHierarchy(res.data);
+      } catch {
+        if (!cancelled) setHierarchy(null);
+      } finally {
+        if (!cancelled) setLoadingHierarchy(false);
+      }
+    };
+    fetchHierarchy();
+    return () => { cancelled = true; };
+  }, [selectedOrg]);
+
+  // Derived: departments under selected org
+  const departments = hierarchy?.children?.map((c: any) => c.org) || [];
+
+  // Derived: sub-departments under selected department
+  const subDepartments = selectedDept && hierarchy?.children
+    ? (hierarchy.children.find((c: any) => c.org?.hashId === selectedDept)?.children?.map((sc: any) => sc.org) || [])
+    : [];
+
+  // Effective org ID for user creation = deepest selected level
+  const effectiveOrgId = selectedSubDept || selectedDept || selectedOrg || orgId;
+
+  // Sync effectiveOrgId into form
+  useEffect(() => {
+    setForm(prev => ({ ...prev, organizationId: effectiveOrgId }));
+  }, [effectiveOrgId]);
 
   // Check if selected role is org-admin
   const isOrgAdminRole = (roleHashId: string) => {
@@ -90,10 +144,12 @@ const UsersPage: React.FC = () => {
       const hashBuffer = await crypto.subtle.digest('SHA-256', data);
       const hashedPassword = Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
 
-      const res = await identityService.createUser(orgId, {
+      const targetOrgId = form.organizationId || orgId;
+      const res = await identityService.createUser(targetOrgId, {
         email: form.email,
         displayName: form.displayName,
         password: hashedPassword,
+        organizationId: targetOrgId,
       });
 
       // If a role was selected, assign it
@@ -111,7 +167,11 @@ const UsersPage: React.FC = () => {
 
       toast('User created successfully', 'success');
       setShowCreate(false);
-      setForm({ email: '', displayName: '', password: '', role: '' });
+      setForm({ email: '', displayName: '', password: '', role: '', organizationId: '' });
+      setSelectedOrg('');
+      setSelectedDept('');
+      setSelectedSubDept('');
+      setHierarchy(null);
       setShowNonAdminWarning(false);
       loadUsers();
     } catch (err: any) {
@@ -266,7 +326,7 @@ const UsersPage: React.FC = () => {
       <DataTable columns={columns} data={users} loading={loading} emptyMessage="No users found" />
 
       {/* Create User Modal */}
-      <Modal isOpen={showCreate} onClose={() => { setShowCreate(false); setShowNonAdminWarning(false); }} title="Create User">
+      <Modal isOpen={showCreate} onClose={() => { setShowCreate(false); setShowNonAdminWarning(false); setSelectedOrg(''); setSelectedDept(''); setSelectedSubDept(''); setHierarchy(null); }} title="Create User">
         <form onSubmit={handleCreate} className="space-y-4">
           {/* Recommended approach banner */}
           <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3">
@@ -276,6 +336,85 @@ const UsersPage: React.FC = () => {
             </p>
           </div>
 
+          {/* Organization — cascading drill-down: Org > Department > Sub-Department */}
+          <div className="space-y-3">
+            <div>
+              <label className="block text-sm font-medium mb-1">Organization <span className="text-red-500">*</span></label>
+              {topLevelOrgs.length > 1 ? (
+                <select
+                  value={selectedOrg}
+                  onChange={(e) => {
+                    setSelectedOrg(e.target.value);
+                    setSelectedDept('');
+                    setSelectedSubDept('');
+                  }}
+                  className="input-field"
+                >
+                  <option value="">-- Select organization --</option>
+                  {topLevelOrgs.map((o: any) => (
+                    <option key={o.hashId} value={o.hashId}>
+                      {o.name || o.hashId}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <p className="text-sm font-medium text-gray-700 dark:text-gray-300 py-2">{organizations.find((o: any) => o.hashId === orgId)?.name || orgId}</p>
+              )}
+            </div>
+
+            {/* Department dropdown — only if org selected and has children */}
+            {selectedOrg && departments.length > 0 && (
+              <div>
+                <label className="block text-sm font-medium mb-1">Department <span className="text-xs text-gray-400 font-normal">(optional)</span></label>
+                <select
+                  value={selectedDept}
+                  onChange={(e) => {
+                    setSelectedDept(e.target.value);
+                    setSelectedSubDept('');
+                  }}
+                  className="input-field"
+                >
+                  <option value="">-- None (use organization) --</option>
+                  {departments.map((d: any) => (
+                    <option key={d.hashId} value={d.hashId}>
+                      {d.name || d.hashId}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+
+            {/* Sub-department dropdown — only if dept selected and has children */}
+            {selectedDept && subDepartments.length > 0 && (
+              <div>
+                <label className="block text-sm font-medium mb-1">Sub-Department <span className="text-xs text-gray-400 font-normal">(optional)</span></label>
+                <select
+                  value={selectedSubDept}
+                  onChange={(e) => setSelectedSubDept(e.target.value)}
+                  className="input-field"
+                >
+                  <option value="">-- None (use department) --</option>
+                  {subDepartments.map((sd: any) => (
+                    <option key={sd.hashId} value={sd.hashId}>
+                      {sd.name || sd.hashId}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+
+            {/* Loading indicator for hierarchy fetch */}
+            {loadingHierarchy && (
+              <p className="text-xs text-gray-400">Loading departments...</p>
+            )}
+
+            {/* Show effective selection */}
+            {selectedOrg && (
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                Creating user in: <code className="bg-gray-100 dark:bg-gray-700 px-1 rounded">{effectiveOrgId}</code>
+              </p>
+            )}
+          </div>
           <div>
             <label className="block text-sm font-medium mb-1">Display Name <span className="text-red-500">*</span></label>
             <input value={form.displayName} onChange={(e) => setForm({ ...form, displayName: e.target.value })} className="input-field" required />
@@ -326,7 +465,7 @@ const UsersPage: React.FC = () => {
           )}
 
           <div className="flex justify-end space-x-3">
-            <button type="button" onClick={() => { setShowCreate(false); setShowNonAdminWarning(false); }} className="btn-secondary">Cancel</button>
+            <button type="button" onClick={() => { setShowCreate(false); setShowNonAdminWarning(false); setSelectedOrg(''); setSelectedDept(''); setSelectedSubDept(''); setHierarchy(null); }} className="btn-secondary">Cancel</button>
             <button type="submit" disabled={creating} className="btn-primary">{creating ? 'Creating...' : 'Create User'}</button>
           </div>
         </form>

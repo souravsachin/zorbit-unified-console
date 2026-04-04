@@ -236,7 +236,25 @@ const IdentityHubPage: React.FC = () => {
         { label: 'Suspended', description: 'Account temporarily disabled by admin. Login blocked, tokens invalidated.', color: '#ef4444' },
         { label: 'Deactivated', description: 'Account permanently disabled. No login possible. Data retained for audit.', color: '#64748b' },
       ]}
-      recordings={[]}
+      recordings={[
+        {
+          file: 'zorbit-identity-tutorial.mp4',
+          title: 'Identity Service — Complete Tutorial (Narrated)',
+          thumbnail: 'thumb.jpg',
+          timestamp: '2026-04-04T10:00:00Z',
+          duration: 180,
+          chapters: [
+            { title: 'Login with MFA', startMs: 0 },
+            { title: 'Identity Guide & Capabilities', startMs: 15000 },
+            { title: 'Organization Management', startMs: 35000 },
+            { title: 'User Management & Role Assignment', startMs: 50000 },
+            { title: 'Roles & Privileges', startMs: 70000 },
+            { title: 'Security Settings (MFA, Passkeys, Sessions, Compliance)', startMs: 80000 },
+            { title: 'Auth Methods & Forgot Password', startMs: 130000 },
+            { title: 'Summary', startMs: 160000 },
+          ],
+        },
+      ]}
       videosBaseUrl="/demos/identity/"
       swaggerUrl="https://zorbit.scalatics.com/api/identity/api-docs"
       faqs={[

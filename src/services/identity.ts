@@ -182,4 +182,15 @@ export const identityService = {
   // ─── Organization Security Policy ──────────────────────────────
   getOrganization: (orgId: string) =>
     api.get(`${API_CONFIG.IDENTITY_URL}/api/v1/G/organizations/${orgId}`),
+
+  // ─── Departments / Hierarchy ────────────────────────────────────
+  getOrgHierarchy: (orgId: string) =>
+    api.get(`${API_CONFIG.IDENTITY_URL}/api/v1/O/${orgId}/organizations/hierarchy`),
+
+  createDepartment: (orgId: string, payload: { name: string }) =>
+    api.post(`${API_CONFIG.IDENTITY_URL}/api/v1/O/${orgId}/departments`, payload),
+
+  // ─── Org Chart ──────────────────────────────────────────────────
+  getOrgChart: (orgId: string) =>
+    api.get(`${API_CONFIG.IDENTITY_URL}/api/v1/O/${orgId}/users/org-chart`),
 };
