@@ -171,4 +171,15 @@ export const identityService = {
 
   revokeSession: (userId: string, sessionId: string) =>
     api.delete(`${API_CONFIG.IDENTITY_URL}/api/v1/U/${userId}/sessions/${sessionId}`),
+
+  // ─── Impersonation (Sudo) ──────────────────────────────────────
+  impersonate: (targetUserHashId: string) =>
+    api.post(`${API_CONFIG.IDENTITY_URL}/api/v1/G/auth/impersonate`, { targetUserHashId }),
+
+  exitImpersonation: () =>
+    api.post(`${API_CONFIG.IDENTITY_URL}/api/v1/G/auth/exit-impersonation`),
+
+  // ─── Organization Security Policy ──────────────────────────────
+  getOrganization: (orgId: string) =>
+    api.get(`${API_CONFIG.IDENTITY_URL}/api/v1/G/organizations/${orgId}`),
 };

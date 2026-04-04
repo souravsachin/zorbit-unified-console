@@ -1,0 +1,10 @@
+{
+  "skill_id": "1021",
+  "skill_name": "Session Communicator",
+  "sections": {
+    "claude_md_integration": "2.0",
+    "soldier_integration": "2.0",
+    "project_id_assignment": "2.0"
+  },
+  "last_reapply": "2026-04-04"
+}

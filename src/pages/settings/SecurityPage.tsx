@@ -17,6 +17,8 @@ import {
   Smartphone,
   X,
   History,
+  Globe,
+  Save,
 } from 'lucide-react';
 import { startRegistration } from '@simplewebauthn/browser';
 import { identityService, hashPassword } from '../../services/identity';
@@ -133,11 +135,20 @@ const SecurityPage: React.FC = () => {
   const [loginActivity, setLoginActivity] = useState<LoginActivity[]>([]);
   const [loginActivityLoading, setLoginActivityLoading] = useState(true);
 
+  // Geo-restriction / IP whitelisting state
+  const [geoEnabled, setGeoEnabled] = useState(false);
+  const [geoCountries, setGeoCountries] = useState('');
+  const [geoIpRanges, setGeoIpRanges] = useState('');
+  const [geoBlockMessage, setGeoBlockMessage] = useState('');
+  const [geoLoading, setGeoLoading] = useState(true);
+  const [geoSaving, setGeoSaving] = useState(false);
+
   useEffect(() => {
     loadStatus();
     loadPasskeys();
     loadSessions();
     loadLoginActivity();
+    loadGeoPolicy();
   }, []);
 
   const loadStatus = async () => {
@@ -227,6 +238,56 @@ const SecurityPage: React.FC = () => {
       setLoginActivity([]);
     } finally {
       setLoginActivityLoading(false);
+    }
+  };
+
+  const loadGeoPolicy = async () => {
+    try {
+      const { orgId } = getTokenInfo();
+      if (!orgId) return;
+      const res = await identityService.getOrganization(orgId);
+      const policy = res.data?.securityPolicy?.geoRestriction;
+      if (policy) {
+        setGeoEnabled(!!policy.enabled);
+        setGeoCountries((policy.allowedCountries || []).join(', '));
+        setGeoIpRanges((policy.allowedIpRanges || []).join('\n'));
+        setGeoBlockMessage(policy.blockMessage || '');
+      }
+    } catch {
+      // org may not have a security policy yet
+    } finally {
+      setGeoLoading(false);
+    }
+  };
+
+  const handleSaveGeoPolicy = async () => {
+    setGeoSaving(true);
+    try {
+      const { orgId } = getTokenInfo();
+      if (!orgId) return;
+      const allowedCountries = geoCountries
+        .split(/[,\s]+/)
+        .map((c) => c.trim().toUpperCase())
+        .filter(Boolean);
+      const allowedIpRanges = geoIpRanges
+        .split(/[\n,]+/)
+        .map((r) => r.trim())
+        .filter(Boolean);
+      await identityService.updateOrganization(orgId, {
+        securityPolicy: {
+          geoRestriction: {
+            enabled: geoEnabled,
+            allowedCountries,
+            allowedIpRanges,
+            blockMessage: geoBlockMessage,
+          },
+        },
+      } as any);
+      toast('Geo & IP restriction policy saved', 'success');
+    } catch (err: any) {
+      toast(err.response?.data?.message || 'Failed to save policy', 'error');
+    } finally {
+      setGeoSaving(false);
     }
   };
 
@@ -990,6 +1051,99 @@ const SecurityPage: React.FC = () => {
           <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 text-center">
             <History className="w-8 h-8 text-gray-300 mx-auto mb-2" />
             <p className="text-sm text-gray-500">No recent login activity found</p>
+          </div>
+        )}
+      </div>
+
+      {/* ─── Geo & IP Restrictions (Admin) ─────────────────────────── */}
+      <div className="card p-6 space-y-4">
+        <div className="flex items-start gap-4">
+          <div className="w-12 h-12 bg-rose-100 dark:bg-rose-900/30 rounded-xl flex items-center justify-center flex-shrink-0">
+            <Globe className="w-6 h-6 text-rose-600" />
+          </div>
+          <div className="flex-1">
+            <h2 className="text-lg font-semibold">Geo & IP Restrictions</h2>
+            <p className="text-sm text-gray-500 mt-1">
+              Restrict logins by country or IP range for your organization. Only org admins can configure this.
+            </p>
+          </div>
+        </div>
+
+        {geoLoading ? (
+          <div className="flex items-center justify-center py-4">
+            <Loader2 className="w-5 h-5 animate-spin text-gray-400" />
+          </div>
+        ) : (
+          <div className="space-y-4">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={geoEnabled}
+                onChange={(e) => setGeoEnabled(e.target.checked)}
+                className="rounded border-gray-300"
+              />
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                Enable geo-restriction / IP whitelisting
+              </span>
+            </label>
+
+            {geoEnabled && (
+              <>
+                <div>
+                  <label className="block text-sm font-medium mb-1">
+                    Allowed Countries <span className="text-xs text-gray-500">(ISO codes, comma-separated)</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={geoCountries}
+                    onChange={(e) => setGeoCountries(e.target.value)}
+                    className="input-field"
+                    placeholder="AE, IN, US, GB, SG"
+                  />
+                  <p className="text-xs text-gray-400 mt-1">
+                    Leave empty to allow all countries (IP ranges still apply).
+                  </p>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-1">
+                    Allowed IP Ranges <span className="text-xs text-gray-500">(CIDR notation, one per line)</span>
+                  </label>
+                  <textarea
+                    value={geoIpRanges}
+                    onChange={(e) => setGeoIpRanges(e.target.value)}
+                    className="input-field font-mono text-sm"
+                    rows={3}
+                    placeholder={"85.25.93.0/24\n10.0.0.0/8\n192.168.1.0/24"}
+                  />
+                  <p className="text-xs text-gray-400 mt-1">
+                    Whitelisted IPs bypass the country check.
+                  </p>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-1">
+                    Block Message <span className="text-xs text-gray-500">(optional)</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={geoBlockMessage}
+                    onChange={(e) => setGeoBlockMessage(e.target.value)}
+                    className="input-field"
+                    placeholder="Login restricted. Contact your administrator."
+                  />
+                </div>
+              </>
+            )}
+
+            <button
+              onClick={handleSaveGeoPolicy}
+              disabled={geoSaving}
+              className="btn-primary flex items-center gap-2 disabled:opacity-50"
+            >
+              {geoSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+              {geoSaving ? 'Saving...' : 'Save Policy'}
+            </button>
           </div>
         )}
       </div>

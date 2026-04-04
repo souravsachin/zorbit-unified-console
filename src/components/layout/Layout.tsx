@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Outlet } from 'react-router-dom';
 import { HamburgerMenu } from '../HamburgerMenu';
 import Header from './Header';
+import ImpersonationBanner from './ImpersonationBanner';
 import { useAuth } from '../../hooks/useAuth';
 import { usePreferences } from '../../hooks/usePreferences';
 
@@ -42,24 +43,27 @@ const Layout: React.FC = () => {
   const toggleSidebar = useCallback(() => setSidebarOpen((v) => !v), []);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-gray-50 dark:bg-gray-900">
-      <HamburgerMenu
-        open={sidebarVisible}
-        onClose={closeSidebar}
-        isOverlay={isMobile || !locked}
-        prefs={prefs}
-        updatePrefs={updatePrefs}
-      />
-      <div className="flex-1 flex flex-col min-w-0">
-        <Header
-          onMenuToggle={toggleSidebar}
-          darkMode={darkMode}
-          onDarkModeToggle={() => setDarkMode(!darkMode)}
-          showHamburger={showHamburger}
+    <div className="flex flex-col h-screen overflow-hidden bg-gray-50 dark:bg-gray-900">
+      <ImpersonationBanner />
+      <div className="flex flex-1 min-h-0">
+        <HamburgerMenu
+          open={sidebarVisible}
+          onClose={closeSidebar}
+          isOverlay={isMobile || !locked}
+          prefs={prefs}
+          updatePrefs={updatePrefs}
         />
-        <main className="flex-1 overflow-y-auto p-6">
-          <Outlet />
-        </main>
+        <div className="flex-1 flex flex-col min-w-0">
+          <Header
+            onMenuToggle={toggleSidebar}
+            darkMode={darkMode}
+            onDarkModeToggle={() => setDarkMode(!darkMode)}
+            showHamburger={showHamburger}
+          />
+          <main className="flex-1 overflow-y-auto p-6">
+            <Outlet />
+          </main>
+        </div>
       </div>
     </div>
   );

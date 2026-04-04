@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Plus, Trash2, Shield, KeyRound, AlertTriangle } from 'lucide-react';
+import { Plus, Trash2, Shield, KeyRound, AlertTriangle, Eye } from 'lucide-react';
 import DataTable, { Column } from '../../components/shared/DataTable';
 import StatusBadge from '../../components/shared/StatusBadge';
 import Modal from '../../components/shared/Modal';
@@ -34,6 +34,7 @@ const UsersPage: React.FC = () => {
   const [creating, setCreating] = useState(false);
   const [assigning, setAssigning] = useState(false);
   const [resetting, setResetting] = useState(false);
+  const [impersonating, setImpersonating] = useState<string | null>(null);
 
   const loadUsers = async () => {
     setLoading(true);
@@ -164,6 +165,35 @@ const UsersPage: React.FC = () => {
     }
   };
 
+  const handleImpersonate = async (user: User) => {
+    const userId = user.hashId || user.id;
+    if (!confirm(`Impersonate "${user.displayName}" (${userId})? You will see the platform as this user.`)) return;
+    setImpersonating(userId);
+    try {
+      const res = await identityService.impersonate(userId);
+      const data = res.data;
+      if (data?.accessToken) {
+        localStorage.setItem('zorbit_token', data.accessToken);
+        const domain = window.location.hostname.split('.').slice(-2).join('.');
+        document.cookie = `zorbit_token=${data.accessToken}; domain=.${domain}; path=/; max-age=3600; SameSite=Lax; Secure`;
+        try {
+          const payload = JSON.parse(atob(data.accessToken.split('.')[1]));
+          localStorage.setItem('zorbit_user', JSON.stringify({
+            id: payload.sub,
+            email: payload.email,
+            displayName: payload.displayName || payload.email,
+            organizationId: payload.org,
+          }));
+        } catch { /* ignore */ }
+        window.location.href = '/';
+      }
+    } catch (err: any) {
+      toast(err.response?.data?.message || 'Failed to impersonate user', 'error');
+    } finally {
+      setImpersonating(null);
+    }
+  };
+
   const handleDelete = async (user: User) => {
     const userId = user.hashId || user.id;
     if (!confirm(`Delete user "${user.displayName}" (${userId})?`)) return;
@@ -189,6 +219,14 @@ const UsersPage: React.FC = () => {
       header: 'Actions',
       render: (u) => (
         <div className="flex gap-1">
+          <button
+            onClick={(e) => { e.stopPropagation(); handleImpersonate(u); }}
+            className="p-1 hover:bg-purple-100 dark:hover:bg-purple-900/30 rounded disabled:opacity-50"
+            title="View as this user"
+            disabled={impersonating === (u.hashId || u.id) || (u.hashId || u.id) === currentUser?.id}
+          >
+            <Eye size={14} className="text-purple-500" />
+          </button>
           <button
             onClick={(e) => { e.stopPropagation(); setShowAssignRole(u); }}
             className="p-1 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded"
