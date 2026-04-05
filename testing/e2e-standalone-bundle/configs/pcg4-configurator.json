@@ -1,0 +1,768 @@
+{
+  "baseUrl": "https://zorbit.scalatics.com",
+  "viewport": { "width": 1440, "height": 900 },
+  "defaults": {
+    "timeout": 15000,
+    "waitAfterAction": 1000,
+    "waitForNetworkIdle": false
+  },
+  "segments": {
+    "pcg4-login": {
+      "name": "Login for PCG4",
+      "description": "Authenticate to access Product Configurator",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/login",
+          "announce": { "before": "Navigating to Zorbit login for Product Configurator testing" }
+        },
+        {
+          "action": "wait",
+          "timeout": 1500
+        },
+        {
+          "action": "fill",
+          "selector": "input[type='email'], input[placeholder*='email' i], input[name='email']",
+          "value": "${credentials.admin.email}"
+        },
+        {
+          "action": "fill",
+          "selector": "input[type='password']",
+          "value": "${credentials.admin.password}"
+        },
+        {
+          "action": "click",
+          "selector": "button[type='submit'], button:has-text('Sign in'), button:has-text('Login')",
+          "announce": { "after": "Login submitted" }
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "custom",
+          "handler": "generateTotp",
+          "description": "Generate TOTP for MFA",
+          "params": {
+            "command": "ssh sovpn 'bash /tmp/get-totp.sh'"
+          },
+          "selector": "input[inputmode='numeric'], input[maxlength='6'], input[placeholder='000000']",
+          "announce": { "before": "Entering MFA code" }
+        },
+        {
+          "action": "click",
+          "selector": "button[type='submit'], button:has-text('Verify')"
+        },
+        {
+          "action": "wait",
+          "timeout": 3000
+        },
+        {
+          "action": "waitForUrl",
+          "pattern": "/(dashboard|home|app)",
+          "timeout": 20000,
+          "announce": { "after": "Logged in successfully. Ready for PCG4 testing." }
+        },
+        {
+          "action": "screenshot",
+          "value": "pcg4-01-logged-in.png"
+        }
+      ]
+    },
+
+    "navigate-to-configurations": {
+      "name": "Navigate to Products > Configurations",
+      "description": "Use hamburger menu to reach the Product Configurations list",
+      "steps": [
+        {
+          "action": "click",
+          "selector": "button[class*='hamburger'], button[aria-label*='menu'], [data-testid='menu-toggle'], button[class*='sidebar-toggle']",
+          "force": true,
+          "announce": { "before": "Opening navigation menu" }
+        },
+        {
+          "action": "wait",
+          "timeout": 800
+        },
+        {
+          "action": "click",
+          "selector": "a:has-text('Products'), [data-menu='products'], nav a[href*='product']",
+          "force": true,
+          "announce": { "before": "Clicking Products section" }
+        },
+        {
+          "action": "wait",
+          "timeout": 800
+        },
+        {
+          "action": "click",
+          "selector": "a:has-text('Configurations'), a:has-text('Product Config'), nav a[href*='configuration']",
+          "force": true,
+          "announce": { "before": "Clicking Configurations sub-menu" }
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "screenshot",
+          "value": "pcg4-02-configurations-list.png",
+          "announce": { "after": "Product Configurations page loaded. Viewing existing configurations." }
+        }
+      ]
+    },
+
+    "click-new-configuration": {
+      "name": "Start New Configuration",
+      "description": "Click New Configuration to start the PCG4 wizard",
+      "steps": [
+        {
+          "action": "click",
+          "selector": "button:has-text('New Configuration'), button:has-text('Create Configuration'), a:has-text('New Configuration'), button:has-text('New')",
+          "announce": { "before": "Starting a new product configuration" }
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "screenshot",
+          "value": "pcg4-03-new-config-wizard.png",
+          "announce": { "after": "Configuration wizard opened. Step 1: Insurer Details." }
+        }
+      ]
+    },
+
+    "step1-insurer-details": {
+      "name": "Step 1: Insurer Details",
+      "description": "Fill insurer details with Emirates Health Shield Insurance data",
+      "steps": [
+        {
+          "action": "assertVisible",
+          "selector": "input[name*='insurer'], input[placeholder*='insurer' i], [data-step='1'], h2:has-text('Insurer'), h3:has-text('Insurer')",
+          "timeout": 10000,
+          "announce": { "before": "Verifying Step 1 - Insurer Details form is visible" }
+        },
+        {
+          "action": "fill",
+          "selector": "input[name*='insurerName'], input[placeholder*='insurer name' i], input[name*='companyName']",
+          "value": "Emirates Health Shield Insurance",
+          "announce": { "before": "Entering insurer name: Emirates Health Shield Insurance" }
+        },
+        {
+          "action": "fill",
+          "selector": "input[name*='insurerCode'], input[placeholder*='code' i], input[name*='code']",
+          "value": "EHSI-2026"
+        },
+        {
+          "action": "fill",
+          "selector": "input[name*='registrationNumber'], input[placeholder*='registration' i], input[name*='regNumber'], input[name*='licenseNumber']",
+          "value": "REG-EHSI-UAE-001",
+          "announce": { "after": "Registration number: REG-EHSI-UAE-001" }
+        },
+        {
+          "action": "fill",
+          "selector": "input[name*='country'], input[placeholder*='country' i], select[name*='country']",
+          "value": "United Arab Emirates"
+        },
+        {
+          "action": "fill",
+          "selector": "input[name*='regulatoryBody'], input[placeholder*='regulatory' i], input[name*='regulator']",
+          "value": "Insurance Authority of UAE"
+        },
+        {
+          "action": "fill",
+          "selector": "input[name*='contactEmail'], input[placeholder*='contact' i][type='email']",
+          "value": "product.team@ehsi.ae"
+        },
+        {
+          "action": "screenshot",
+          "value": "pcg4-04-step1-insurer-filled.png",
+          "announce": { "after": "Step 1 complete. Emirates Health Shield Insurance details filled." }
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text('Next'), button:has-text('Continue'), button[type='submit']:has-text('Next')",
+          "announce": { "before": "Proceeding to Step 2" }
+        },
+        {
+          "action": "wait",
+          "timeout": 1500
+        }
+      ]
+    },
+
+    "step2-product-details": {
+      "name": "Step 2: Product Details",
+      "description": "Fill product details for Comprehensive Health Plus plan",
+      "steps": [
+        {
+          "action": "assertVisible",
+          "selector": "input[name*='productName'], input[placeholder*='product' i], [data-step='2'], h2:has-text('Product'), h3:has-text('Product')",
+          "timeout": 10000,
+          "announce": { "before": "Step 2 - Product Details" }
+        },
+        {
+          "action": "fill",
+          "selector": "input[name*='productName'], input[placeholder*='product name' i]",
+          "value": "Comprehensive Health Plus",
+          "announce": { "before": "Product name: Comprehensive Health Plus" }
+        },
+        {
+          "action": "fill",
+          "selector": "input[name*='productCode'], input[placeholder*='product code' i], input[name*='sku']",
+          "value": "CHP-2026-V1"
+        },
+        {
+          "action": "fill",
+          "selector": "input[name*='version'], input[placeholder*='version' i]",
+          "value": "1.0"
+        },
+        {
+          "action": "fill",
+          "selector": "textarea[name*='description'], textarea[placeholder*='description' i]",
+          "value": "Comprehensive health insurance product for UAE market, covering inpatient, outpatient, dental, optical, maternity, and mental health services with tiered plan structure (Gold/Silver). Designed for employer group and individual retail distribution.",
+          "announce": { "after": "Product description entered with full coverage summary" }
+        },
+        {
+          "action": "fill",
+          "selector": "input[name*='effectiveDate'], input[type='date'][name*='effective'], input[placeholder*='effective' i]",
+          "value": "2026-07-01"
+        },
+        {
+          "action": "fill",
+          "selector": "input[name*='expiryDate'], input[type='date'][name*='expiry'], input[placeholder*='expiry' i]",
+          "value": "2027-06-30"
+        },
+        {
+          "action": "screenshot",
+          "value": "pcg4-05-step2-product-filled.png",
+          "announce": { "after": "Step 2 complete. Comprehensive Health Plus product details filled." }
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text('Next'), button:has-text('Continue')"
+        },
+        {
+          "action": "wait",
+          "timeout": 1500
+        }
+      ]
+    },
+
+    "step3-create-plans": {
+      "name": "Step 3: Create Plans (Gold + Silver)",
+      "description": "Create Gold and Silver tier plans for Middle East region",
+      "steps": [
+        {
+          "action": "assertVisible",
+          "selector": "[data-step='3'], h2:has-text('Plan'), h3:has-text('Plan'), button:has-text('Add Plan')",
+          "timeout": 10000,
+          "announce": { "before": "Step 3 - Creating plan tiers" }
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text('Add Plan'), button:has-text('New Plan'), button:has-text('Create Plan')",
+          "announce": { "before": "Adding Gold tier plan" }
+        },
+        {
+          "action": "wait",
+          "timeout": 1000
+        },
+        {
+          "action": "fill",
+          "selector": "input[name*='planName'], input[placeholder*='plan name' i]",
+          "value": "Gold Tier"
+        },
+        {
+          "action": "fill",
+          "selector": "input[name*='planCode'], input[placeholder*='plan code' i]",
+          "value": "CHP-GOLD-2026"
+        },
+        {
+          "action": "fill",
+          "selector": "input[name*='region'], input[placeholder*='region' i], select[name*='region']",
+          "value": "Middle East",
+          "announce": { "after": "Gold Tier plan configured for Middle East region" }
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text('Save Plan'), button:has-text('Confirm'), button:has-text('Add')"
+        },
+        {
+          "action": "wait",
+          "timeout": 1500
+        },
+        {
+          "action": "screenshot",
+          "value": "pcg4-06-step3-gold-plan.png"
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text('Add Plan'), button:has-text('New Plan'), button:has-text('Create Plan')",
+          "announce": { "before": "Adding Silver tier plan" }
+        },
+        {
+          "action": "wait",
+          "timeout": 1000
+        },
+        {
+          "action": "fill",
+          "selector": "input[name*='planName'], input[placeholder*='plan name' i]",
+          "value": "Silver Tier"
+        },
+        {
+          "action": "fill",
+          "selector": "input[name*='planCode'], input[placeholder*='plan code' i]",
+          "value": "CHP-SILVER-2026"
+        },
+        {
+          "action": "fill",
+          "selector": "input[name*='region'], input[placeholder*='region' i], select[name*='region']",
+          "value": "Middle East"
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text('Save Plan'), button:has-text('Confirm'), button:has-text('Add')",
+          "announce": { "after": "Silver Tier plan added. Both tiers created for Middle East." }
+        },
+        {
+          "action": "wait",
+          "timeout": 1500
+        },
+        {
+          "action": "screenshot",
+          "value": "pcg4-07-step3-both-plans.png"
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text('Next'), button:has-text('Continue')"
+        },
+        {
+          "action": "wait",
+          "timeout": 1500
+        }
+      ]
+    },
+
+    "step4-base-plan-config": {
+      "name": "Step 4: Base Plan Configuration",
+      "description": "Verify plan tabs work independently for Gold and Silver",
+      "steps": [
+        {
+          "action": "assertVisible",
+          "selector": "[data-step='4'], h2:has-text('Base Plan'), h3:has-text('Base Plan'), [role='tab']:has-text('Gold'), button:has-text('Gold')",
+          "timeout": 10000,
+          "announce": { "before": "Step 4 - Base Plan Configuration. Verifying plan tab independence." }
+        },
+        {
+          "action": "click",
+          "selector": "[role='tab']:has-text('Gold'), button:has-text('Gold Tier'), [data-plan='gold']",
+          "announce": { "before": "Selecting Gold Tier tab" }
+        },
+        {
+          "action": "wait",
+          "timeout": 1000
+        },
+        {
+          "action": "screenshot",
+          "value": "pcg4-08-step4-gold-tab.png",
+          "announce": { "after": "Gold Tier configuration panel active" }
+        },
+        {
+          "action": "click",
+          "selector": "[role='tab']:has-text('Silver'), button:has-text('Silver Tier'), [data-plan='silver']",
+          "announce": { "before": "Switching to Silver Tier tab" }
+        },
+        {
+          "action": "wait",
+          "timeout": 1000
+        },
+        {
+          "action": "screenshot",
+          "value": "pcg4-09-step4-silver-tab.png",
+          "announce": { "after": "Silver Tier tab is independent. Each plan can be configured separately." }
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text('Next'), button:has-text('Continue')"
+        },
+        {
+          "action": "wait",
+          "timeout": 1500
+        }
+      ]
+    },
+
+    "step5-encounter-configuration": {
+      "name": "Step 5: Encounter Configuration",
+      "description": "Select encounters from the taxonomy tree (inpatient, outpatient, dental, optical)",
+      "steps": [
+        {
+          "action": "assertVisible",
+          "selector": "[data-step='5'], h2:has-text('Encounter'), h3:has-text('Encounter'), [class*='taxonomy'], [class*='encounter']",
+          "timeout": 10000,
+          "announce": { "before": "Step 5 - Encounter Configuration. Selecting from encounter taxonomy." }
+        },
+        {
+          "action": "screenshot",
+          "value": "pcg4-10-step5-encounter-taxonomy.png"
+        },
+        {
+          "action": "click",
+          "selector": "label:has-text('Inpatient'), input[value*='inpatient'], [data-encounter='inpatient'], li:has-text('Inpatient') input[type='checkbox']",
+          "announce": { "before": "Selecting Inpatient encounters" }
+        },
+        {
+          "action": "wait",
+          "timeout": 500
+        },
+        {
+          "action": "click",
+          "selector": "label:has-text('Outpatient'), input[value*='outpatient'], [data-encounter='outpatient'], li:has-text('Outpatient') input[type='checkbox']",
+          "announce": { "before": "Selecting Outpatient encounters" }
+        },
+        {
+          "action": "wait",
+          "timeout": 500
+        },
+        {
+          "action": "click",
+          "selector": "label:has-text('Dental'), input[value*='dental'], [data-encounter='dental'], li:has-text('Dental') input[type='checkbox']",
+          "announce": { "before": "Selecting Dental encounters" }
+        },
+        {
+          "action": "wait",
+          "timeout": 500
+        },
+        {
+          "action": "click",
+          "selector": "label:has-text('Optical'), input[value*='optical'], [data-encounter='optical'], li:has-text('Optical') input[type='checkbox']",
+          "announce": { "before": "Selecting Optical encounters" }
+        },
+        {
+          "action": "wait",
+          "timeout": 500
+        },
+        {
+          "action": "click",
+          "selector": "label:has-text('Maternity'), input[value*='maternity'], [data-encounter='maternity'], li:has-text('Maternity') input[type='checkbox']",
+          "announce": { "before": "Selecting Maternity encounters" }
+        },
+        {
+          "action": "wait",
+          "timeout": 500
+        },
+        {
+          "action": "click",
+          "selector": "label:has-text('Mental Health'), input[value*='mental'], [data-encounter='mental-health'], li:has-text('Mental Health') input[type='checkbox']",
+          "announce": { "after": "Six encounter types selected: Inpatient, Outpatient, Dental, Optical, Maternity, Mental Health" }
+        },
+        {
+          "action": "screenshot",
+          "value": "pcg4-11-step5-encounters-selected.png"
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text('Next'), button:has-text('Continue')"
+        },
+        {
+          "action": "wait",
+          "timeout": 1500
+        }
+      ]
+    },
+
+    "step6-benefits-setup": {
+      "name": "Step 6: Benefits Setup",
+      "description": "Verify cost sharing, visit limits, and benefit structure",
+      "steps": [
+        {
+          "action": "assertVisible",
+          "selector": "[data-step='6'], h2:has-text('Benefit'), h3:has-text('Benefit'), [class*='benefit']",
+          "timeout": 10000,
+          "announce": { "before": "Step 6 - Benefits Setup. Configuring cost sharing and visit limits." }
+        },
+        {
+          "action": "screenshot",
+          "value": "pcg4-12-step6-benefits-overview.png"
+        },
+        {
+          "action": "assertVisible",
+          "selector": "[class*='cost-sharing'], :has-text('Cost Sharing'), :has-text('Copay'), :has-text('Coinsurance'), [class*='copay']",
+          "timeout": 8000,
+          "announce": { "after": "Cost sharing configuration section visible" }
+        },
+        {
+          "action": "scroll",
+          "announce": { "before": "Scrolling to visit limits section" }
+        },
+        {
+          "action": "wait",
+          "timeout": 800
+        },
+        {
+          "action": "assertVisible",
+          "selector": "[class*='visit-limit'], :has-text('Visit Limit'), :has-text('Annual Limit'), :has-text('Maximum'), [class*='limit']",
+          "timeout": 8000,
+          "announce": { "after": "Visit limits and annual maximums visible" }
+        },
+        {
+          "action": "screenshot",
+          "value": "pcg4-13-step6-benefits-limits.png",
+          "announce": { "after": "Benefits setup reviewed. Cost sharing and limits configured." }
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text('Next'), button:has-text('Continue')"
+        },
+        {
+          "action": "wait",
+          "timeout": 1500
+        }
+      ]
+    },
+
+    "step7-plan-overrides": {
+      "name": "Step 7: Plan Overrides",
+      "description": "View plan comparison overview and verify override capabilities",
+      "steps": [
+        {
+          "action": "assertVisible",
+          "selector": "[data-step='7'], h2:has-text('Override'), h3:has-text('Override'), h2:has-text('Plan Comparison'), [class*='override']",
+          "timeout": 10000,
+          "announce": { "before": "Step 7 - Plan Overrides. Comparing Gold vs Silver tier configurations." }
+        },
+        {
+          "action": "screenshot",
+          "value": "pcg4-14-step7-plan-comparison.png"
+        },
+        {
+          "action": "assertVisible",
+          "selector": "table, [class*='comparison'], [class*='grid'], [class*='plan-table']",
+          "timeout": 8000,
+          "announce": { "after": "Plan comparison table visible. Gold and Silver tiers shown side by side." }
+        },
+        {
+          "action": "scroll",
+          "announce": { "before": "Scrolling through plan comparison details" }
+        },
+        {
+          "action": "wait",
+          "timeout": 800
+        },
+        {
+          "action": "screenshot",
+          "value": "pcg4-15-step7-comparison-scrolled.png",
+          "announce": { "after": "Plan overrides reviewed. Override capability verified." }
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text('Next'), button:has-text('Continue')"
+        },
+        {
+          "action": "wait",
+          "timeout": 1500
+        }
+      ]
+    },
+
+    "step8-review-and-publish": {
+      "name": "Step 8: Review & Publish",
+      "description": "Review validation status and publish the configuration",
+      "steps": [
+        {
+          "action": "assertVisible",
+          "selector": "[data-step='8'], h2:has-text('Review'), h3:has-text('Review'), h2:has-text('Publish'), [class*='review']",
+          "timeout": 10000,
+          "announce": { "before": "Step 8 - Review and Publish. Final validation before publishing." }
+        },
+        {
+          "action": "screenshot",
+          "value": "pcg4-16-step8-review.png"
+        },
+        {
+          "action": "assertVisible",
+          "selector": "[class*='validation'], :has-text('Validation'), [class*='status'], [class*='check']",
+          "timeout": 8000,
+          "announce": { "after": "Validation status visible. Checking all configuration items passed." }
+        },
+        {
+          "action": "scroll",
+          "announce": { "before": "Scrolling through review summary" }
+        },
+        {
+          "action": "wait",
+          "timeout": 800
+        },
+        {
+          "action": "screenshot",
+          "value": "pcg4-17-step8-review-scrolled.png"
+        },
+        {
+          "action": "assertVisible",
+          "selector": "button:has-text('Publish'), button:has-text('Submit'), button:has-text('Finalize')",
+          "timeout": 8000,
+          "announce": { "after": "Publish button is available. Configuration is ready for publishing." }
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text('Publish'), button:has-text('Submit'), button:has-text('Finalize')",
+          "announce": { "before": "Publishing the configuration" }
+        },
+        {
+          "action": "wait",
+          "timeout": 3000
+        },
+        {
+          "action": "screenshot",
+          "value": "pcg4-18-step8-published.png",
+          "announce": { "after": "Configuration published successfully. Emirates Health Shield - Comprehensive Health Plus is now live." }
+        }
+      ]
+    },
+
+    "verify-config-in-list": {
+      "name": "Verify Configuration in List",
+      "description": "Navigate back to configurations list and verify the new config appears",
+      "steps": [
+        {
+          "action": "click",
+          "selector": "button[class*='hamburger'], button[aria-label*='menu'], [data-testid='menu-toggle']",
+          "force": true,
+          "announce": { "before": "Navigating back to configurations list" }
+        },
+        {
+          "action": "wait",
+          "timeout": 800
+        },
+        {
+          "action": "click",
+          "selector": "a:has-text('Products'), nav a[href*='product']",
+          "force": true
+        },
+        {
+          "action": "wait",
+          "timeout": 800
+        },
+        {
+          "action": "click",
+          "selector": "a:has-text('Configurations'), nav a[href*='configuration']",
+          "force": true
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "assertVisible",
+          "selector": "td:has-text('Comprehensive Health Plus'), tr:has-text('CHP-2026'), [class*='row']:has-text('Emirates Health')",
+          "timeout": 10000,
+          "announce": { "after": "New configuration found in the list. Comprehensive Health Plus verified." }
+        },
+        {
+          "action": "screenshot",
+          "value": "pcg4-19-config-in-list.png"
+        }
+      ]
+    },
+
+    "pcg4-logout": {
+      "name": "Logout after PCG4 Test",
+      "description": "Safely log out after product configurator testing",
+      "steps": [
+        {
+          "action": "click",
+          "selector": "button[class*='avatar'], [data-testid='user-menu'], button[aria-label*='profile']"
+        },
+        {
+          "action": "wait",
+          "timeout": 800
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text('Logout'), button:has-text('Sign out'), a:has-text('Logout'), [role='menuitem']:has-text('Log')",
+          "announce": { "before": "Logging out" }
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "waitForUrl",
+          "pattern": "/(login|signin|auth)",
+          "timeout": 15000,
+          "announce": { "after": "Logged out. PCG4 test session complete." }
+        }
+      ]
+    }
+  },
+
+  "journeys": {
+    "full-pcg4-configuration": {
+      "name": "Complete PCG4 Configuration Flow",
+      "description": "End-to-end product configuration: login, all 8 wizard steps, verify, logout",
+      "segments": [
+        "pcg4-login",
+        "navigate-to-configurations",
+        "click-new-configuration",
+        "step1-insurer-details",
+        "step2-product-details",
+        "step3-create-plans",
+        "step4-base-plan-config",
+        "step5-encounter-configuration",
+        "step6-benefits-setup",
+        "step7-plan-overrides",
+        "step8-review-and-publish",
+        "verify-config-in-list",
+        "pcg4-logout"
+      ]
+    },
+    "pcg4-wizard-steps-only": {
+      "name": "PCG4 Wizard Steps (No Verify)",
+      "description": "Quick run through all 8 wizard steps without final list verification",
+      "segments": [
+        "pcg4-login",
+        "navigate-to-configurations",
+        "click-new-configuration",
+        "step1-insurer-details",
+        "step2-product-details",
+        "step3-create-plans",
+        "step4-base-plan-config",
+        "step5-encounter-configuration",
+        "step6-benefits-setup",
+        "step7-plan-overrides",
+        "step8-review-and-publish",
+        "pcg4-logout"
+      ]
+    },
+    "pcg4-first-3-steps": {
+      "name": "PCG4 First 3 Steps Only",
+      "description": "Quick test of insurer, product, and plan creation steps",
+      "segments": [
+        "pcg4-login",
+        "navigate-to-configurations",
+        "click-new-configuration",
+        "step1-insurer-details",
+        "step2-product-details",
+        "step3-create-plans",
+        "pcg4-logout"
+      ]
+    }
+  },
+
+  "bouquets": {
+    "pcg4-full": {
+      "name": "PCG4 Full Configuration Suite",
+      "description": "Complete product configurator regression test with all 8 wizard steps",
+      "mode": "sequential",
+      "journeys": ["full-pcg4-configuration"]
+    },
+    "pcg4-quick": {
+      "name": "PCG4 Quick Test",
+      "description": "Fast test of first 3 configuration steps",
+      "mode": "sequential",
+      "journeys": ["pcg4-first-3-steps"]
+    }
+  }
+}

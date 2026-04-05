@@ -507,6 +507,51 @@ const DeveloperPage: React.FC = () => {
             </a>
           ))}
         </div>
+
+        {/* E2E Test Bundle */}
+        <h4 className="text-xs font-semibold text-gray-500 dark:text-gray-400 mt-6 mb-2">E2E Test Bundle</h4>
+        <div className="bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 border border-emerald-200 dark:border-emerald-800 rounded-xl p-5">
+          <div className="flex items-start justify-between">
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-2">
+                <Terminal className="h-5 w-5 text-emerald-600" />
+                <h3 className="text-base font-bold text-gray-900 dark:text-gray-100">Standalone E2E Test Bundle</h3>
+                <span className="px-2 py-0.5 text-[10px] font-medium bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 rounded-full">v1.0</span>
+              </div>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                Portable Playwright test suite for the Zorbit platform. Config-driven, no code changes needed.
+                Covers identity, PCG4 product configurator, menu sanity, and broken link detection.
+              </p>
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-2 mb-3">
+                {[
+                  { name: 'Smoke Test', desc: 'Login, dashboard, health' },
+                  { name: 'Identity', desc: 'Users, orgs, departments' },
+                  { name: 'PCG4', desc: '8-step product wizard' },
+                  { name: 'Menu Sanity', desc: 'Every menu item' },
+                  { name: 'Broken Links', desc: 'Full site crawl' },
+                ].map((t) => (
+                  <div key={t.name} className="bg-white/60 dark:bg-gray-800/40 rounded-lg px-2.5 py-1.5 text-center">
+                    <p className="text-xs font-semibold text-gray-800 dark:text-gray-200">{t.name}</p>
+                    <p className="text-[10px] text-gray-500 dark:text-gray-400">{t.desc}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="text-xs text-gray-500 dark:text-gray-400 space-y-1">
+                <p><strong>How to use:</strong> Unzip → run <code className="bg-gray-100 dark:bg-gray-700 px-1 rounded">./runme.sh smoke-test</code> → enter credentials when prompted → tests run in visible Chrome</p>
+                <p><strong>MFA handled automatically</strong> — paste your TOTP secret when prompted, no Google Authenticator needed during tests</p>
+                <p><strong>Add tests:</strong> Edit JSON configs in <code className="bg-gray-100 dark:bg-gray-700 px-1 rounded">configs/</code> — no code changes required</p>
+              </div>
+            </div>
+            <a
+              href="/downloads/zorbit-e2e-bundle.zip"
+              download
+              className="ml-4 flex items-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-lg transition-colors shadow-sm shrink-0"
+            >
+              <Download className="h-4 w-4" />
+              Download Bundle
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   );

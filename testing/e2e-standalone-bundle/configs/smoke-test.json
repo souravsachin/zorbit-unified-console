@@ -1,0 +1,265 @@
+{
+  "baseUrl": "https://zorbit.scalatics.com",
+  "viewport": { "width": 1280, "height": 720 },
+  "defaults": {
+    "timeout": 10000,
+    "waitAfterAction": 500,
+    "waitForNetworkIdle": false
+  },
+  "segments": {
+    "landing-page": {
+      "name": "Landing Page Loads",
+      "description": "Verify the landing/login page renders",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/",
+          "announce": { "before": "Loading Zorbit landing page" }
+        },
+        {
+          "action": "wait",
+          "timeout": 1500
+        },
+        {
+          "action": "assertVisible",
+          "selector": "body",
+          "announce": { "after": "Landing page loaded" }
+        },
+        {
+          "action": "screenshot",
+          "value": "smoke-01-landing.png"
+        }
+      ]
+    },
+
+    "login-page": {
+      "name": "Login Page Verification",
+      "description": "Verify login form elements are present",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/login",
+          "announce": { "before": "Loading login page" }
+        },
+        {
+          "action": "wait",
+          "timeout": 1500
+        },
+        {
+          "action": "assertVisible",
+          "selector": "input[type='email'], input[placeholder*='email' i], input[name='email']",
+          "announce": { "after": "Email input is visible" }
+        },
+        {
+          "action": "assertVisible",
+          "selector": "input[type='password']",
+          "announce": { "after": "Password input is visible" }
+        },
+        {
+          "action": "assertVisible",
+          "selector": "button[type='submit'], button:has-text('Sign in'), button:has-text('Login')",
+          "announce": { "after": "Login button is visible" }
+        },
+        {
+          "action": "screenshot",
+          "value": "smoke-02-login.png",
+          "announce": { "after": "Login page verified. All form elements present." }
+        }
+      ]
+    },
+
+    "login-flow": {
+      "name": "Login Authentication",
+      "description": "Perform login and verify dashboard loads",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/login",
+          "announce": { "before": "Navigating to login" }
+        },
+        {
+          "action": "wait",
+          "timeout": 1500
+        },
+        {
+          "action": "fill",
+          "selector": "input[type='email'], input[placeholder*='email' i], input[name='email']",
+          "value": "${credentials.admin.email}"
+        },
+        {
+          "action": "fill",
+          "selector": "input[type='password']",
+          "value": "${credentials.admin.password}"
+        },
+        {
+          "action": "click",
+          "selector": "button[type='submit'], button:has-text('Sign in'), button:has-text('Login')",
+          "announce": { "after": "Login submitted" }
+        },
+        {
+          "action": "wait",
+          "timeout": 3000
+        },
+        {
+          "action": "custom",
+          "handler": "generateTotp",
+          "description": "Generate TOTP for MFA if challenged",
+          "params": {
+            "command": "ssh sovpn 'bash /tmp/get-totp.sh'"
+          },
+          "selector": "input[inputmode='numeric'], input[maxlength='6'], input[placeholder='000000']"
+        },
+        {
+          "action": "click",
+          "selector": "button[type='submit'], button:has-text('Verify')"
+        },
+        {
+          "action": "wait",
+          "timeout": 3000
+        },
+        {
+          "action": "waitForUrl",
+          "pattern": "/(dashboard|home|app)",
+          "timeout": 20000,
+          "announce": { "after": "Successfully logged in" }
+        },
+        {
+          "action": "screenshot",
+          "value": "smoke-03-dashboard.png"
+        }
+      ]
+    },
+
+    "verify-dashboard": {
+      "name": "Dashboard Health Check",
+      "description": "Verify dashboard renders with content",
+      "steps": [
+        {
+          "action": "assertVisible",
+          "selector": "[class*='dashboard'], [data-testid='dashboard'], main",
+          "timeout": 10000,
+          "announce": { "after": "Dashboard is visible" }
+        },
+        {
+          "action": "screenshot",
+          "value": "smoke-04-dashboard-content.png",
+          "announce": { "after": "Dashboard content verified" }
+        }
+      ]
+    },
+
+    "verify-sidebar-menu": {
+      "name": "Sidebar Menu Renders",
+      "description": "Verify the navigation sidebar/hamburger menu is functional",
+      "steps": [
+        {
+          "action": "click",
+          "selector": "button[class*='hamburger'], button[aria-label*='menu'], [data-testid='menu-toggle'], button[class*='sidebar-toggle']",
+          "force": true,
+          "announce": { "before": "Opening sidebar menu" }
+        },
+        {
+          "action": "wait",
+          "timeout": 1000
+        },
+        {
+          "action": "assertVisible",
+          "selector": "nav, [role='navigation'], [class*='sidebar'], [class*='menu']",
+          "timeout": 8000,
+          "announce": { "after": "Sidebar menu is visible" }
+        },
+        {
+          "action": "screenshot",
+          "value": "smoke-05-sidebar-menu.png",
+          "announce": { "after": "Sidebar navigation verified" }
+        },
+        {
+          "action": "pressEscape"
+        },
+        {
+          "action": "wait",
+          "timeout": 500
+        }
+      ]
+    },
+
+    "api-health-checks": {
+      "name": "API Health Endpoints",
+      "description": "Check health endpoints for core platform services",
+      "steps": [
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/health",
+          "expectedStatus": [200, 204],
+          "announce": { "before": "Checking main API health", "after": "Main API healthy" }
+        }
+      ]
+    },
+
+    "smoke-logout": {
+      "name": "Logout",
+      "description": "Logout and return to login page",
+      "steps": [
+        {
+          "action": "click",
+          "selector": "button[class*='avatar'], [data-testid='user-menu'], button[aria-label*='profile']"
+        },
+        {
+          "action": "wait",
+          "timeout": 800
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text('Logout'), button:has-text('Sign out'), a:has-text('Logout'), [role='menuitem']:has-text('Log')"
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "waitForUrl",
+          "pattern": "/(login|signin|auth)",
+          "timeout": 15000,
+          "announce": { "after": "Logged out successfully" }
+        },
+        {
+          "action": "screenshot",
+          "value": "smoke-06-logged-out.png"
+        }
+      ]
+    }
+  },
+
+  "journeys": {
+    "public-pages": {
+      "name": "Public Pages",
+      "description": "Verify public pages load correctly without login",
+      "segments": ["landing-page", "login-page"]
+    },
+    "authenticated-check": {
+      "name": "Authenticated Check",
+      "description": "Login, verify dashboard and sidebar, logout",
+      "segments": ["login-flow", "verify-dashboard", "verify-sidebar-menu", "smoke-logout"]
+    },
+    "api-check": {
+      "name": "API Health",
+      "description": "Check platform API health endpoints",
+      "segments": ["api-health-checks"]
+    }
+  },
+
+  "bouquets": {
+    "smoke-test": {
+      "name": "Smoke Test",
+      "description": "Quick sanity check: public pages, login, dashboard, sidebar, API health, logout",
+      "mode": "sequential",
+      "journeys": ["public-pages", "api-check", "authenticated-check"]
+    },
+    "public-only": {
+      "name": "Public Pages Only",
+      "description": "No-login smoke test of public pages and API",
+      "mode": "sequential",
+      "journeys": ["public-pages", "api-check"]
+    }
+  }
+}

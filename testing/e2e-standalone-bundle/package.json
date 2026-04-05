@@ -1,0 +1,23 @@
+{
+  "name": "zorbit-unified-console-e2e-tests",
+  "version": "1.0.0",
+  "description": "Standalone E2E test bundle for Zorbit Unified Console",
+  "scripts": {
+    "test": "npx tsx runner.ts",
+    "test:list": "npx tsx runner.ts --list",
+    "test:headless": "npx tsx runner.ts --headless",
+    "test:smoke": "npx tsx runner.ts -c smoke-test.json",
+    "test:identity": "npx tsx runner.ts -c identity-service.json",
+    "test:pcg4": "npx tsx runner.ts -c pcg4-configurator.json",
+    "test:menu": "npx tsx runner.ts --spec specs/menu-sanity.spec.ts",
+    "test:links": "npx tsx runner.ts --spec specs/broken-links.spec.ts",
+    "setup": "npm install && npx playwright install chromium"
+  },
+  "dependencies": {
+    "playwright": "^1.40.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.0",
+    "@playwright/test": "^1.40.0",
+    "otplib": "^12.0.1"
+  }
+}

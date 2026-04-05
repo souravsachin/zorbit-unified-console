@@ -1,0 +1,579 @@
+{
+  "baseUrl": "https://zorbit.scalatics.com",
+  "viewport": { "width": 1440, "height": 900 },
+  "defaults": {
+    "timeout": 12000,
+    "waitAfterAction": 800,
+    "waitForNetworkIdle": false
+  },
+  "segments": {
+    "menu-login": {
+      "name": "Login for Menu Crawl",
+      "description": "Authenticate before crawling all menu items",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/login",
+          "announce": { "before": "Logging in for menu sanity test" }
+        },
+        {
+          "action": "wait",
+          "timeout": 1500
+        },
+        {
+          "action": "fill",
+          "selector": "input[type='email'], input[placeholder*='email' i], input[name='email']",
+          "value": "${credentials.admin.email}"
+        },
+        {
+          "action": "fill",
+          "selector": "input[type='password']",
+          "value": "${credentials.admin.password}"
+        },
+        {
+          "action": "click",
+          "selector": "button[type='submit'], button:has-text('Sign in'), button:has-text('Login')"
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "custom",
+          "handler": "generateTotp",
+          "description": "Generate TOTP for MFA",
+          "params": {
+            "command": "ssh sovpn 'bash /tmp/get-totp.sh'"
+          },
+          "selector": "input[inputmode='numeric'], input[maxlength='6'], input[placeholder='000000']"
+        },
+        {
+          "action": "click",
+          "selector": "button[type='submit'], button:has-text('Verify')"
+        },
+        {
+          "action": "wait",
+          "timeout": 3000
+        },
+        {
+          "action": "waitForUrl",
+          "pattern": "/(dashboard|home|app)",
+          "timeout": 20000,
+          "announce": { "after": "Logged in. Starting menu crawl." }
+        }
+      ]
+    },
+
+    "crawl-dashboard": {
+      "name": "Dashboard Menu Item",
+      "description": "Click Dashboard in hamburger menu",
+      "steps": [
+        {
+          "action": "click",
+          "selector": "button[class*='hamburger'], button[aria-label*='menu'], [data-testid='menu-toggle']",
+          "force": true,
+          "announce": { "before": "Opening hamburger menu for Dashboard" }
+        },
+        {
+          "action": "wait",
+          "timeout": 800
+        },
+        {
+          "action": "click",
+          "selector": "a:has-text('Dashboard'), nav a[href*='dashboard']",
+          "force": true
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "screenshot",
+          "value": "menu-01-dashboard.png",
+          "announce": { "after": "Dashboard page loaded" }
+        }
+      ]
+    },
+
+    "crawl-identity": {
+      "name": "Identity Section",
+      "description": "Click Identity menu and all sub-items",
+      "steps": [
+        {
+          "action": "click",
+          "selector": "button[class*='hamburger'], button[aria-label*='menu'], [data-testid='menu-toggle']",
+          "force": true,
+          "announce": { "before": "Opening menu for Identity section" }
+        },
+        {
+          "action": "wait",
+          "timeout": 800
+        },
+        {
+          "action": "click",
+          "selector": "a:has-text('Identity'), [data-menu='identity'], nav a[href*='identity']",
+          "force": true
+        },
+        {
+          "action": "wait",
+          "timeout": 800
+        },
+        {
+          "action": "click",
+          "selector": "a:has-text('Users'), nav a[href*='users']",
+          "force": true
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "screenshot",
+          "value": "menu-02-identity-users.png",
+          "announce": { "after": "Identity > Users loaded" }
+        },
+        {
+          "action": "click",
+          "selector": "button[class*='hamburger'], button[aria-label*='menu'], [data-testid='menu-toggle']",
+          "force": true
+        },
+        {
+          "action": "wait",
+          "timeout": 800
+        },
+        {
+          "action": "click",
+          "selector": "a:has-text('Identity'), [data-menu='identity']",
+          "force": true
+        },
+        {
+          "action": "wait",
+          "timeout": 800
+        },
+        {
+          "action": "click",
+          "selector": "a:has-text('Organizations'), nav a[href*='organization']",
+          "force": true
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "screenshot",
+          "value": "menu-03-identity-organizations.png",
+          "announce": { "after": "Identity > Organizations loaded" }
+        }
+      ]
+    },
+
+    "crawl-authorization": {
+      "name": "Authorization Section",
+      "description": "Click Authorization menu and sub-items",
+      "steps": [
+        {
+          "action": "click",
+          "selector": "button[class*='hamburger'], button[aria-label*='menu'], [data-testid='menu-toggle']",
+          "force": true,
+          "announce": { "before": "Opening menu for Authorization section" }
+        },
+        {
+          "action": "wait",
+          "timeout": 800
+        },
+        {
+          "action": "click",
+          "selector": "a:has-text('Authorization'), [data-menu='authorization'], nav a[href*='authorization']",
+          "force": true
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "screenshot",
+          "value": "menu-04-authorization.png",
+          "announce": { "after": "Authorization section loaded" }
+        }
+      ]
+    },
+
+    "crawl-navigation": {
+      "name": "Navigation Section",
+      "description": "Click Navigation menu item",
+      "steps": [
+        {
+          "action": "click",
+          "selector": "button[class*='hamburger'], button[aria-label*='menu'], [data-testid='menu-toggle']",
+          "force": true,
+          "announce": { "before": "Opening menu for Navigation section" }
+        },
+        {
+          "action": "wait",
+          "timeout": 800
+        },
+        {
+          "action": "click",
+          "selector": "a:has-text('Navigation'), [data-menu='navigation'], nav a[href*='navigation']",
+          "force": true
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "screenshot",
+          "value": "menu-05-navigation.png",
+          "announce": { "after": "Navigation section loaded" }
+        }
+      ]
+    },
+
+    "crawl-messaging": {
+      "name": "Messaging Section",
+      "description": "Click Messaging/Event Bus menu item",
+      "steps": [
+        {
+          "action": "click",
+          "selector": "button[class*='hamburger'], button[aria-label*='menu'], [data-testid='menu-toggle']",
+          "force": true,
+          "announce": { "before": "Opening menu for Messaging section" }
+        },
+        {
+          "action": "wait",
+          "timeout": 800
+        },
+        {
+          "action": "click",
+          "selector": "a:has-text('Messaging'), a:has-text('Event Bus'), [data-menu='messaging'], nav a[href*='messaging']",
+          "force": true
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "screenshot",
+          "value": "menu-06-messaging.png",
+          "announce": { "after": "Messaging section loaded" }
+        }
+      ]
+    },
+
+    "crawl-audit": {
+      "name": "Audit Section",
+      "description": "Click Audit menu item",
+      "steps": [
+        {
+          "action": "click",
+          "selector": "button[class*='hamburger'], button[aria-label*='menu'], [data-testid='menu-toggle']",
+          "force": true,
+          "announce": { "before": "Opening menu for Audit section" }
+        },
+        {
+          "action": "wait",
+          "timeout": 800
+        },
+        {
+          "action": "click",
+          "selector": "a:has-text('Audit'), [data-menu='audit'], nav a[href*='audit']",
+          "force": true
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "screenshot",
+          "value": "menu-07-audit.png",
+          "announce": { "after": "Audit section loaded" }
+        }
+      ]
+    },
+
+    "crawl-pii-vault": {
+      "name": "PII Vault Section",
+      "description": "Click PII Vault menu item",
+      "steps": [
+        {
+          "action": "click",
+          "selector": "button[class*='hamburger'], button[aria-label*='menu'], [data-testid='menu-toggle']",
+          "force": true,
+          "announce": { "before": "Opening menu for PII Vault section" }
+        },
+        {
+          "action": "wait",
+          "timeout": 800
+        },
+        {
+          "action": "click",
+          "selector": "a:has-text('PII Vault'), a:has-text('PII'), [data-menu='pii-vault'], nav a[href*='pii']",
+          "force": true
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "screenshot",
+          "value": "menu-08-pii-vault.png",
+          "announce": { "after": "PII Vault section loaded" }
+        }
+      ]
+    },
+
+    "crawl-settings": {
+      "name": "Settings Section",
+      "description": "Click Settings menu item",
+      "steps": [
+        {
+          "action": "click",
+          "selector": "button[class*='hamburger'], button[aria-label*='menu'], [data-testid='menu-toggle']",
+          "force": true,
+          "announce": { "before": "Opening menu for Settings section" }
+        },
+        {
+          "action": "wait",
+          "timeout": 800
+        },
+        {
+          "action": "click",
+          "selector": "a:has-text('Settings'), [data-menu='settings'], nav a[href*='settings']",
+          "force": true
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "screenshot",
+          "value": "menu-09-settings.png",
+          "announce": { "after": "Settings section loaded" }
+        }
+      ]
+    },
+
+    "crawl-admin": {
+      "name": "Admin Section",
+      "description": "Click Admin menu item",
+      "steps": [
+        {
+          "action": "click",
+          "selector": "button[class*='hamburger'], button[aria-label*='menu'], [data-testid='menu-toggle']",
+          "force": true,
+          "announce": { "before": "Opening menu for Admin section" }
+        },
+        {
+          "action": "wait",
+          "timeout": 800
+        },
+        {
+          "action": "click",
+          "selector": "a:has-text('Admin'), [data-menu='admin'], nav a[href*='admin']",
+          "force": true
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "screenshot",
+          "value": "menu-10-admin.png",
+          "announce": { "after": "Admin section loaded" }
+        }
+      ]
+    },
+
+    "crawl-products": {
+      "name": "Products Section",
+      "description": "Click Products menu and sub-items",
+      "steps": [
+        {
+          "action": "click",
+          "selector": "button[class*='hamburger'], button[aria-label*='menu'], [data-testid='menu-toggle']",
+          "force": true,
+          "announce": { "before": "Opening menu for Products section" }
+        },
+        {
+          "action": "wait",
+          "timeout": 800
+        },
+        {
+          "action": "click",
+          "selector": "a:has-text('Products'), [data-menu='products'], nav a[href*='product']",
+          "force": true
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "screenshot",
+          "value": "menu-11-products.png",
+          "announce": { "after": "Products section loaded" }
+        }
+      ]
+    },
+
+    "crawl-product-pricing": {
+      "name": "Product Pricing Section",
+      "description": "Click Product Pricing menu item",
+      "steps": [
+        {
+          "action": "click",
+          "selector": "button[class*='hamburger'], button[aria-label*='menu'], [data-testid='menu-toggle']",
+          "force": true,
+          "announce": { "before": "Opening menu for Product Pricing section" }
+        },
+        {
+          "action": "wait",
+          "timeout": 800
+        },
+        {
+          "action": "click",
+          "selector": "a:has-text('Product Pricing'), a:has-text('Pricing'), [data-menu='pricing'], nav a[href*='pricing']",
+          "force": true
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "screenshot",
+          "value": "menu-12-product-pricing.png",
+          "announce": { "after": "Product Pricing section loaded" }
+        }
+      ]
+    },
+
+    "crawl-form-builder": {
+      "name": "Form Builder Section",
+      "description": "Click Form Builder menu item",
+      "steps": [
+        {
+          "action": "click",
+          "selector": "button[class*='hamburger'], button[aria-label*='menu'], [data-testid='menu-toggle']",
+          "force": true,
+          "announce": { "before": "Opening menu for Form Builder section" }
+        },
+        {
+          "action": "wait",
+          "timeout": 800
+        },
+        {
+          "action": "click",
+          "selector": "a:has-text('Form Builder'), a:has-text('Forms'), [data-menu='form-builder'], nav a[href*='form']",
+          "force": true
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "screenshot",
+          "value": "menu-13-form-builder.png",
+          "announce": { "after": "Form Builder section loaded" }
+        }
+      ]
+    },
+
+    "menu-logout": {
+      "name": "Menu Crawl Logout",
+      "description": "Logout after menu crawl",
+      "steps": [
+        {
+          "action": "click",
+          "selector": "button[class*='avatar'], [data-testid='user-menu'], button[aria-label*='profile']"
+        },
+        {
+          "action": "wait",
+          "timeout": 800
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text('Logout'), button:has-text('Sign out'), a:has-text('Logout'), [role='menuitem']:has-text('Log')"
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "waitForUrl",
+          "pattern": "/(login|signin|auth)",
+          "timeout": 15000,
+          "announce": { "after": "Menu sanity crawl complete. All sections visited." }
+        }
+      ]
+    }
+  },
+
+  "journeys": {
+    "full-menu-crawl": {
+      "name": "Full Menu Crawl",
+      "description": "Click every menu section and screenshot each page",
+      "segments": [
+        "menu-login",
+        "crawl-dashboard",
+        "crawl-identity",
+        "crawl-authorization",
+        "crawl-navigation",
+        "crawl-messaging",
+        "crawl-audit",
+        "crawl-pii-vault",
+        "crawl-settings",
+        "crawl-admin",
+        "crawl-products",
+        "crawl-product-pricing",
+        "crawl-form-builder",
+        "menu-logout"
+      ]
+    },
+    "platform-services-menu": {
+      "name": "Platform Services Menu Only",
+      "description": "Crawl only platform service menu items",
+      "segments": [
+        "menu-login",
+        "crawl-dashboard",
+        "crawl-identity",
+        "crawl-authorization",
+        "crawl-navigation",
+        "crawl-messaging",
+        "crawl-audit",
+        "crawl-pii-vault",
+        "menu-logout"
+      ]
+    },
+    "business-modules-menu": {
+      "name": "Business Modules Menu Only",
+      "description": "Crawl only business module menu items",
+      "segments": [
+        "menu-login",
+        "crawl-products",
+        "crawl-product-pricing",
+        "crawl-form-builder",
+        "menu-logout"
+      ]
+    }
+  },
+
+  "bouquets": {
+    "menu-sanity": {
+      "name": "Menu Sanity - Full Crawl",
+      "description": "Open every menu section, click every sub-item, screenshot each page",
+      "mode": "sequential",
+      "journeys": ["full-menu-crawl"]
+    },
+    "menu-platform-only": {
+      "name": "Menu Sanity - Platform Services",
+      "description": "Crawl only platform service menus",
+      "mode": "sequential",
+      "journeys": ["platform-services-menu"]
+    },
+    "menu-business-only": {
+      "name": "Menu Sanity - Business Modules",
+      "description": "Crawl only business module menus",
+      "mode": "sequential",
+      "journeys": ["business-modules-menu"]
+    }
+  }
+}

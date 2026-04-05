@@ -1,0 +1,248 @@
+{
+  "baseUrl": "https://zorbit.scalatics.com",
+  "viewport": { "width": 1280, "height": 720 },
+  "defaults": {
+    "timeout": 10000,
+    "waitAfterAction": 500,
+    "waitForNetworkIdle": false
+  },
+  "segments": {
+    "links-login": {
+      "name": "Login for Link Crawl",
+      "description": "Authenticate before crawling links",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/login",
+          "announce": { "before": "Logging in for broken link detection" }
+        },
+        {
+          "action": "wait",
+          "timeout": 1500
+        },
+        {
+          "action": "fill",
+          "selector": "input[type='email'], input[placeholder*='email' i], input[name='email']",
+          "value": "${credentials.admin.email}"
+        },
+        {
+          "action": "fill",
+          "selector": "input[type='password']",
+          "value": "${credentials.admin.password}"
+        },
+        {
+          "action": "click",
+          "selector": "button[type='submit'], button:has-text('Sign in'), button:has-text('Login')"
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "custom",
+          "handler": "generateTotp",
+          "description": "Generate TOTP for MFA",
+          "params": {
+            "command": "ssh sovpn 'bash /tmp/get-totp.sh'"
+          },
+          "selector": "input[inputmode='numeric'], input[maxlength='6'], input[placeholder='000000']"
+        },
+        {
+          "action": "click",
+          "selector": "button[type='submit'], button:has-text('Verify')"
+        },
+        {
+          "action": "wait",
+          "timeout": 3000
+        },
+        {
+          "action": "waitForUrl",
+          "pattern": "/(dashboard|home|app)",
+          "timeout": 20000,
+          "announce": { "after": "Logged in. Ready to crawl links." }
+        }
+      ]
+    },
+
+    "crawl-dashboard-links": {
+      "name": "Dashboard Link Check",
+      "description": "Check all links on the dashboard page",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/dashboard",
+          "announce": { "before": "Checking links on Dashboard page" }
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "screenshot",
+          "value": "links-01-dashboard.png"
+        },
+        {
+          "action": "assertVisible",
+          "selector": "a[href]",
+          "timeout": 5000,
+          "announce": { "after": "Dashboard links detected" }
+        }
+      ]
+    },
+
+    "crawl-identity-links": {
+      "name": "Identity Section Link Check",
+      "description": "Navigate to Identity section and check all links",
+      "steps": [
+        {
+          "action": "click",
+          "selector": "button[class*='hamburger'], button[aria-label*='menu'], [data-testid='menu-toggle']",
+          "force": true,
+          "announce": { "before": "Checking links in Identity section" }
+        },
+        {
+          "action": "wait",
+          "timeout": 800
+        },
+        {
+          "action": "click",
+          "selector": "a:has-text('Identity'), nav a[href*='identity']",
+          "force": true
+        },
+        {
+          "action": "wait",
+          "timeout": 800
+        },
+        {
+          "action": "click",
+          "selector": "a:has-text('Users'), nav a[href*='users']",
+          "force": true
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "screenshot",
+          "value": "links-02-identity-users.png",
+          "announce": { "after": "Identity Users page loaded for link check" }
+        }
+      ]
+    },
+
+    "crawl-products-links": {
+      "name": "Products Section Link Check",
+      "description": "Navigate to Products section and check all links",
+      "steps": [
+        {
+          "action": "click",
+          "selector": "button[class*='hamburger'], button[aria-label*='menu'], [data-testid='menu-toggle']",
+          "force": true,
+          "announce": { "before": "Checking links in Products section" }
+        },
+        {
+          "action": "wait",
+          "timeout": 800
+        },
+        {
+          "action": "click",
+          "selector": "a:has-text('Products'), nav a[href*='product']",
+          "force": true
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "screenshot",
+          "value": "links-03-products.png",
+          "announce": { "after": "Products page loaded for link check" }
+        }
+      ]
+    },
+
+    "crawl-settings-links": {
+      "name": "Settings Section Link Check",
+      "description": "Navigate to Settings section and check all links",
+      "steps": [
+        {
+          "action": "click",
+          "selector": "button[class*='hamburger'], button[aria-label*='menu'], [data-testid='menu-toggle']",
+          "force": true,
+          "announce": { "before": "Checking links in Settings section" }
+        },
+        {
+          "action": "wait",
+          "timeout": 800
+        },
+        {
+          "action": "click",
+          "selector": "a:has-text('Settings'), nav a[href*='settings']",
+          "force": true
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "screenshot",
+          "value": "links-04-settings.png",
+          "announce": { "after": "Settings page loaded for link check" }
+        }
+      ]
+    },
+
+    "links-logout": {
+      "name": "Link Crawl Logout",
+      "description": "Logout after link detection",
+      "steps": [
+        {
+          "action": "click",
+          "selector": "button[class*='avatar'], [data-testid='user-menu'], button[aria-label*='profile']"
+        },
+        {
+          "action": "wait",
+          "timeout": 800
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text('Logout'), button:has-text('Sign out'), a:has-text('Logout'), [role='menuitem']:has-text('Log')"
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "waitForUrl",
+          "pattern": "/(login|signin|auth)",
+          "timeout": 15000,
+          "announce": { "after": "Broken link detection complete." }
+        }
+      ]
+    }
+  },
+
+  "journeys": {
+    "full-link-crawl": {
+      "name": "Full Link Crawl",
+      "description": "Visit key pages and verify all links are accessible",
+      "segments": [
+        "links-login",
+        "crawl-dashboard-links",
+        "crawl-identity-links",
+        "crawl-products-links",
+        "crawl-settings-links",
+        "links-logout"
+      ]
+    }
+  },
+
+  "bouquets": {
+    "broken-links": {
+      "name": "Broken Link Detector",
+      "description": "Crawl all major pages and check for 404s and broken links",
+      "mode": "sequential",
+      "journeys": ["full-link-crawl"]
+    }
+  }
+}
