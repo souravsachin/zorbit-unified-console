@@ -1,10 +1,31 @@
-{
-  "skill_id": "1021",
-  "skill_name": "Session Communicator",
-  "sections": {
-    "claude_md_integration": "2.0",
-    "soldier_integration": "2.0",
-    "project_id_assignment": "2.0"
+[
+  {
+    "skill_id": "1021",
+    "skill_name": "Session Communicator",
+    "sections": {
+      "claude_md_integration": "2.0",
+      "soldier_integration": "2.0",
+      "project_id_assignment": "2.0"
+    },
+    "last_reapply": "2026-04-04"
   },
-  "last_reapply": "2026-04-04"
-}
+  {
+    "skill_id": "1023",
+    "skill_name": "Standalone E2E Test Bundle",
+    "sections": {
+      "folder_structure": "1.0",
+      "separation_of_concerns": "1.0",
+      "runner_code": "1.1",
+      "config_schema": "1.1",
+      "credentials_management": "1.0",
+      "launcher_script": "1.0",
+      "test_hierarchy": "1.0",
+      "narration_tts": "1.1",
+      "interactive_menu": "1.0",
+      "cli_modes": "1.1",
+      "ready_made_recipes": "1.0",
+      "best_practices": "1.0"
+    },
+    "last_reapply": "2026-04-05"
+  }
+]

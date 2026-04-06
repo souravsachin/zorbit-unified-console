@@ -323,6 +323,8 @@ function toBackendDto(data: Partial<FullConfig>): Record<string, unknown> {
   if (data.effectiveDate) dto.effectiveDate = data.effectiveDate;
   if (data.expiryDate) dto.expiryDate = data.expiryDate;
   if (data.general_rules) dto.generalRules = data.general_rules;
+  if (data.description) dto.description = data.description;
+  // Note: plans are NOT sent via configuration PUT — they use separate plan endpoints
   return dto;
 }
 
@@ -354,12 +356,42 @@ export const pcg4ConfiguratorApi = {
     stage: string,
     data: Record<string, unknown>,
   ) => {
-    // 1. Save configuration data
+    // 1. Save configuration data (non-plan fields)
     const dto = toBackendDto(data as Partial<FullConfig>);
     if (Object.keys(dto).length > 0) {
       await api.put(`${orgBase(orgId)}/configurations/${configId}`, dto);
     }
-    // 2. Advance stage
+
+    // 2. Save plans if present (delete existing + recreate)
+    const plans = (data as Partial<FullConfig>).plans;
+    if (plans && plans.length > 0) {
+      // Delete existing plans first
+      const existing = await api
+        .get(`${orgBase(orgId)}/configurations/${configId}/plans`)
+        .then((r) => r.data || [])
+        .catch(() => []);
+      for (const ep of existing) {
+        await api.delete(
+          `${orgBase(orgId)}/configurations/${configId}/plans/${ep.hashId}`,
+        ).catch(() => {/* ignore */});
+      }
+
+      // Create all plans
+      for (const plan of plans) {
+        await api.post(
+          `${orgBase(orgId)}/configurations/${configId}/plans`,
+          {
+            name: plan.plan_name,
+            tier: plan.plan_tier,
+            currency: plan.currency,
+            regions: plan.regions,
+            generalRules: plan.benefits?.general_rules,
+          },
+        ).catch(() => {/* plan create failed, continue */});
+      }
+    }
+
+    // 3. Advance stage
     const stageNum = STAGE_NAME_TO_NUM[stage] || parseInt(stage, 10) || 1;
     return api
       .patch(`${orgBase(orgId)}/configurations/${configId}/stage`, { stage: stageNum })
@@ -419,8 +451,29 @@ export const pcg4ConfiguratorApi = {
   // ---- Taxonomies ----
 
   getTaxonomies: (orgId: string): Promise<EncounterCategory[]> =>
-    api.get(`/api/app/pcg4/v1/O/${orgId}/taxonomies`).then((r) => {
+    api.get(`/api/app/pcg4/v1/O/${orgId}/encounter-types`).then((r) => {
       const data = r.data?.data || r.data || [];
+      // If the response is flat encounter types, group by category
+      if (Array.isArray(data) && data.length > 0 && data[0].hashId) {
+        const grouped: Record<string, { types: { type_id: string; label: string; description: string }[] }> = {};
+        for (const et of data) {
+          const cat = et.category || 'uncategorized';
+          if (!grouped[cat]) {
+            grouped[cat] = { types: [] };
+          }
+          grouped[cat].types.push({
+            type_id: et.hashId || et.code,
+            label: et.label,
+            description: et.description || '',
+          });
+        }
+        return Object.entries(grouped).map(([catName, val]) => ({
+          category_id: `cat_${catName}`,
+          category_name: catName.replace(/-/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase()),
+          description: `${catName} encounter types`,
+          types: val.types,
+        }));
+      }
       // Find the "Healthcare Encounter Types" taxonomy
       const taxonomy = Array.isArray(data)
         ? data.find(
@@ -429,6 +482,6 @@ export const pcg4ConfiguratorApi = {
               t.type === 'encounter_types',
           )
         : null;
-      return taxonomy?.categories || [];
+      return taxonomy?.categories || data || [];
     }),
 };

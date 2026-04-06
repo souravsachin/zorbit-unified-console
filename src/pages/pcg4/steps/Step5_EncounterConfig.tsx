@@ -10,12 +10,12 @@ function getOrgId(): string {
     const user = localStorage.getItem('zorbit_user');
     if (user) {
       const parsed = JSON.parse(user);
-      return parsed.organizationHashId || parsed.orgId || 'O-DEFAULT';
+      return parsed.organizationId || parsed.organizationHashId || parsed.orgId || 'O-OZPY';
     }
   } catch {
     // ignore
   }
-  return 'O-DEFAULT';
+  return 'O-OZPY';
 }
 
 function taxonomyToTreeNodes(categories: EncounterCategory[]): TreeNode[] {
@@ -23,7 +23,7 @@ function taxonomyToTreeNodes(categories: EncounterCategory[]): TreeNode[] {
     id: cat.category_id,
     label: cat.category_name,
     description: cat.description,
-    children: cat.types.map((t) => ({
+    children: (cat.types || []).map((t) => ({
       id: t.type_id,
       label: t.label,
       description: t.description,

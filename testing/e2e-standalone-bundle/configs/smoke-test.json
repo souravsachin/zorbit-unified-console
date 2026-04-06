@@ -119,7 +119,7 @@
         },
         {
           "action": "waitForUrl",
-          "pattern": "/(dashboard|home|app)",
+          "pattern": "^https://zorbit\\.scalatics\\.com/?$",
           "timeout": 20000,
           "announce": { "after": "Successfully logged in" }
         },

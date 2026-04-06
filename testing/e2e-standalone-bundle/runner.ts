@@ -111,6 +111,25 @@ let executionStatus = {
   failed: 0,
 };
 
+// Structured log for Claude session consumption
+interface StepResult {
+  segment: string;
+  journey: string;
+  step: number;
+  action: string;
+  selector?: string;
+  status: 'pass' | 'fail' | 'skip';
+  error?: string;
+  duration_ms: number;
+  screenshot?: string;
+  timestamp: string;
+}
+const testLog: StepResult[] = [];
+
+function logStep(result: Omit<StepResult, 'timestamp'>) {
+  testLog.push({ ...result, timestamp: new Date().toISOString() });
+}
+
 // CLI options
 const args = process.argv.slice(2);
 const cliOptions = {
@@ -696,6 +715,7 @@ async function executeStep(
   executionStatus.stepNum = stepIndex + 1;
   executionStatus.totalSteps = totalSteps;
   executionStatus.step = step.action;
+  const stepStartMs = Date.now();
 
   const stepNum = `[${stepIndex + 1}/${totalSteps}]`;
   const timeout = step.timeout || currentConfig.defaults.timeout;
@@ -960,6 +980,15 @@ async function executeStep(
       await speak(step.announce.after);
     }
 
+    logStep({
+      segment: executionStatus.segment,
+      journey: executionStatus.journey,
+      step: stepIndex + 1,
+      action: step.action,
+      selector: step.selector,
+      status: 'pass',
+      duration_ms: Date.now() - stepStartMs,
+    });
     return true;
   } catch (error) {
     const errorMsg =
@@ -973,6 +1002,17 @@ async function executeStep(
     }
     console.log(`${stepNum} FAIL: ${errorMsg}`);
     await speak(`Step failed. ${step.action} error.`);
+    logStep({
+      segment: executionStatus.segment,
+      journey: executionStatus.journey,
+      step: stepIndex + 1,
+      action: step.action,
+      selector: step.selector,
+      status: 'fail',
+      error: errorMsg,
+      duration_ms: Date.now() - stepStartMs,
+      screenshot: `error-${Date.now()}.png`,
+    });
     return false;
   }
 }
@@ -1216,6 +1256,20 @@ async function runTest(type: string, id: string): Promise<void> {
     `${COLORS.cyan}${"=".repeat(60)}${COLORS.reset}`
   );
   console.log();
+
+  // Write structured JSON report for Claude session consumption
+  const report = {
+    config: currentConfigName,
+    baseUrl: currentConfig?.baseUrl,
+    timestamp: new Date().toISOString(),
+    duration: elapsed,
+    summary: { passed, failed, total: passed + failed },
+    steps: testLog,
+    outputDir: runOutputDir,
+  };
+  const reportPath = path.join(runOutputDir, 'results.json');
+  fs.writeFileSync(reportPath, JSON.stringify(report, null, 2) + '\n');
+  console.log(`\n${COLORS.dim}  Report: ${reportPath}${COLORS.reset}`);
 
   if (failed === 0)
     await speak(`All ${passed} tests passed in ${elapsed}!`);

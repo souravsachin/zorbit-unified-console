@@ -1,0 +1,1148 @@
+{
+  "baseUrl": "https://zorbit.scalatics.com",
+  "viewport": { "width": 1440, "height": 900 },
+  "defaults": {
+    "timeout": 15000,
+    "waitAfterAction": 800,
+    "waitForNetworkIdle": false
+  },
+
+  "segments": {
+
+    "logout": {
+      "name": "Logout of Zorbit",
+      "description": "Click avatar menu, logout, verify login page appears",
+      "steps": [
+        {
+          "action": "click",
+          "selector": "button[class*='avatar'], [data-testid='user-menu'], button[aria-label*='profile'], [class*='user-avatar'], img[class*='avatar']",
+          "announce": { "before": "Opening user profile menu to logout" }
+        },
+        {
+          "action": "wait",
+          "timeout": 800
+        },
+        {
+          "action": "screenshot",
+          "value": "awnic-logout-01-menu.png"
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text('Logout'), button:has-text('Sign out'), a:has-text('Logout'), [data-action='logout'], [role='menuitem']:has-text('Log')",
+          "announce": { "before": "Clicking Logout" }
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "waitForUrl",
+          "pattern": "/(login|signin|auth)",
+          "timeout": 15000,
+          "announce": { "after": "Logged out successfully. Login page visible." }
+        },
+        {
+          "action": "screenshot",
+          "value": "awnic-logout-02-login-page.png"
+        }
+      ]
+    },
+
+    "login": {
+      "name": "Login to Zorbit",
+      "description": "Login with admin credentials, handle MFA if prompted, verify dashboard loads",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/login",
+          "announce": { "before": "Navigating to Zorbit login page" }
+        },
+        {
+          "action": "wait",
+          "timeout": 1500
+        },
+        {
+          "action": "assertVisible",
+          "selector": "input[type='email'], input[placeholder*='email' i], input[name='email']",
+          "announce": { "after": "Login form is ready" }
+        },
+        {
+          "action": "screenshot",
+          "value": "awnic-login-01-form.png"
+        },
+        {
+          "action": "fill",
+          "selector": "input[type='email'], input[placeholder*='email' i], input[name='email']",
+          "value": "${credentials.admin.email}",
+          "announce": { "before": "Entering admin email" }
+        },
+        {
+          "action": "fill",
+          "selector": "input[type='password']",
+          "value": "${credentials.admin.password}"
+        },
+        {
+          "action": "screenshot",
+          "value": "awnic-login-02-filled.png"
+        },
+        {
+          "action": "click",
+          "selector": "button[type='submit'], button:has-text('Sign in'), button:has-text('Login')",
+          "announce": { "after": "Login credentials submitted" }
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "custom",
+          "handler": "generateTotp",
+          "description": "Generate TOTP for MFA if challenged",
+          "params": {
+            "command": "ssh sovpn 'bash /tmp/get-totp.sh'"
+          },
+          "selector": "input[inputmode='numeric'], input[maxlength='6'], input[placeholder='000000']",
+          "announce": { "before": "Generating TOTP code via SSH", "after": "TOTP code entered" }
+        },
+        {
+          "action": "click",
+          "selector": "button[type='submit'], button:has-text('Verify'), button:has-text('Confirm')"
+        },
+        {
+          "action": "wait",
+          "timeout": 3000
+        },
+        {
+          "action": "waitForUrl",
+          "pattern": "/(dashboard|home|app)",
+          "timeout": 20000,
+          "announce": { "after": "Successfully logged in to Zorbit" }
+        },
+        {
+          "action": "screenshot",
+          "value": "awnic-login-03-dashboard.png"
+        }
+      ]
+    },
+
+    "enable-mfa": {
+      "name": "Enable MFA via Settings",
+      "description": "Navigate to Settings > Security and enable TOTP-based MFA",
+      "steps": [
+        {
+          "action": "click",
+          "selector": "button[class*='hamburger'], button[aria-label*='menu'], [data-testid='menu-toggle']",
+          "force": true,
+          "announce": { "before": "Opening menu to navigate to Settings" }
+        },
+        {
+          "action": "wait",
+          "timeout": 800
+        },
+        {
+          "action": "click",
+          "selector": "a:has-text('Settings'), nav a[href*='settings']",
+          "force": true,
+          "announce": { "before": "Clicking Settings" }
+        },
+        {
+          "action": "wait",
+          "timeout": 1000
+        },
+        {
+          "action": "click",
+          "selector": "a:has-text('Security'), nav a[href*='security'], [data-tab='security'], [role='tab']:has-text('Security')",
+          "force": true,
+          "announce": { "before": "Navigating to Security tab" }
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "screenshot",
+          "value": "awnic-mfa-01-security-settings.png"
+        },
+        {
+          "action": "assertVisible",
+          "selector": "[class*='mfa'], :has-text('Multi-Factor'), :has-text('MFA'), [data-section='mfa']",
+          "timeout": 8000,
+          "announce": { "after": "MFA configuration section is visible" }
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text('Enable MFA'), button:has-text('Enable TOTP'), button:has-text('Set up'), [data-action='enable-mfa']",
+          "announce": { "before": "Clicking Enable MFA" }
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "screenshot",
+          "value": "awnic-mfa-02-qr-code.png",
+          "announce": { "after": "TOTP QR code displayed for scanning" }
+        },
+        {
+          "action": "custom",
+          "handler": "generateTotp",
+          "description": "Generate TOTP code from displayed secret to verify setup",
+          "params": {
+            "command": "ssh sovpn 'bash /tmp/get-totp.sh'"
+          },
+          "selector": "input[inputmode='numeric'], input[maxlength='6'], input[placeholder*='code' i], input[placeholder='000000']",
+          "announce": { "before": "Generating TOTP verification code", "after": "TOTP code entered for verification" }
+        },
+        {
+          "action": "click",
+          "selector": "button[type='submit'], button:has-text('Verify'), button:has-text('Confirm'), button:has-text('Activate')",
+          "announce": { "after": "MFA verification submitted" }
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "screenshot",
+          "value": "awnic-mfa-03-enabled.png",
+          "announce": { "after": "MFA successfully enabled on the account" }
+        }
+      ]
+    },
+
+    "mfa-relogin": {
+      "name": "Logout and Re-login with MFA",
+      "description": "Logout, then re-login to verify MFA challenge appears and can be completed",
+      "steps": [
+        {
+          "action": "click",
+          "selector": "button[class*='avatar'], [data-testid='user-menu'], button[aria-label*='profile']",
+          "announce": { "before": "Logging out to test MFA re-login" }
+        },
+        {
+          "action": "wait",
+          "timeout": 800
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text('Logout'), button:has-text('Sign out'), a:has-text('Logout'), [role='menuitem']:has-text('Log')"
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "waitForUrl",
+          "pattern": "/(login|signin|auth)",
+          "timeout": 15000,
+          "announce": { "after": "Logged out. Now re-logging in with MFA." }
+        },
+        {
+          "action": "fill",
+          "selector": "input[type='email'], input[placeholder*='email' i], input[name='email']",
+          "value": "${credentials.admin.email}"
+        },
+        {
+          "action": "fill",
+          "selector": "input[type='password']",
+          "value": "${credentials.admin.password}"
+        },
+        {
+          "action": "click",
+          "selector": "button[type='submit'], button:has-text('Sign in'), button:has-text('Login')",
+          "announce": { "after": "Credentials submitted, expecting MFA challenge" }
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "assertVisible",
+          "selector": "input[inputmode='numeric'], input[maxlength='6'], input[placeholder='000000']",
+          "timeout": 10000,
+          "announce": { "after": "MFA challenge is displayed" }
+        },
+        {
+          "action": "screenshot",
+          "value": "awnic-mfa-relogin-01-challenge.png"
+        },
+        {
+          "action": "custom",
+          "handler": "generateTotp",
+          "description": "Generate TOTP for MFA re-login",
+          "params": {
+            "command": "ssh sovpn 'bash /tmp/get-totp.sh'"
+          },
+          "selector": "input[inputmode='numeric'], input[maxlength='6'], input[placeholder='000000']",
+          "announce": { "before": "Generating TOTP code", "after": "TOTP entered" }
+        },
+        {
+          "action": "click",
+          "selector": "button[type='submit'], button:has-text('Verify'), button:has-text('Confirm')",
+          "announce": { "after": "MFA verification submitted" }
+        },
+        {
+          "action": "wait",
+          "timeout": 3000
+        },
+        {
+          "action": "waitForUrl",
+          "pattern": "/(dashboard|home|app)",
+          "timeout": 20000,
+          "announce": { "after": "MFA re-login successful. Dashboard loaded." }
+        },
+        {
+          "action": "screenshot",
+          "value": "awnic-mfa-relogin-02-success.png"
+        }
+      ]
+    },
+
+    "create-org": {
+      "name": "Create AWNIC Organization",
+      "description": "Create a new organization of type Insurance/Cedent named AWNIC (Al Wathba National Insurance Company)",
+      "steps": [
+        {
+          "action": "click",
+          "selector": "button[class*='hamburger'], button[aria-label*='menu'], [data-testid='menu-toggle']",
+          "force": true,
+          "announce": { "before": "Opening menu to navigate to Organizations" }
+        },
+        {
+          "action": "wait",
+          "timeout": 800
+        },
+        {
+          "action": "click",
+          "selector": "a:has-text('Organizations'), nav a[href*='organization']",
+          "force": true,
+          "announce": { "before": "Clicking Organizations menu item" }
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "screenshot",
+          "value": "awnic-org-01-list.png"
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text('New Organization'), button:has-text('Add Organization'), button:has-text('Create'), a:has-text('New Org')",
+          "announce": { "before": "Clicking New Organization button" }
+        },
+        {
+          "action": "wait",
+          "timeout": 1500
+        },
+        {
+          "action": "screenshot",
+          "value": "awnic-org-02-form.png"
+        },
+        {
+          "action": "fill",
+          "selector": "input[name='name'], input[placeholder*='name' i], input[placeholder*='organization' i]",
+          "value": "AWNIC",
+          "announce": { "before": "Entering organization name: AWNIC" }
+        },
+        {
+          "action": "fill",
+          "selector": "input[name='fullName'], input[name='displayName'], input[placeholder*='full name' i], input[placeholder*='display' i]",
+          "value": "Al Wathba National Insurance Company"
+        },
+        {
+          "action": "click",
+          "selector": "select[name*='type'], [data-testid*='type-select'], button:has-text('Select Type'), [class*='type-selector']",
+          "announce": { "before": "Selecting organization type" }
+        },
+        {
+          "action": "wait",
+          "timeout": 800
+        },
+        {
+          "action": "click",
+          "selector": "[data-value*='insurance'], option:has-text('Insurance'), li:has-text('Insurance'), div:has-text('Insurance'), [data-value*='cedent'], option:has-text('Cedent'), li:has-text('Cedent')",
+          "announce": { "after": "Selected Insurance/Cedent type" }
+        },
+        {
+          "action": "wait",
+          "timeout": 500
+        },
+        {
+          "action": "screenshot",
+          "value": "awnic-org-03-filled.png"
+        },
+        {
+          "action": "click",
+          "selector": "button[type='submit'], button:has-text('Create'), button:has-text('Save'), button:has-text('Submit')",
+          "announce": { "before": "Submitting AWNIC organization creation" }
+        },
+        {
+          "action": "wait",
+          "timeout": 3000
+        },
+        {
+          "action": "screenshot",
+          "value": "awnic-org-04-created.png",
+          "announce": { "after": "AWNIC organization created successfully" }
+        }
+      ]
+    },
+
+    "create-users": {
+      "name": "Create AWNIC Users",
+      "description": "Create 5 users within AWNIC org: Farooq (Product Config), Hessa (Rate Analyst), Omar (Quotation Officer), Noura (UW Manager), Rashid (Rules Admin)",
+      "steps": [
+        {
+          "action": "click",
+          "selector": "button[class*='hamburger'], button[aria-label*='menu'], [data-testid='menu-toggle']",
+          "force": true,
+          "announce": { "before": "Navigating to Users section" }
+        },
+        {
+          "action": "wait",
+          "timeout": 800
+        },
+        {
+          "action": "click",
+          "selector": "a:has-text('Users'), nav a[href*='users']",
+          "force": true
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "screenshot",
+          "value": "awnic-users-01-list.png"
+        },
+
+        {
+          "action": "click",
+          "selector": "button:has-text('New User'), button:has-text('Add User'), button:has-text('Create')",
+          "announce": { "before": "Creating user 1 of 5: Farooq Al Mansouri - Product Configurator" }
+        },
+        { "action": "wait", "timeout": 1500 },
+        {
+          "action": "fill",
+          "selector": "input[name='firstName'], input[placeholder*='first' i]",
+          "value": "Farooq"
+        },
+        {
+          "action": "fill",
+          "selector": "input[name='lastName'], input[placeholder*='last' i]",
+          "value": "Al Mansouri"
+        },
+        {
+          "action": "fill",
+          "selector": "input[name='email'], input[type='email'], input[placeholder*='email' i]",
+          "value": "farooq.almansouri@awnic.ae"
+        },
+        {
+          "action": "fill",
+          "selector": "input[name='title'], input[placeholder*='title' i], input[placeholder*='job' i]",
+          "value": "Product Configurator"
+        },
+        {
+          "action": "click",
+          "selector": "select[name*='org'], [data-testid*='org-select'], button:has-text('Select Organization')"
+        },
+        { "action": "wait", "timeout": 800 },
+        {
+          "action": "click",
+          "selector": "[data-value*='awnic'], option:has-text('AWNIC'), li:has-text('AWNIC'), div:has-text('AWNIC')"
+        },
+        { "action": "wait", "timeout": 500 },
+        {
+          "action": "screenshot",
+          "value": "awnic-users-02-farooq-filled.png"
+        },
+        {
+          "action": "click",
+          "selector": "button[type='submit'], button:has-text('Create User'), button:has-text('Save')",
+          "announce": { "after": "User Farooq Al Mansouri created" }
+        },
+        { "action": "wait", "timeout": 2000 },
+
+        {
+          "action": "click",
+          "selector": "button:has-text('New User'), button:has-text('Add User'), button:has-text('Create')",
+          "announce": { "before": "Creating user 2 of 5: Hessa Al Dhaheri - Rate Analyst" }
+        },
+        { "action": "wait", "timeout": 1500 },
+        {
+          "action": "fill",
+          "selector": "input[name='firstName'], input[placeholder*='first' i]",
+          "value": "Hessa"
+        },
+        {
+          "action": "fill",
+          "selector": "input[name='lastName'], input[placeholder*='last' i]",
+          "value": "Al Dhaheri"
+        },
+        {
+          "action": "fill",
+          "selector": "input[name='email'], input[type='email'], input[placeholder*='email' i]",
+          "value": "hessa.aldhaheri@awnic.ae"
+        },
+        {
+          "action": "fill",
+          "selector": "input[name='title'], input[placeholder*='title' i], input[placeholder*='job' i]",
+          "value": "Rate Analyst"
+        },
+        {
+          "action": "click",
+          "selector": "select[name*='org'], [data-testid*='org-select'], button:has-text('Select Organization')"
+        },
+        { "action": "wait", "timeout": 800 },
+        {
+          "action": "click",
+          "selector": "[data-value*='awnic'], option:has-text('AWNIC'), li:has-text('AWNIC'), div:has-text('AWNIC')"
+        },
+        { "action": "wait", "timeout": 500 },
+        {
+          "action": "click",
+          "selector": "button[type='submit'], button:has-text('Create User'), button:has-text('Save')",
+          "announce": { "after": "User Hessa Al Dhaheri created" }
+        },
+        { "action": "wait", "timeout": 2000 },
+
+        {
+          "action": "click",
+          "selector": "button:has-text('New User'), button:has-text('Add User'), button:has-text('Create')",
+          "announce": { "before": "Creating user 3 of 5: Omar bin Khalid - Quotation Officer" }
+        },
+        { "action": "wait", "timeout": 1500 },
+        {
+          "action": "fill",
+          "selector": "input[name='firstName'], input[placeholder*='first' i]",
+          "value": "Omar"
+        },
+        {
+          "action": "fill",
+          "selector": "input[name='lastName'], input[placeholder*='last' i]",
+          "value": "bin Khalid"
+        },
+        {
+          "action": "fill",
+          "selector": "input[name='email'], input[type='email'], input[placeholder*='email' i]",
+          "value": "omar.binkhalid@awnic.ae"
+        },
+        {
+          "action": "fill",
+          "selector": "input[name='title'], input[placeholder*='title' i], input[placeholder*='job' i]",
+          "value": "Quotation Officer"
+        },
+        {
+          "action": "click",
+          "selector": "select[name*='org'], [data-testid*='org-select'], button:has-text('Select Organization')"
+        },
+        { "action": "wait", "timeout": 800 },
+        {
+          "action": "click",
+          "selector": "[data-value*='awnic'], option:has-text('AWNIC'), li:has-text('AWNIC'), div:has-text('AWNIC')"
+        },
+        { "action": "wait", "timeout": 500 },
+        {
+          "action": "click",
+          "selector": "button[type='submit'], button:has-text('Create User'), button:has-text('Save')",
+          "announce": { "after": "User Omar bin Khalid created" }
+        },
+        { "action": "wait", "timeout": 2000 },
+
+        {
+          "action": "click",
+          "selector": "button:has-text('New User'), button:has-text('Add User'), button:has-text('Create')",
+          "announce": { "before": "Creating user 4 of 5: Noura Al Shamsi - Underwriting Manager" }
+        },
+        { "action": "wait", "timeout": 1500 },
+        {
+          "action": "fill",
+          "selector": "input[name='firstName'], input[placeholder*='first' i]",
+          "value": "Noura"
+        },
+        {
+          "action": "fill",
+          "selector": "input[name='lastName'], input[placeholder*='last' i]",
+          "value": "Al Shamsi"
+        },
+        {
+          "action": "fill",
+          "selector": "input[name='email'], input[type='email'], input[placeholder*='email' i]",
+          "value": "noura.alshamsi@awnic.ae"
+        },
+        {
+          "action": "fill",
+          "selector": "input[name='title'], input[placeholder*='title' i], input[placeholder*='job' i]",
+          "value": "Underwriting Manager"
+        },
+        {
+          "action": "click",
+          "selector": "select[name*='org'], [data-testid*='org-select'], button:has-text('Select Organization')"
+        },
+        { "action": "wait", "timeout": 800 },
+        {
+          "action": "click",
+          "selector": "[data-value*='awnic'], option:has-text('AWNIC'), li:has-text('AWNIC'), div:has-text('AWNIC')"
+        },
+        { "action": "wait", "timeout": 500 },
+        {
+          "action": "click",
+          "selector": "button[type='submit'], button:has-text('Create User'), button:has-text('Save')",
+          "announce": { "after": "User Noura Al Shamsi created" }
+        },
+        { "action": "wait", "timeout": 2000 },
+
+        {
+          "action": "click",
+          "selector": "button:has-text('New User'), button:has-text('Add User'), button:has-text('Create')",
+          "announce": { "before": "Creating user 5 of 5: Rashid Al Falasi - Rules Administrator" }
+        },
+        { "action": "wait", "timeout": 1500 },
+        {
+          "action": "fill",
+          "selector": "input[name='firstName'], input[placeholder*='first' i]",
+          "value": "Rashid"
+        },
+        {
+          "action": "fill",
+          "selector": "input[name='lastName'], input[placeholder*='last' i]",
+          "value": "Al Falasi"
+        },
+        {
+          "action": "fill",
+          "selector": "input[name='email'], input[type='email'], input[placeholder*='email' i]",
+          "value": "rashid.alfalasi@awnic.ae"
+        },
+        {
+          "action": "fill",
+          "selector": "input[name='title'], input[placeholder*='title' i], input[placeholder*='job' i]",
+          "value": "Rules Administrator"
+        },
+        {
+          "action": "click",
+          "selector": "select[name*='org'], [data-testid*='org-select'], button:has-text('Select Organization')"
+        },
+        { "action": "wait", "timeout": 800 },
+        {
+          "action": "click",
+          "selector": "[data-value*='awnic'], option:has-text('AWNIC'), li:has-text('AWNIC'), div:has-text('AWNIC')"
+        },
+        { "action": "wait", "timeout": 500 },
+        {
+          "action": "click",
+          "selector": "button[type='submit'], button:has-text('Create User'), button:has-text('Save')",
+          "announce": { "after": "User Rashid Al Falasi created" }
+        },
+        { "action": "wait", "timeout": 2000 },
+        {
+          "action": "screenshot",
+          "value": "awnic-users-03-all-created.png",
+          "announce": { "after": "All 5 AWNIC users created: Farooq, Hessa, Omar, Noura, Rashid" }
+        }
+      ]
+    },
+
+    "configure-product": {
+      "name": "Configure Products/Plans (Farooq)",
+      "description": "TODO: Implement when PCG4 product configurator wizard is ready. Login as Farooq Al Mansouri and configure health insurance products/plans via the PCG4 wizard.",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/login",
+          "announce": { "before": "Logging in as Farooq Al Mansouri - Product Configurator" }
+        },
+        { "action": "wait", "timeout": 1500 },
+        {
+          "action": "fill",
+          "selector": "input[type='email'], input[placeholder*='email' i], input[name='email']",
+          "value": "farooq.almansouri@awnic.ae"
+        },
+        {
+          "action": "fill",
+          "selector": "input[type='password']",
+          "value": "${credentials.awnic.farooq.password}"
+        },
+        {
+          "action": "click",
+          "selector": "button[type='submit'], button:has-text('Sign in'), button:has-text('Login')"
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "screenshot",
+          "value": "awnic-product-01-farooq-dashboard.png",
+          "announce": { "after": "Logged in as Farooq. TODO: Navigate to PCG4 product configurator wizard." }
+        },
+        {
+          "action": "assertVisible",
+          "selector": "body",
+          "announce": { "after": "TODO: Implement product configuration steps when PCG4 wizard UI is ready" }
+        },
+        {
+          "action": "screenshot",
+          "value": "awnic-product-02-placeholder.png"
+        }
+      ]
+    },
+
+    "configure-rater": {
+      "name": "Configure Product Pricing/Rater (Hessa)",
+      "description": "TODO: Implement when rater/pricing module is ready. Login as Hessa Al Dhaheri and configure product-plan pricing tables.",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/login",
+          "announce": { "before": "Logging in as Hessa Al Dhaheri - Rate Analyst" }
+        },
+        { "action": "wait", "timeout": 1500 },
+        {
+          "action": "fill",
+          "selector": "input[type='email'], input[placeholder*='email' i], input[name='email']",
+          "value": "hessa.aldhaheri@awnic.ae"
+        },
+        {
+          "action": "fill",
+          "selector": "input[type='password']",
+          "value": "${credentials.awnic.hessa.password}"
+        },
+        {
+          "action": "click",
+          "selector": "button[type='submit'], button:has-text('Sign in'), button:has-text('Login')"
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "screenshot",
+          "value": "awnic-rater-01-hessa-dashboard.png",
+          "announce": { "after": "Logged in as Hessa. TODO: Navigate to rater/pricing configuration." }
+        },
+        {
+          "action": "assertVisible",
+          "selector": "body",
+          "announce": { "after": "TODO: Implement pricing configuration steps when rater module is ready" }
+        },
+        {
+          "action": "screenshot",
+          "value": "awnic-rater-02-placeholder.png"
+        }
+      ]
+    },
+
+    "create-quotation": {
+      "name": "Create Health Insurance Individual Quotation (Omar)",
+      "description": "TODO: Implement when hi_quotation module is ready. Login as Omar bin Khalid and create a new Health Insurance Individual Quotation.",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/login",
+          "announce": { "before": "Logging in as Omar bin Khalid - Quotation Officer" }
+        },
+        { "action": "wait", "timeout": 1500 },
+        {
+          "action": "fill",
+          "selector": "input[type='email'], input[placeholder*='email' i], input[name='email']",
+          "value": "omar.binkhalid@awnic.ae"
+        },
+        {
+          "action": "fill",
+          "selector": "input[type='password']",
+          "value": "${credentials.awnic.omar.password}"
+        },
+        {
+          "action": "click",
+          "selector": "button[type='submit'], button:has-text('Sign in'), button:has-text('Login')"
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "screenshot",
+          "value": "awnic-quotation-01-omar-dashboard.png",
+          "announce": { "after": "Logged in as Omar. TODO: Navigate to hi_quotation module and create quotation." }
+        },
+        {
+          "action": "assertVisible",
+          "selector": "body",
+          "announce": { "after": "TODO: Implement quotation creation steps when hi_quotation module is ready" }
+        },
+        {
+          "action": "screenshot",
+          "value": "awnic-quotation-02-placeholder.png"
+        }
+      ]
+    },
+
+    "manual-underwrite": {
+      "name": "Manual Underwriting (Noura)",
+      "description": "TODO: Implement when underwriting module is ready. Login as Noura Al Shamsi and manually underwrite the quotation created by Omar.",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/login",
+          "announce": { "before": "Logging in as Noura Al Shamsi - Underwriting Manager" }
+        },
+        { "action": "wait", "timeout": 1500 },
+        {
+          "action": "fill",
+          "selector": "input[type='email'], input[placeholder*='email' i], input[name='email']",
+          "value": "noura.alshamsi@awnic.ae"
+        },
+        {
+          "action": "fill",
+          "selector": "input[type='password']",
+          "value": "${credentials.awnic.noura.password}"
+        },
+        {
+          "action": "click",
+          "selector": "button[type='submit'], button:has-text('Sign in'), button:has-text('Login')"
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "screenshot",
+          "value": "awnic-underwrite-01-noura-dashboard.png",
+          "announce": { "after": "Logged in as Noura. TODO: Navigate to underwriting queue and review quotation." }
+        },
+        {
+          "action": "assertVisible",
+          "selector": "body",
+          "announce": { "after": "TODO: Implement manual underwriting steps when underwriting module is ready" }
+        },
+        {
+          "action": "screenshot",
+          "value": "awnic-underwrite-02-placeholder.png"
+        }
+      ]
+    },
+
+    "payment-flow": {
+      "name": "Payment Link and Completion",
+      "description": "TODO: Implement when payment module is ready. Generate payment link for broker, complete payment flow.",
+      "steps": [
+        {
+          "action": "screenshot",
+          "value": "awnic-payment-01-placeholder.png",
+          "announce": { "before": "TODO: Implement payment link generation and broker payment flow" }
+        },
+        {
+          "action": "assertVisible",
+          "selector": "body",
+          "announce": { "after": "TODO: Implement when payment module is ready - payment link to broker, payment completion, receipt generation" }
+        },
+        {
+          "action": "screenshot",
+          "value": "awnic-payment-02-placeholder.png"
+        }
+      ]
+    },
+
+    "policy-issuance": {
+      "name": "Policy Issuance and Email Notification",
+      "description": "TODO: Implement when policy issuance module is ready. Verify policy is issued and customer receives email.",
+      "steps": [
+        {
+          "action": "screenshot",
+          "value": "awnic-policy-01-placeholder.png",
+          "announce": { "before": "TODO: Implement policy issuance verification" }
+        },
+        {
+          "action": "assertVisible",
+          "selector": "body",
+          "announce": { "after": "TODO: Implement when policy issuance module is ready - verify policy document, email to customer, status update" }
+        },
+        {
+          "action": "screenshot",
+          "value": "awnic-policy-02-placeholder.png"
+        }
+      ]
+    },
+
+    "stakeholder-notifications": {
+      "name": "Verify Broker/Distributor Notifications",
+      "description": "TODO: Implement when notification system is ready. Verify broker and distributor receive notifications at quotation, underwriting, payment, and issuance stages.",
+      "steps": [
+        {
+          "action": "screenshot",
+          "value": "awnic-notifications-01-placeholder.png",
+          "announce": { "before": "TODO: Implement stakeholder notification verification" }
+        },
+        {
+          "action": "assertVisible",
+          "selector": "body",
+          "announce": { "after": "TODO: Implement when notification module is ready - verify broker notifications at each stage, distributor notifications, email/SMS delivery" }
+        },
+        {
+          "action": "screenshot",
+          "value": "awnic-notifications-02-placeholder.png"
+        }
+      ]
+    },
+
+    "create-rules": {
+      "name": "Create STP Automation Rules (Rashid)",
+      "description": "TODO: Implement when rules engine module is ready. Login as Rashid Al Falasi and create STP (Straight-Through Processing) automation rules.",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/login",
+          "announce": { "before": "Logging in as Rashid Al Falasi - Rules Administrator" }
+        },
+        { "action": "wait", "timeout": 1500 },
+        {
+          "action": "fill",
+          "selector": "input[type='email'], input[placeholder*='email' i], input[name='email']",
+          "value": "rashid.alfalasi@awnic.ae"
+        },
+        {
+          "action": "fill",
+          "selector": "input[type='password']",
+          "value": "${credentials.awnic.rashid.password}"
+        },
+        {
+          "action": "click",
+          "selector": "button[type='submit'], button:has-text('Sign in'), button:has-text('Login')"
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "screenshot",
+          "value": "awnic-rules-01-rashid-dashboard.png",
+          "announce": { "after": "Logged in as Rashid. TODO: Navigate to rules engine and create STP rules." }
+        },
+        {
+          "action": "assertVisible",
+          "selector": "body",
+          "announce": { "after": "TODO: Implement STP rule creation when rules engine module is ready - auto-approve rules, threshold rules, referral rules" }
+        },
+        {
+          "action": "screenshot",
+          "value": "awnic-rules-02-placeholder.png"
+        }
+      ]
+    },
+
+    "test-auto-rules": {
+      "name": "Test Automated Rules with New Quotation",
+      "description": "TODO: Implement when rules engine is active. Submit a new quotation flow and verify STP rules automatically process it without manual underwriting.",
+      "steps": [
+        {
+          "action": "screenshot",
+          "value": "awnic-autorules-01-placeholder.png",
+          "announce": { "before": "TODO: Implement automated rules verification" }
+        },
+        {
+          "action": "assertVisible",
+          "selector": "body",
+          "announce": { "after": "TODO: Implement when rules engine is active - create quotation within STP thresholds, verify auto-approval, verify no manual queue entry" }
+        },
+        {
+          "action": "screenshot",
+          "value": "awnic-autorules-02-placeholder.png"
+        }
+      ]
+    },
+
+    "test-queues": {
+      "name": "Test Queue Scenarios (Auto/Moderated/Manual)",
+      "description": "TODO: Implement when queue module is ready. Test three scenarios: fully automated (STP), moderated (human review), and fully manual queue processing.",
+      "steps": [
+        {
+          "action": "screenshot",
+          "value": "awnic-queues-01-placeholder.png",
+          "announce": { "before": "TODO: Implement queue scenario testing" }
+        },
+        {
+          "action": "assertVisible",
+          "selector": "body",
+          "announce": { "after": "TODO: Implement when queue module is ready - test STP auto-approve, moderated queue with human override, fully manual queue with UW decision" }
+        },
+        {
+          "action": "screenshot",
+          "value": "awnic-queues-02-placeholder.png"
+        }
+      ]
+    },
+
+    "ai-synthetic-data": {
+      "name": "AI Synthetic Data Generation",
+      "description": "TODO: Implement when AI seeding tool is ready. Use built-in AI tool to generate realistic demo/test data with cohort distribution for AWNIC.",
+      "steps": [
+        {
+          "action": "screenshot",
+          "value": "awnic-synth-01-placeholder.png",
+          "announce": { "before": "TODO: Implement AI synthetic data generation" }
+        },
+        {
+          "action": "assertVisible",
+          "selector": "body",
+          "announce": { "after": "TODO: Implement when AI seeding tool is ready - generate UAE-realistic member data, cohort distributions (age, gender, nationality, plan type), realistic claim histories" }
+        },
+        {
+          "action": "screenshot",
+          "value": "awnic-synth-02-placeholder.png"
+        }
+      ]
+    },
+
+    "verify-guides": {
+      "name": "Verify Guide Sections in All Modules",
+      "description": "TODO: Implement when Guide framework is populated. Verify that Guide sections (overview, presentation, pricing) exist in all utilized modules.",
+      "steps": [
+        {
+          "action": "screenshot",
+          "value": "awnic-guides-01-placeholder.png",
+          "announce": { "before": "TODO: Implement Guide section verification" }
+        },
+        {
+          "action": "assertVisible",
+          "selector": "body",
+          "announce": { "after": "TODO: Implement when Guide content is populated - verify /guide/overview, /guide/presentation, /guide/pricing tabs in PCG4, quotation, underwriting, and rules modules" }
+        },
+        {
+          "action": "screenshot",
+          "value": "awnic-guides-02-placeholder.png"
+        }
+      ]
+    },
+
+    "verify-pii-tokenization": {
+      "name": "Verify PII Tokenization for Underwriter View",
+      "description": "TODO: Implement when PII masking is enforced. Login as Noura (underwriter) and verify she sees tokenized PII values, not real customer data.",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/login",
+          "announce": { "before": "Logging in as Noura Al Shamsi to verify PII tokenization" }
+        },
+        { "action": "wait", "timeout": 1500 },
+        {
+          "action": "fill",
+          "selector": "input[type='email'], input[placeholder*='email' i], input[name='email']",
+          "value": "noura.alshamsi@awnic.ae"
+        },
+        {
+          "action": "fill",
+          "selector": "input[type='password']",
+          "value": "${credentials.awnic.noura.password}"
+        },
+        {
+          "action": "click",
+          "selector": "button[type='submit'], button:has-text('Sign in'), button:has-text('Login')"
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "screenshot",
+          "value": "awnic-pii-01-noura-logged-in.png",
+          "announce": { "after": "Logged in as Noura. TODO: Navigate to quotation/member details and verify PII tokens." }
+        },
+        {
+          "action": "assertVisible",
+          "selector": "body",
+          "announce": { "after": "TODO: Implement when PII masking is enforced - verify PII-XXXX tokens shown instead of real names/emails/phones, verify no raw PII in DOM" }
+        },
+        {
+          "action": "screenshot",
+          "value": "awnic-pii-02-placeholder.png"
+        }
+      ]
+    },
+
+    "verify-nicknames": {
+      "name": "Verify Configured Nicknames Replace Tokens",
+      "description": "TODO: Implement when nickname feature is ready. Verify that configured nicknames (friendly display names) replace tokenized PII values in the UI.",
+      "steps": [
+        {
+          "action": "screenshot",
+          "value": "awnic-nicknames-01-placeholder.png",
+          "announce": { "before": "TODO: Implement nickname replacement verification" }
+        },
+        {
+          "action": "assertVisible",
+          "selector": "body",
+          "announce": { "after": "TODO: Implement when nickname feature is ready - verify configured nicknames display instead of PII-XXXX tokens, verify nickname resolution in tables and detail views" }
+        },
+        {
+          "action": "screenshot",
+          "value": "awnic-nicknames-02-placeholder.png"
+        }
+      ]
+    }
+  },
+
+  "journeys": {
+    "setup": {
+      "name": "Platform Setup",
+      "description": "Logout, login with admin credentials, enable MFA, and re-login to verify MFA works",
+      "segments": ["logout", "login", "enable-mfa", "mfa-relogin"]
+    },
+    "org-setup": {
+      "name": "AWNIC Organization Setup",
+      "description": "Create AWNIC organization and 5 role-based users",
+      "segments": ["create-org", "create-users"]
+    },
+    "product-config": {
+      "name": "Product Configuration",
+      "description": "Configure health insurance products and pricing via Farooq and Hessa",
+      "segments": ["configure-product", "configure-rater"]
+    },
+    "quotation-flow": {
+      "name": "Quotation to Policy Flow",
+      "description": "End-to-end flow: create quotation, manual underwrite, payment, policy issuance",
+      "segments": ["create-quotation", "manual-underwrite", "payment-flow", "policy-issuance"]
+    },
+    "notifications": {
+      "name": "Stakeholder Notifications",
+      "description": "Verify broker and distributor notifications at each stage",
+      "segments": ["stakeholder-notifications"]
+    },
+    "automation": {
+      "name": "Rules and Automation",
+      "description": "Create STP rules, test automated processing, test queue scenarios",
+      "segments": ["create-rules", "test-auto-rules", "test-queues"]
+    },
+    "data-quality": {
+      "name": "Data Quality and Guides",
+      "description": "AI synthetic data generation and Guide section verification",
+      "segments": ["ai-synthetic-data", "verify-guides"]
+    },
+    "security-pii": {
+      "name": "Security and PII Verification",
+      "description": "Verify PII tokenization and nickname replacement in underwriter views",
+      "segments": ["verify-pii-tokenization", "verify-nicknames"]
+    }
+  },
+
+  "bouquets": {
+    "awnic-full": {
+      "name": "AWNIC Full E2E",
+      "description": "Complete end-to-end AWNIC flow: setup, org creation, product config, quotation-to-policy, notifications, automation, data quality, and security/PII",
+      "mode": "sequential",
+      "journeys": ["setup", "org-setup", "product-config", "quotation-flow", "notifications", "automation", "data-quality", "security-pii"]
+    },
+    "awnic-setup": {
+      "name": "AWNIC Setup Only",
+      "description": "Platform login/MFA setup and AWNIC org+user creation",
+      "mode": "sequential",
+      "journeys": ["setup", "org-setup"]
+    },
+    "awnic-product": {
+      "name": "AWNIC Product Configuration",
+      "description": "Product and pricing configuration by Farooq and Hessa",
+      "mode": "sequential",
+      "journeys": ["product-config"]
+    },
+    "awnic-quotation": {
+      "name": "AWNIC Quotation to Policy",
+      "description": "Full quotation lifecycle with stakeholder notifications",
+      "mode": "sequential",
+      "journeys": ["quotation-flow", "notifications"]
+    },
+    "awnic-automation": {
+      "name": "AWNIC Automation Rules",
+      "description": "STP rules creation and queue scenario testing",
+      "mode": "sequential",
+      "journeys": ["automation"]
+    },
+    "awnic-security": {
+      "name": "AWNIC Security and Data Quality",
+      "description": "PII tokenization, nickname verification, synthetic data, and Guide sections",
+      "mode": "sequential",
+      "journeys": ["security-pii", "data-quality"]
+    }
+  }
+}
