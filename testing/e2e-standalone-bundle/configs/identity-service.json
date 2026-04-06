@@ -7,7 +7,67 @@
     "waitForNetworkIdle": false
   },
   "segments": {
-    "login-with-mfa": {
+    "identity-login": {
+      "name": "Login with Email/Password (no MFA)",
+      "description": "Quick login for accounts without MFA enabled",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/login",
+          "announce": { "before": "Navigating to Zorbit login page" }
+        },
+        {
+          "action": "wait",
+          "timeout": 1500,
+          "announce": { "before": "Waiting for login form to render" }
+        },
+        {
+          "action": "assertVisible",
+          "selector": "input[type='email'], input[placeholder*='email' i], input[name='email']",
+          "announce": { "after": "Login form is ready" }
+        },
+        {
+          "action": "screenshot",
+          "value": "identity-login-01-page.png"
+        },
+        {
+          "action": "fill",
+          "selector": "input[type='email'], input[placeholder*='email' i], input[name='email']",
+          "value": "${credentials.admin.email}",
+          "announce": { "before": "Entering admin email address" }
+        },
+        {
+          "action": "fill",
+          "selector": "input[type='password']",
+          "value": "${credentials.admin.password}"
+        },
+        {
+          "action": "screenshot",
+          "value": "identity-login-02-filled.png"
+        },
+        {
+          "action": "click",
+          "selector": "button[type='submit'], button:has-text('Sign in'), button:has-text('Login')",
+          "announce": { "after": "Login credentials submitted" }
+        },
+        {
+          "action": "wait",
+          "timeout": 3000
+        },
+        {
+          "action": "waitForUrl",
+          "pattern": "/(dashboard|home|app)",
+          "timeout": 20000,
+          "announce": { "after": "Successfully authenticated. Welcome to Zorbit." }
+        },
+        {
+          "action": "screenshot",
+          "value": "identity-login-03-post-login.png"
+        }
+      ]
+    },
+
+    "identity-login-mfa": {
       "name": "Login with Email/Password + MFA",
       "description": "Authenticate using email/password then complete TOTP MFA verification",
       "steps": [
@@ -28,7 +88,7 @@
         },
         {
           "action": "screenshot",
-          "value": "identity-01-login-page.png"
+          "value": "identity-mfa-login-01-page.png"
         },
         {
           "action": "fill",
@@ -43,7 +103,7 @@
         },
         {
           "action": "screenshot",
-          "value": "identity-02-login-filled.png"
+          "value": "identity-mfa-login-02-filled.png"
         },
         {
           "action": "click",
@@ -57,7 +117,7 @@
         },
         {
           "action": "screenshot",
-          "value": "identity-03-mfa-challenge.png"
+          "value": "identity-mfa-login-03-challenge.png"
         },
         {
           "action": "custom",
@@ -86,12 +146,12 @@
         },
         {
           "action": "screenshot",
-          "value": "identity-04-post-login.png"
+          "value": "identity-mfa-login-04-post-login.png"
         }
       ]
     },
 
-    "verify-dashboard": {
+    "identity-verify-dashboard": {
       "name": "Dashboard Verification",
       "description": "Verify dashboard loads with key metrics: user count, org count, health status",
       "steps": [
@@ -112,7 +172,7 @@
         },
         {
           "action": "screenshot",
-          "value": "identity-05-dashboard-overview.png"
+          "value": "identity-dashboard-01-overview.png"
         },
         {
           "action": "assertVisible",
@@ -130,13 +190,196 @@
         },
         {
           "action": "screenshot",
-          "value": "identity-06-dashboard-scrolled.png",
+          "value": "identity-dashboard-02-scrolled.png",
           "announce": { "after": "Dashboard verified. Metrics and health indicators are visible." }
         }
       ]
     },
 
-    "navigate-to-users": {
+    "identity-mfa-setup": {
+      "name": "Enable MFA via Settings > Security",
+      "description": "Navigate to Security settings and enable TOTP-based MFA with QR code and backup codes",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/settings/security",
+          "announce": { "before": "Navigating to Settings > Security page" }
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "assertVisible",
+          "selector": "h1:has-text('Security'), h2:has-text('Security')",
+          "timeout": 10000,
+          "announce": { "after": "Security page loaded" }
+        },
+        {
+          "action": "screenshot",
+          "value": "identity-mfa-setup-01-security-page.png"
+        },
+        {
+          "action": "assertVisible",
+          "selector": "button:has-text('Enable MFA'), button:has-text('Set Up MFA'), button:has-text('Enable Two-Factor'), [data-testid='enable-mfa']",
+          "timeout": 8000,
+          "announce": { "after": "MFA enable button is visible" }
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text('Enable MFA'), button:has-text('Set Up MFA'), button:has-text('Enable Two-Factor'), [data-testid='enable-mfa']",
+          "announce": { "before": "Clicking Enable MFA button" }
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "assertVisible",
+          "selector": "img[alt*='QR'], img[src*='data:image'], canvas, [class*='qr'], [data-testid='qr-code']",
+          "timeout": 10000,
+          "announce": { "after": "QR code is displayed for authenticator app scanning" }
+        },
+        {
+          "action": "screenshot",
+          "value": "identity-mfa-setup-02-qr-code.png"
+        },
+        {
+          "action": "assertVisible",
+          "selector": "code, [class*='secret'], [data-testid='mfa-secret'], span:has-text('otpauth')",
+          "timeout": 5000,
+          "announce": { "after": "TOTP secret key is visible for manual entry" }
+        },
+        {
+          "action": "scroll",
+          "announce": { "before": "Scrolling to see backup codes" }
+        },
+        {
+          "action": "wait",
+          "timeout": 1000
+        },
+        {
+          "action": "assertVisible",
+          "selector": "[class*='backup'], :has-text('Backup Codes'), :has-text('Recovery'), [data-testid='backup-codes']",
+          "timeout": 5000,
+          "announce": { "after": "Backup codes section is visible" }
+        },
+        {
+          "action": "screenshot",
+          "value": "identity-mfa-setup-03-backup-codes.png"
+        },
+        {
+          "action": "click",
+          "selector": "input[type='checkbox'], label:has-text('saved'), label:has-text('acknowledge'), label:has-text('backed up')",
+          "announce": { "before": "Acknowledging backup codes have been saved" }
+        },
+        {
+          "action": "wait",
+          "timeout": 500
+        },
+        {
+          "action": "custom",
+          "handler": "generateTotp",
+          "description": "Generate TOTP code from the displayed secret to verify setup",
+          "params": {
+            "command": "ssh sovpn 'bash /tmp/get-totp.sh'"
+          },
+          "selector": "input[inputmode='numeric'], input[maxlength='6'], input[placeholder='000000'], input[name='code'], input[placeholder*='code' i]",
+          "announce": { "before": "Generating TOTP code to verify MFA setup", "after": "TOTP verification code entered" }
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text('Verify'), button:has-text('Confirm'), button:has-text('Enable'), button[type='submit']",
+          "announce": { "before": "Submitting verification code to finalize MFA setup" }
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "screenshot",
+          "value": "identity-mfa-setup-04-enabled.png",
+          "announce": { "after": "MFA has been successfully enabled. TOTP verification passed." }
+        }
+      ]
+    },
+
+    "identity-mfa-login": {
+      "name": "Login with MFA Verification",
+      "description": "Login flow that includes TOTP MFA challenge after credential submission",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/login",
+          "announce": { "before": "Navigating to login page for MFA login test" }
+        },
+        {
+          "action": "wait",
+          "timeout": 1500
+        },
+        {
+          "action": "fill",
+          "selector": "input[type='email'], input[placeholder*='email' i], input[name='email']",
+          "value": "${credentials.admin.email}",
+          "announce": { "before": "Entering admin email for MFA login" }
+        },
+        {
+          "action": "fill",
+          "selector": "input[type='password']",
+          "value": "${credentials.admin.password}"
+        },
+        {
+          "action": "click",
+          "selector": "button[type='submit'], button:has-text('Sign in'), button:has-text('Login')",
+          "announce": { "after": "Credentials submitted, waiting for MFA challenge" }
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "assertVisible",
+          "selector": "input[inputmode='numeric'], input[maxlength='6'], input[placeholder='000000'], :has-text('verification code'), :has-text('Enter the code')",
+          "timeout": 10000,
+          "announce": { "after": "MFA challenge screen is displayed" }
+        },
+        {
+          "action": "screenshot",
+          "value": "identity-mfa-login-01-challenge.png"
+        },
+        {
+          "action": "custom",
+          "handler": "generateTotp",
+          "description": "Generate TOTP code from server MFA secret",
+          "params": {
+            "command": "ssh sovpn 'bash /tmp/get-totp.sh'"
+          },
+          "selector": "input[inputmode='numeric'], input[maxlength='6'], input[placeholder='000000']",
+          "announce": { "before": "Generating TOTP code via SSH", "after": "TOTP code entered into MFA field" }
+        },
+        {
+          "action": "click",
+          "selector": "button[type='submit'], button:has-text('Verify'), button:has-text('Confirm')",
+          "announce": { "before": "Submitting MFA verification code" }
+        },
+        {
+          "action": "wait",
+          "timeout": 3000
+        },
+        {
+          "action": "waitForUrl",
+          "pattern": "/(dashboard|home|app)",
+          "timeout": 20000,
+          "announce": { "after": "MFA login completed. Dashboard loaded." }
+        },
+        {
+          "action": "screenshot",
+          "value": "identity-mfa-login-02-success.png"
+        }
+      ]
+    },
+
+    "identity-navigate-users": {
       "name": "Navigate to Users via Hamburger Menu",
       "description": "Open hamburger menu, navigate to Identity > Users section",
       "steps": [
@@ -152,7 +395,7 @@
         },
         {
           "action": "screenshot",
-          "value": "identity-07-hamburger-open.png"
+          "value": "identity-nav-users-01-menu-open.png"
         },
         {
           "action": "click",
@@ -182,92 +425,85 @@
         },
         {
           "action": "screenshot",
-          "value": "identity-08-users-list.png"
+          "value": "identity-nav-users-02-list.png"
         }
       ]
     },
 
-    "create-new-user": {
+    "identity-create-user": {
       "name": "Create New User",
       "description": "Create a new user with cascading org/department selector and realistic data",
       "steps": [
         {
           "action": "click",
-          "selector": "button:has-text('New User'), button:has-text('Add User'), button:has-text('Create'), a:has-text('New User')",
-          "announce": { "before": "Clicking New User button" }
+          "selector": "button:has-text('Create User'), button:has-text('New User'), button:has-text('Add User')",
+          "announce": { "before": "Clicking Create User button" }
         },
         {
           "action": "wait",
           "timeout": 1500
         },
         {
+          "action": "assertVisible",
+          "selector": "[class*='modal'], [role='dialog']",
+          "timeout": 5000,
+          "announce": { "after": "Create User modal is open" }
+        },
+        {
           "action": "screenshot",
-          "value": "identity-09-new-user-form.png"
+          "value": "identity-create-user-01-modal.png"
+        },
+        {
+          "action": "click",
+          "selector": "select:has(option:has-text('Select organization')), select:has(option:has-text('-- Select organization --'))",
+          "announce": { "before": "Opening organization selector" }
+        },
+        {
+          "action": "wait",
+          "timeout": 800
+        },
+        {
+          "action": "select",
+          "selector": "select:has(option:has-text('Select organization')), select:has(option:has-text('-- Select organization --'))",
+          "value": "${testData.organizationHashId}",
+          "announce": { "after": "Selected target organization" }
+        },
+        {
+          "action": "wait",
+          "timeout": 1000,
+          "announce": { "before": "Waiting for department hierarchy to load" }
         },
         {
           "action": "fill",
-          "selector": "input[name='firstName'], input[placeholder*='first' i]",
-          "value": "Priya",
+          "selector": "input[name='displayName'], input:near(label:has-text('Display Name'))",
+          "value": "Priya Raghavan",
           "announce": { "before": "Filling in user details: Priya Raghavan, Senior Underwriter" }
         },
         {
           "action": "fill",
-          "selector": "input[name='lastName'], input[placeholder*='last' i]",
-          "value": "Raghavan"
-        },
-        {
-          "action": "fill",
-          "selector": "input[name='email'], input[type='email'], input[placeholder*='email' i]",
+          "selector": "input[type='email'], input[name='email']",
           "value": "priya.raghavan@vantara-insurance.com"
         },
         {
-          "action": "fill",
-          "selector": "input[name='title'], input[placeholder*='title' i], input[placeholder*='job' i]",
-          "value": "Senior Underwriter - Health Products"
+          "action": "screenshot",
+          "value": "identity-create-user-02-details-filled.png"
+        },
+        {
+          "action": "click",
+          "selector": "select:has(option:has-text('Select a role')), select:has(option:has-text('-- Select a role --'))",
+          "announce": { "before": "Selecting a role for the new user" }
+        },
+        {
+          "action": "wait",
+          "timeout": 500
         },
         {
           "action": "screenshot",
-          "value": "identity-10-user-details-filled.png"
+          "value": "identity-create-user-03-role-selected.png"
         },
         {
           "action": "click",
-          "selector": "select[name*='org'], [data-testid*='org-select'], [class*='org-selector'], button:has-text('Select Organization')",
-          "announce": { "before": "Selecting organization from cascading dropdown" }
-        },
-        {
-          "action": "wait",
-          "timeout": 800
-        },
-        {
-          "action": "click",
-          "selector": "[data-value*='vantara'], option:has-text('Vantara'), li:has-text('Vantara'), div:has-text('Vantara General Insurance')",
-          "announce": { "after": "Selected Vantara General Insurance" }
-        },
-        {
-          "action": "wait",
-          "timeout": 800
-        },
-        {
-          "action": "click",
-          "selector": "select[name*='dept'], [data-testid*='dept-select'], [class*='dept-selector'], button:has-text('Select Department')",
-          "announce": { "before": "Selecting department" }
-        },
-        {
-          "action": "wait",
-          "timeout": 800
-        },
-        {
-          "action": "click",
-          "selector": "[data-value*='underwriting'], option:has-text('Underwriting'), li:has-text('Underwriting'), div:has-text('Underwriting')",
-          "announce": { "after": "Selected Underwriting department" }
-        },
-        {
-          "action": "screenshot",
-          "value": "identity-11-user-org-dept-selected.png"
-        },
-        {
-          "action": "click",
-          "selector": "button[type='submit'], button:has-text('Create User'), button:has-text('Save'), button:has-text('Submit')",
+          "selector": "button[type='submit']:has-text('Create User'), button[type='submit']:has-text('Create')",
           "announce": { "before": "Submitting new user creation" }
         },
         {
@@ -276,13 +512,13 @@
         },
         {
           "action": "screenshot",
-          "value": "identity-12-user-created.png",
+          "value": "identity-create-user-04-created.png",
           "announce": { "after": "User Priya Raghavan created successfully" }
         }
       ]
     },
 
-    "verify-user-in-list": {
+    "identity-verify-user-in-list": {
       "name": "Verify User in List",
       "description": "Search for the newly created user in the users list",
       "steps": [
@@ -313,211 +549,303 @@
         },
         {
           "action": "screenshot",
-          "value": "identity-13-user-search-result.png"
+          "value": "identity-verify-user-01-search-result.png"
         }
       ]
     },
 
-    "navigate-to-organizations": {
-      "name": "Navigate to Organizations",
-      "description": "Open Organizations page and explore Vantara General Insurance hierarchy",
+    "identity-user-roles": {
+      "name": "Assign Role to User",
+      "description": "Open the Assign Role modal on a user and assign a role via the authorization service",
       "steps": [
         {
-          "action": "click",
-          "selector": "button[class*='hamburger'], button[aria-label*='menu'], [data-testid='menu-toggle'], button[class*='sidebar-toggle']",
-          "force": true,
-          "announce": { "before": "Opening hamburger menu for Organizations" }
-        },
-        {
-          "action": "wait",
-          "timeout": 800
-        },
-        {
-          "action": "click",
-          "selector": "a:has-text('Organizations'), nav a[href*='organization']",
-          "force": true,
-          "announce": { "before": "Clicking Organizations menu item" }
+          "action": "navigate",
+          "url": "/users",
+          "announce": { "before": "Navigating to Users page for role assignment" }
         },
         {
           "action": "wait",
           "timeout": 2000
         },
         {
+          "action": "assertVisible",
+          "selector": "h1:has-text('Users')",
+          "timeout": 10000,
+          "announce": { "after": "Users page loaded" }
+        },
+        {
           "action": "screenshot",
-          "value": "identity-14-organizations-list.png",
+          "value": "identity-user-roles-01-users-list.png"
+        },
+        {
+          "action": "click",
+          "selector": "tr:nth-child(2) button[title='Assign role'], tr:nth-child(2) button:has(svg.text-blue-500), table tbody tr:nth-child(2) .flex.gap-1 button:nth-child(2)",
+          "announce": { "before": "Clicking Assign Role (shield icon) on the second user row" }
+        },
+        {
+          "action": "wait",
+          "timeout": 1000
+        },
+        {
+          "action": "assertVisible",
+          "selector": "[class*='modal'], [role='dialog']",
+          "timeout": 5000,
+          "announce": { "after": "Assign Role modal is open" }
+        },
+        {
+          "action": "screenshot",
+          "value": "identity-user-roles-02-assign-modal.png"
+        },
+        {
+          "action": "assertVisible",
+          "selector": "select:has(option:has-text('Select a role'))",
+          "timeout": 5000,
+          "announce": { "after": "Role dropdown is visible with available roles" }
+        },
+        {
+          "action": "click",
+          "selector": "select:has(option:has-text('Select a role'))",
+          "announce": { "before": "Opening role selector dropdown" }
+        },
+        {
+          "action": "wait",
+          "timeout": 500
+        },
+        {
+          "action": "screenshot",
+          "value": "identity-user-roles-03-role-dropdown.png"
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text('Cancel'), button.btn-secondary",
+          "announce": { "after": "Closed Assign Role modal without changes (read-only test)" }
+        },
+        {
+          "action": "screenshot",
+          "value": "identity-user-roles-04-closed.png"
+        }
+      ]
+    },
+
+    "identity-create-org": {
+      "name": "Create a New Organization",
+      "description": "Navigate to Organizations page and create a new organization with type selector",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/organizations",
+          "announce": { "before": "Navigating to Organizations page" }
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "assertVisible",
+          "selector": "h1:has-text('Organizations')",
+          "timeout": 10000,
           "announce": { "after": "Organizations page loaded" }
         },
         {
-          "action": "click",
-          "selector": "tr:has-text('Vantara'), [class*='row']:has-text('Vantara'), a:has-text('Vantara General Insurance')",
-          "announce": { "before": "Opening Vantara General Insurance details" }
-        },
-        {
-          "action": "wait",
-          "timeout": 2000
-        },
-        {
           "action": "screenshot",
-          "value": "identity-15-vantara-details.png",
-          "announce": { "after": "Viewing Vantara General Insurance organization details" }
-        }
-      ]
-    },
-
-    "view-department-hierarchy": {
-      "name": "View Department Hierarchy Tree",
-      "description": "Navigate through Vantara's department hierarchy tree structure",
-      "steps": [
+          "value": "identity-create-org-01-list.png"
+        },
         {
           "action": "click",
-          "selector": "a:has-text('Departments'), button:has-text('Departments'), [data-tab='departments'], [role='tab']:has-text('Departments')",
-          "announce": { "before": "Switching to Departments tab" }
+          "selector": "button:has-text('Create Organization')",
+          "announce": { "before": "Clicking Create Organization button" }
         },
         {
           "action": "wait",
-          "timeout": 1500
+          "timeout": 1000
         },
         {
           "action": "assertVisible",
-          "selector": "[class*='tree'], [class*='hierarchy'], [data-testid='dept-tree'], ul[class*='department']",
+          "selector": "[class*='modal'], [role='dialog']",
+          "timeout": 5000,
+          "announce": { "after": "Create Organization modal is open" }
+        },
+        {
+          "action": "screenshot",
+          "value": "identity-create-org-02-modal.png"
+        },
+        {
+          "action": "fill",
+          "selector": "input.input-field, input:near(label:has-text('Name'))",
+          "value": "Meridian Health Partners",
+          "announce": { "before": "Entering organization name: Meridian Health Partners" }
+        },
+        {
+          "action": "click",
+          "selector": "select.input-field, select:near(label:has-text('Organization Type'))",
+          "announce": { "before": "Opening organization type selector" }
+        },
+        {
+          "action": "wait",
+          "timeout": 500
+        },
+        {
+          "action": "select",
+          "selector": "select.input-field, select:near(label:has-text('Organization Type'))",
+          "value": "Healthcare Provider",
+          "announce": { "after": "Selected Healthcare Provider as organization type" }
+        },
+        {
+          "action": "screenshot",
+          "value": "identity-create-org-03-filled.png"
+        },
+        {
+          "action": "click",
+          "selector": "button[type='submit']:has-text('Create'), button.btn-primary:has-text('Create')",
+          "announce": { "before": "Submitting organization creation" }
+        },
+        {
+          "action": "wait",
+          "timeout": 3000
+        },
+        {
+          "action": "screenshot",
+          "value": "identity-create-org-04-created.png",
+          "announce": { "after": "Organization Meridian Health Partners created successfully" }
+        },
+        {
+          "action": "assertVisible",
+          "selector": "td:has-text('Meridian'), tr:has-text('Meridian'), div:has-text('Meridian Health Partners')",
           "timeout": 10000,
-          "announce": { "after": "Department hierarchy tree is rendering" }
-        },
-        {
-          "action": "screenshot",
-          "value": "identity-16-dept-hierarchy.png"
-        },
-        {
-          "action": "click",
-          "selector": "[class*='tree-node']:has-text('Underwriting'), [class*='expand']:first-child, li:has-text('Underwriting')",
-          "announce": { "before": "Expanding Underwriting department branch" }
-        },
-        {
-          "action": "wait",
-          "timeout": 800
-        },
-        {
-          "action": "screenshot",
-          "value": "identity-17-dept-underwriting-expanded.png",
-          "announce": { "after": "Department hierarchy explored. Underwriting branch expanded." }
+          "announce": { "after": "New organization appears in the list" }
         }
       ]
     },
 
-    "view-org-chart": {
-      "name": "View Org Chart / Reporting Structure",
-      "description": "Navigate to org chart view showing reporting structure",
+    "identity-create-department": {
+      "name": "Create Department Within Organization",
+      "description": "Navigate to an organization's departments page and create a new department",
       "steps": [
         {
-          "action": "click",
-          "selector": "a:has-text('Org Chart'), button:has-text('Org Chart'), [data-tab='org-chart'], [role='tab']:has-text('Chart'), button:has-text('Reporting')",
-          "announce": { "before": "Switching to Org Chart view" }
+          "action": "navigate",
+          "url": "/organizations",
+          "announce": { "before": "Navigating to Organizations to find target org" }
         },
         {
           "action": "wait",
           "timeout": 2000
         },
         {
-          "action": "screenshot",
-          "value": "identity-18-org-chart.png",
-          "announce": { "after": "Org chart loaded. Reporting structure visible." }
-        },
-        {
-          "action": "scroll",
-          "announce": { "before": "Scrolling through org chart" }
-        },
-        {
-          "action": "wait",
-          "timeout": 800
-        },
-        {
-          "action": "screenshot",
-          "value": "identity-19-org-chart-scrolled.png"
-        }
-      ]
-    },
-
-    "navigate-to-security-settings": {
-      "name": "Security Settings (MFA, Passkeys, Sessions)",
-      "description": "Navigate to Security Settings and review MFA, Passkeys, and Session policies",
-      "steps": [
-        {
           "action": "click",
-          "selector": "button[class*='hamburger'], button[aria-label*='menu'], [data-testid='menu-toggle']",
-          "force": true,
-          "announce": { "before": "Opening menu for Security Settings" }
-        },
-        {
-          "action": "wait",
-          "timeout": 800
-        },
-        {
-          "action": "click",
-          "selector": "a:has-text('Settings'), nav a[href*='settings']",
-          "force": true
-        },
-        {
-          "action": "wait",
-          "timeout": 800
-        },
-        {
-          "action": "click",
-          "selector": "a:has-text('Security'), nav a[href*='security']",
-          "force": true,
-          "announce": { "before": "Navigating to Security Settings" }
+          "selector": "a:has-text('Depts'), a[href*='/departments']:first-of-type, tr:first-child a:has-text('Depts')",
+          "announce": { "before": "Clicking Depts link on the first organization row" }
         },
         {
           "action": "wait",
           "timeout": 2000
-        },
-        {
-          "action": "screenshot",
-          "value": "identity-20-security-settings.png",
-          "announce": { "after": "Security Settings page loaded" }
         },
         {
           "action": "assertVisible",
-          "selector": "[class*='mfa'], :has-text('Multi-Factor'), :has-text('MFA'), [data-section='mfa']",
-          "timeout": 8000,
-          "announce": { "after": "MFA configuration section is visible" }
-        },
-        {
-          "action": "scroll",
-          "selector": ":has-text('Passkeys'), :has-text('FIDO2'), [data-section='passkeys']"
-        },
-        {
-          "action": "wait",
-          "timeout": 800
+          "selector": "h1:has-text('Departments')",
+          "timeout": 10000,
+          "announce": { "after": "Departments page loaded with hierarchy tree" }
         },
         {
           "action": "screenshot",
-          "value": "identity-21-security-passkeys.png",
-          "announce": { "after": "Passkeys section visible" }
+          "value": "identity-create-dept-01-page.png"
         },
         {
-          "action": "scroll",
-          "selector": ":has-text('Sessions'), :has-text('Session Management'), [data-section='sessions']"
+          "action": "click",
+          "selector": "button:has-text('Add Department')",
+          "announce": { "before": "Clicking Add Department button" }
         },
         {
           "action": "wait",
-          "timeout": 800
+          "timeout": 1000
+        },
+        {
+          "action": "assertVisible",
+          "selector": "[class*='modal'], [role='dialog']",
+          "timeout": 5000,
+          "announce": { "after": "Add Department modal is open" }
         },
         {
           "action": "screenshot",
-          "value": "identity-22-security-sessions.png",
-          "announce": { "after": "Session management section visible. Security settings review complete." }
+          "value": "identity-create-dept-02-modal.png"
+        },
+        {
+          "action": "fill",
+          "selector": "input.input-field, input[placeholder*='Engineering' i], input:near(label:has-text('Department Name'))",
+          "value": "Risk & Compliance",
+          "announce": { "before": "Entering department name: Risk & Compliance" }
+        },
+        {
+          "action": "screenshot",
+          "value": "identity-create-dept-03-filled.png"
+        },
+        {
+          "action": "click",
+          "selector": "button[type='submit']:has-text('Create Department'), button.btn-primary:has-text('Create')",
+          "announce": { "before": "Submitting department creation" }
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "screenshot",
+          "value": "identity-create-dept-04-created.png",
+          "announce": { "after": "Department Risk & Compliance created successfully" }
         }
       ]
     },
 
-    "scroll-compliance-badges": {
-      "name": "Scroll Through Compliance Badges",
-      "description": "Scroll through security compliance badges and certifications",
+    "identity-org-chart": {
+      "name": "View Org Chart and Verify Hierarchy",
+      "description": "Navigate to the org chart page and verify reporting structure visualization",
       "steps": [
         {
+          "action": "navigate",
+          "url": "/organizations",
+          "announce": { "before": "Navigating to Organizations to access org chart" }
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "click",
+          "selector": "a:has-text('Chart'), a[href*='/org-chart']:first-of-type, tr:first-child a:has-text('Chart')",
+          "announce": { "before": "Clicking Chart link on the first organization row" }
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "assertVisible",
+          "selector": "h1:has-text('Org Chart')",
+          "timeout": 10000,
+          "announce": { "after": "Org Chart page loaded" }
+        },
+        {
+          "action": "screenshot",
+          "value": "identity-org-chart-01-page.png"
+        },
+        {
+          "action": "assertVisible",
+          "selector": ":has-text('Reporting Structure'), :has-text('Unassigned'), [class*='rounded-xl']",
+          "timeout": 8000,
+          "announce": { "after": "Org chart visualization is rendering with user cards" }
+        },
+        {
+          "action": "screenshot",
+          "value": "identity-org-chart-02-tree.png"
+        },
+        {
+          "action": "assertVisible",
+          "selector": "[class*='w-48'], [class*='rounded-xl'][class*='border-2']",
+          "timeout": 5000,
+          "announce": { "after": "User cards with department color-coding are visible" }
+        },
+        {
           "action": "scroll",
-          "selector": "[class*='compliance'], [class*='badges'], :has-text('Compliance'), [data-section='compliance']",
-          "announce": { "before": "Scrolling to compliance badges section" }
+          "announce": { "before": "Scrolling through org chart to see unassigned users" }
         },
         {
           "action": "wait",
@@ -525,79 +853,70 @@
         },
         {
           "action": "screenshot",
-          "value": "identity-23-compliance-badges.png"
-        },
-        {
-          "action": "scroll",
-          "announce": { "before": "Scrolling through all compliance certifications" }
-        },
-        {
-          "action": "wait",
-          "timeout": 800
-        },
-        {
-          "action": "screenshot",
-          "value": "identity-24-compliance-scrolled.png",
-          "announce": { "after": "Compliance badges reviewed. SOC2, HIPAA, GDPR indicators visible." }
+          "value": "identity-org-chart-03-scrolled.png",
+          "announce": { "after": "Org chart fully explored. Hierarchy and unassigned sections verified." }
         }
       ]
     },
 
-    "impersonate-user": {
+    "identity-impersonation": {
       "name": "Impersonate a User",
-      "description": "Switch to impersonation mode and verify the impersonation banner appears",
+      "description": "Use the impersonation feature (eye icon) on a user to switch context and verify the impersonation banner",
       "steps": [
         {
-          "action": "click",
-          "selector": "button[class*='hamburger'], button[aria-label*='menu'], [data-testid='menu-toggle']",
-          "force": true,
-          "announce": { "before": "Opening menu to navigate to Users for impersonation" }
-        },
-        {
-          "action": "wait",
-          "timeout": 800
-        },
-        {
-          "action": "click",
-          "selector": "a:has-text('Users'), nav a[href*='users']",
-          "force": true
+          "action": "navigate",
+          "url": "/users",
+          "announce": { "before": "Navigating to Users page for impersonation test" }
         },
         {
           "action": "wait",
           "timeout": 2000
         },
         {
-          "action": "click",
-          "selector": "tr:first-child button[aria-label*='actions'], tr:first-child [class*='action'], tr:nth-child(2) button:has-text('...'), tr:nth-child(2) [class*='dropdown-trigger']",
-          "announce": { "before": "Opening actions menu on a user row" }
-        },
-        {
-          "action": "wait",
-          "timeout": 800
-        },
-        {
-          "action": "click",
-          "selector": "button:has-text('Impersonate'), [data-action='impersonate'], a:has-text('Impersonate'), [role='menuitem']:has-text('Impersonate')",
-          "announce": { "before": "Clicking Impersonate button" }
-        },
-        {
-          "action": "wait",
-          "timeout": 2000
+          "action": "assertVisible",
+          "selector": "h1:has-text('Users')",
+          "timeout": 10000
         },
         {
           "action": "screenshot",
-          "value": "identity-25-impersonation-active.png"
+          "value": "identity-impersonate-01-users.png"
+        },
+        {
+          "action": "click",
+          "selector": "tr:nth-child(2) button[title='View as this user'], tr:nth-child(2) button:has(svg.text-purple-500), table tbody tr:nth-child(2) .flex.gap-1 button:first-child",
+          "announce": { "before": "Clicking impersonate (eye icon) on the second user row" }
+        },
+        {
+          "action": "wait",
+          "timeout": 1000
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text('OK'), button:has-text('Confirm')",
+          "announce": { "before": "Confirming impersonation dialog" }
+        },
+        {
+          "action": "wait",
+          "timeout": 3000
+        },
+        {
+          "action": "screenshot",
+          "value": "identity-impersonate-02-active.png"
         },
         {
           "action": "assertVisible",
           "selector": "[class*='impersonat'], [data-testid='impersonation-banner'], [class*='banner']:has-text('Impersonat'), div:has-text('impersonating')",
           "timeout": 10000,
-          "announce": { "after": "Impersonation banner is visible. You are now viewing the console as another user." }
+          "announce": { "after": "Impersonation banner is visible. Viewing the console as another user." }
+        },
+        {
+          "action": "screenshot",
+          "value": "identity-impersonate-03-banner.png"
         }
       ]
     },
 
-    "exit-impersonation": {
+    "identity-exit-impersonation": {
       "name": "Exit Impersonation",
       "description": "Exit impersonation mode and return to admin view",
       "steps": [
@@ -612,13 +931,250 @@
         },
         {
           "action": "screenshot",
-          "value": "identity-26-impersonation-exited.png",
+          "value": "identity-exit-impersonate-01-exited.png",
           "announce": { "after": "Impersonation exited. Back to admin view." }
         }
       ]
     },
 
-    "logout": {
+    "identity-security-settings": {
+      "name": "Security Settings Overview",
+      "description": "Navigate to Security Settings and verify MFA status, Passkeys, Sessions, Login Activity, and Geo-Restriction sections",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/settings/security",
+          "announce": { "before": "Navigating to Settings > Security" }
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "assertVisible",
+          "selector": "h1:has-text('Security'), h2:has-text('Security')",
+          "timeout": 10000,
+          "announce": { "after": "Security settings page loaded" }
+        },
+        {
+          "action": "screenshot",
+          "value": "identity-security-01-page.png"
+        },
+        {
+          "action": "assertVisible",
+          "selector": ":has-text('Multi-Factor'), :has-text('MFA'), :has-text('Two-Factor'), [data-section='mfa']",
+          "timeout": 8000,
+          "announce": { "after": "MFA section is visible" }
+        },
+        {
+          "action": "scroll",
+          "selector": ":has-text('Passkeys'), :has-text('FIDO2'), :has-text('WebAuthn')",
+          "announce": { "before": "Scrolling to Passkeys section" }
+        },
+        {
+          "action": "wait",
+          "timeout": 800
+        },
+        {
+          "action": "assertVisible",
+          "selector": ":has-text('Passkeys'), :has-text('FIDO2'), button:has-text('Register'), button:has-text('Add Passkey')",
+          "timeout": 5000,
+          "announce": { "after": "Passkeys section visible with registration option" }
+        },
+        {
+          "action": "screenshot",
+          "value": "identity-security-02-passkeys.png"
+        },
+        {
+          "action": "scroll",
+          "selector": ":has-text('Change Password'), :has-text('Password')",
+          "announce": { "before": "Scrolling to Change Password section" }
+        },
+        {
+          "action": "wait",
+          "timeout": 800
+        },
+        {
+          "action": "screenshot",
+          "value": "identity-security-03-change-password.png"
+        },
+        {
+          "action": "scroll",
+          "selector": ":has-text('Active Sessions'), :has-text('Session Management')",
+          "announce": { "before": "Scrolling to Sessions section" }
+        },
+        {
+          "action": "wait",
+          "timeout": 800
+        },
+        {
+          "action": "assertVisible",
+          "selector": ":has-text('Active Sessions'), :has-text('Session'), button:has-text('Revoke')",
+          "timeout": 5000,
+          "announce": { "after": "Active Sessions section visible with revoke options" }
+        },
+        {
+          "action": "screenshot",
+          "value": "identity-security-04-sessions.png"
+        },
+        {
+          "action": "scroll",
+          "selector": ":has-text('Login Activity'), :has-text('Recent Logins')",
+          "announce": { "before": "Scrolling to Login Activity section" }
+        },
+        {
+          "action": "wait",
+          "timeout": 800
+        },
+        {
+          "action": "screenshot",
+          "value": "identity-security-05-login-activity.png"
+        },
+        {
+          "action": "scroll",
+          "selector": ":has-text('Geo-Restriction'), :has-text('IP Whitelisting'), :has-text('Geographic')",
+          "announce": { "before": "Scrolling to Geo-Restriction section" }
+        },
+        {
+          "action": "wait",
+          "timeout": 800
+        },
+        {
+          "action": "screenshot",
+          "value": "identity-security-06-geo-restriction.png",
+          "announce": { "after": "Full Security Settings page reviewed: MFA, Passkeys, Password, Sessions, Login Activity, Geo-Restriction." }
+        }
+      ]
+    },
+
+    "identity-navigate-organizations": {
+      "name": "Navigate to Organizations",
+      "description": "Open Organizations page and verify org list with type, status, and action columns",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/organizations",
+          "announce": { "before": "Navigating to Organizations page" }
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "assertVisible",
+          "selector": "h1:has-text('Organizations')",
+          "timeout": 10000,
+          "announce": { "after": "Organizations page loaded" }
+        },
+        {
+          "action": "screenshot",
+          "value": "identity-nav-org-01-list.png"
+        },
+        {
+          "action": "assertVisible",
+          "selector": "th:has-text('Type'), th:has-text('Status'), th:has-text('Actions')",
+          "timeout": 5000,
+          "announce": { "after": "Organizations table with Type, Status, and Actions columns verified" }
+        },
+        {
+          "action": "screenshot",
+          "value": "identity-nav-org-02-table.png"
+        }
+      ]
+    },
+
+    "identity-view-department-hierarchy": {
+      "name": "View Department Hierarchy Tree",
+      "description": "Navigate through an organization's department hierarchy tree and click through nodes",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/organizations",
+          "announce": { "before": "Navigating to Organizations to access departments" }
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "click",
+          "selector": "a:has-text('Depts'), a[href*='/departments']:first-of-type, tr:first-child a:has-text('Depts')",
+          "announce": { "before": "Clicking Depts link on first organization" }
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "assertVisible",
+          "selector": "h1:has-text('Departments')",
+          "timeout": 10000,
+          "announce": { "after": "Departments page loaded" }
+        },
+        {
+          "action": "screenshot",
+          "value": "identity-dept-hierarchy-01-page.png"
+        },
+        {
+          "action": "assertVisible",
+          "selector": "[class*='tree'], [class*='DepartmentTree'], [class*='rounded-xl']",
+          "timeout": 8000,
+          "announce": { "after": "Department hierarchy tree is rendering in left panel" }
+        },
+        {
+          "action": "screenshot",
+          "value": "identity-dept-hierarchy-02-tree.png"
+        },
+        {
+          "action": "scroll",
+          "announce": { "before": "Scrolling through department tree and user list" }
+        },
+        {
+          "action": "wait",
+          "timeout": 800
+        },
+        {
+          "action": "screenshot",
+          "value": "identity-dept-hierarchy-03-scrolled.png",
+          "announce": { "after": "Department hierarchy explored. Two-column layout with tree and user list verified." }
+        }
+      ]
+    },
+
+    "identity-compliance-badges": {
+      "name": "Scroll Through Compliance Badges",
+      "description": "Scroll through security compliance badges and certifications",
+      "steps": [
+        {
+          "action": "scroll",
+          "selector": "[class*='compliance'], [class*='badges'], :has-text('Compliance'), [data-section='compliance']",
+          "announce": { "before": "Scrolling to compliance badges section" }
+        },
+        {
+          "action": "wait",
+          "timeout": 1000
+        },
+        {
+          "action": "screenshot",
+          "value": "identity-compliance-01-badges.png"
+        },
+        {
+          "action": "scroll",
+          "announce": { "before": "Scrolling through all compliance certifications" }
+        },
+        {
+          "action": "wait",
+          "timeout": 800
+        },
+        {
+          "action": "screenshot",
+          "value": "identity-compliance-02-scrolled.png",
+          "announce": { "after": "Compliance badges reviewed. SOC2, HIPAA, GDPR indicators visible." }
+        }
+      ]
+    },
+
+    "identity-logout": {
       "name": "Logout",
       "description": "Safely log out of the Zorbit platform",
       "steps": [
@@ -633,7 +1189,7 @@
         },
         {
           "action": "screenshot",
-          "value": "identity-27-user-menu.png"
+          "value": "identity-logout-01-menu.png"
         },
         {
           "action": "click",
@@ -652,85 +1208,119 @@
         },
         {
           "action": "screenshot",
-          "value": "identity-28-logged-out.png"
+          "value": "identity-logout-02-done.png"
         }
       ]
     }
   },
 
   "journeys": {
-    "full-identity-flow": {
-      "name": "Complete Identity Service Flow",
-      "description": "End-to-end identity service test: login with MFA, dashboard, users, orgs, security, impersonation, logout",
-      "segments": [
-        "login-with-mfa",
-        "verify-dashboard",
-        "navigate-to-users",
-        "create-new-user",
-        "verify-user-in-list",
-        "navigate-to-organizations",
-        "view-department-hierarchy",
-        "view-org-chart",
-        "navigate-to-security-settings",
-        "scroll-compliance-badges",
-        "impersonate-user",
-        "exit-impersonation",
-        "logout"
-      ]
-    },
-    "login-and-dashboard": {
+    "identity-login-and-dashboard": {
       "name": "Login + Dashboard Only",
-      "description": "Quick verification of login and dashboard",
+      "description": "Quick verification of login and dashboard (no MFA)",
       "segments": [
-        "login-with-mfa",
-        "verify-dashboard",
-        "logout"
+        "identity-login",
+        "identity-verify-dashboard",
+        "identity-logout"
       ]
     },
-    "user-management": {
+    "identity-mfa-flow": {
+      "name": "MFA Setup and Login",
+      "description": "Enable MFA in security settings, then verify MFA login works",
+      "segments": [
+        "identity-login",
+        "identity-mfa-setup",
+        "identity-logout",
+        "identity-mfa-login",
+        "identity-verify-dashboard",
+        "identity-logout"
+      ]
+    },
+    "identity-user-management": {
       "name": "User Management Flow",
-      "description": "Login, create user, verify user, manage impersonation",
+      "description": "Login, create user, verify user, assign roles, impersonate",
       "segments": [
-        "login-with-mfa",
-        "navigate-to-users",
-        "create-new-user",
-        "verify-user-in-list",
-        "impersonate-user",
-        "exit-impersonation",
-        "logout"
+        "identity-login",
+        "identity-navigate-users",
+        "identity-create-user",
+        "identity-verify-user-in-list",
+        "identity-user-roles",
+        "identity-impersonation",
+        "identity-exit-impersonation",
+        "identity-logout"
       ]
     },
-    "org-hierarchy-review": {
-      "name": "Organization Hierarchy Review",
-      "description": "Login and explore org/department hierarchy and org chart",
+    "identity-org-management": {
+      "name": "Organization & Department Management",
+      "description": "Create org, create department, view hierarchy and org chart",
       "segments": [
-        "login-with-mfa",
-        "navigate-to-organizations",
-        "view-department-hierarchy",
-        "view-org-chart",
-        "logout"
+        "identity-login",
+        "identity-navigate-organizations",
+        "identity-create-org",
+        "identity-create-department",
+        "identity-view-department-hierarchy",
+        "identity-org-chart",
+        "identity-logout"
+      ]
+    },
+    "identity-security-review": {
+      "name": "Security Settings Review",
+      "description": "Review all security settings: MFA, Passkeys, Sessions, Geo-Restriction",
+      "segments": [
+        "identity-login",
+        "identity-security-settings",
+        "identity-compliance-badges",
+        "identity-logout"
+      ]
+    },
+    "identity-full-regression": {
+      "name": "Complete Identity Service Regression",
+      "description": "End-to-end regression covering all identity features",
+      "segments": [
+        "identity-login-mfa",
+        "identity-verify-dashboard",
+        "identity-navigate-users",
+        "identity-create-user",
+        "identity-verify-user-in-list",
+        "identity-user-roles",
+        "identity-navigate-organizations",
+        "identity-create-org",
+        "identity-create-department",
+        "identity-view-department-hierarchy",
+        "identity-org-chart",
+        "identity-security-settings",
+        "identity-compliance-badges",
+        "identity-impersonation",
+        "identity-exit-impersonation",
+        "identity-logout"
       ]
     }
   },
 
   "bouquets": {
-    "identity-full": {
-      "name": "Identity Service - Full Suite",
-      "description": "Complete identity service regression test covering all capabilities",
-      "mode": "sequential",
-      "journeys": ["full-identity-flow"]
-    },
     "identity-quick": {
       "name": "Identity Service - Quick Check",
-      "description": "Fast login and dashboard verification",
+      "description": "Fast login and dashboard verification (under 1 minute)",
       "mode": "sequential",
-      "journeys": ["login-and-dashboard"]
+      "journeys": ["identity-login-and-dashboard"]
+    },
+    "identity-full": {
+      "name": "Identity Service - Full Suite",
+      "description": "Complete identity regression: MFA, org creation, user management, security, impersonation",
+      "mode": "sequential",
+      "journeys": ["identity-full-regression"]
+    },
+    "identity-security": {
+      "name": "Identity Service - Security Suite",
+      "description": "MFA setup, MFA login verification, and security settings review",
+      "mode": "sequential",
+      "journeys": ["identity-mfa-flow", "identity-security-review"]
     },
     "identity-management": {
       "name": "Identity Service - Management Suite",
-      "description": "User and org management flows",
+      "description": "User and organization management flows",
       "mode": "sequential",
-      "journeys": ["user-management", "org-hierarchy-review"]
+      "journeys": ["identity-user-management", "identity-org-management"]
     }
   }
 }

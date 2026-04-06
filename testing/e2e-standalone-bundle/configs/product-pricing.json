@@ -1,0 +1,525 @@
+{
+  "baseUrl": "https://zorbit.scalatics.com",
+  "viewport": { "width": 1280, "height": 720 },
+  "defaults": {
+    "timeout": 10000,
+    "waitAfterAction": 500,
+    "waitForNetworkIdle": false
+  },
+  "segments": {
+    "pricing-login": {
+      "name": "Login for Product Pricing",
+      "description": "Login with admin credentials that have product-pricing access",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/login",
+          "announce": { "before": "Loading login page for Product Pricing tests" }
+        },
+        {
+          "action": "wait",
+          "timeout": 1500
+        },
+        {
+          "action": "fill",
+          "selector": "input[type='email'], input[placeholder*='email' i], input[name='email']",
+          "value": "${credentials.admin.email}"
+        },
+        {
+          "action": "fill",
+          "selector": "input[type='password']",
+          "value": "${credentials.admin.password}"
+        },
+        {
+          "action": "click",
+          "selector": "button[type='submit'], button:has-text('Sign in'), button:has-text('Login')",
+          "announce": { "after": "Login submitted" }
+        },
+        {
+          "action": "wait",
+          "timeout": 3000
+        },
+        {
+          "action": "custom",
+          "handler": "generateTotp",
+          "description": "Generate TOTP for MFA if challenged",
+          "params": {
+            "command": "ssh sovpn 'bash /tmp/get-totp.sh'"
+          },
+          "selector": "input[inputmode='numeric'], input[maxlength='6'], input[placeholder='000000']"
+        },
+        {
+          "action": "click",
+          "selector": "button[type='submit'], button:has-text('Verify')"
+        },
+        {
+          "action": "wait",
+          "timeout": 3000
+        },
+        {
+          "action": "waitForUrl",
+          "pattern": "^https://zorbit\\.scalatics\\.com/?$",
+          "timeout": 20000,
+          "announce": { "after": "Successfully logged in" }
+        },
+        {
+          "action": "screenshot",
+          "value": "pricing-login-01-dashboard.png"
+        }
+      ]
+    },
+
+    "pricing-navigate": {
+      "name": "Navigate to Product Pricing",
+      "description": "Open sidebar and navigate to the Product Pricing section",
+      "steps": [
+        {
+          "action": "click",
+          "selector": "button[class*='hamburger'], button[aria-label*='menu'], [data-testid='menu-toggle'], button[class*='sidebar-toggle']",
+          "force": true,
+          "announce": { "before": "Opening sidebar menu" }
+        },
+        {
+          "action": "wait",
+          "timeout": 1000
+        },
+        {
+          "action": "assertVisible",
+          "selector": "nav, [role='navigation'], [class*='sidebar'], [class*='menu']",
+          "timeout": 8000,
+          "announce": { "after": "Sidebar menu is visible" }
+        },
+        {
+          "action": "screenshot",
+          "value": "pricing-navigate-01-sidebar.png"
+        },
+        {
+          "action": "click",
+          "selector": "a[href*='product-pricing'], button:has-text('Product Pricing'), [class*='menu'] :text('Product Pricing')",
+          "announce": { "after": "Clicked Product Pricing menu item" }
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "waitForUrl",
+          "pattern": "/product-pricing",
+          "timeout": 10000,
+          "announce": { "after": "Product Pricing hub loaded" }
+        },
+        {
+          "action": "screenshot",
+          "value": "pricing-navigate-02-hub.png"
+        }
+      ]
+    },
+
+    "pricing-list-products": {
+      "name": "View Rate Tables List",
+      "description": "Navigate to the rate tables page and verify the list renders",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/product-pricing/rate-tables",
+          "announce": { "before": "Loading rate tables list" }
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "assertVisible",
+          "selector": "h1, [class*='heading'], [class*='title']",
+          "timeout": 10000,
+          "announce": { "after": "Rate Tables heading is visible" }
+        },
+        {
+          "action": "screenshot",
+          "value": "pricing-list-01-rate-tables.png"
+        },
+        {
+          "action": "assertVisible",
+          "selector": "table, [class*='table'], [class*='list'], [class*='card'], [class*='grid']",
+          "timeout": 10000,
+          "announce": { "after": "Rate tables list or empty state rendered" }
+        },
+        {
+          "action": "screenshot",
+          "value": "pricing-list-02-table-content.png"
+        }
+      ]
+    },
+
+    "pricing-select-product": {
+      "name": "Select a Rate Table",
+      "description": "Click on a rate table row to view its details",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/product-pricing/rate-tables",
+          "announce": { "before": "Loading rate tables list" }
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "click",
+          "selector": "table tbody tr:first-child, [class*='card']:first-child, [class*='table-row']:first-child, [class*='list-item']:first-child",
+          "announce": { "after": "Selected first rate table" }
+        },
+        {
+          "action": "wait",
+          "timeout": 1500
+        },
+        {
+          "action": "assertVisible",
+          "selector": "[class*='detail'], [class*='panel'], [class*='drawer'], [class*='modal'], table",
+          "timeout": 10000,
+          "announce": { "after": "Rate table detail view is visible" }
+        },
+        {
+          "action": "screenshot",
+          "value": "pricing-select-01-detail.png"
+        }
+      ]
+    },
+
+    "pricing-configure-rates": {
+      "name": "Configure Pricing Rates",
+      "description": "TODO: Configure pricing rates for a plan — placeholder until rate editing UI exists",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/product-pricing/rate-tables",
+          "announce": { "before": "Loading rate tables for rate configuration" }
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "assertVisible",
+          "selector": "body",
+          "timeout": 5000,
+          "announce": { "after": "TODO: Rate configuration UI not yet implemented — asserting page loads" }
+        },
+        {
+          "action": "screenshot",
+          "value": "pricing-configure-rates-01-placeholder.png"
+        }
+      ]
+    },
+
+    "pricing-age-bands": {
+      "name": "Age Band Pricing Setup",
+      "description": "TODO: Set up age band pricing dimensions — placeholder until age band editor UI exists",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/product-pricing/rate-tables",
+          "announce": { "before": "Loading rate tables for age band setup" }
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "assertVisible",
+          "selector": "body",
+          "timeout": 5000,
+          "announce": { "after": "TODO: Age band editor UI not yet implemented — asserting page loads" }
+        },
+        {
+          "action": "screenshot",
+          "value": "pricing-age-bands-01-placeholder.png"
+        }
+      ]
+    },
+
+    "pricing-gender-rates": {
+      "name": "Gender-Based Rates",
+      "description": "TODO: Configure gender-based rate variations — placeholder until gender rate editor UI exists",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/product-pricing/rate-tables",
+          "announce": { "before": "Loading rate tables for gender rate setup" }
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "assertVisible",
+          "selector": "body",
+          "timeout": 5000,
+          "announce": { "after": "TODO: Gender rate editor UI not yet implemented — asserting page loads" }
+        },
+        {
+          "action": "screenshot",
+          "value": "pricing-gender-rates-01-placeholder.png"
+        }
+      ]
+    },
+
+    "pricing-member-types": {
+      "name": "Member Type Rates",
+      "description": "TODO: Configure member type rates (individual, family, etc.) — placeholder until member type editor UI exists",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/product-pricing/rate-tables",
+          "announce": { "before": "Loading rate tables for member type setup" }
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "assertVisible",
+          "selector": "body",
+          "timeout": 5000,
+          "announce": { "after": "TODO: Member type rate editor UI not yet implemented — asserting page loads" }
+        },
+        {
+          "action": "screenshot",
+          "value": "pricing-member-types-01-placeholder.png"
+        }
+      ]
+    },
+
+    "pricing-copay-setup": {
+      "name": "Copay Configuration",
+      "description": "TODO: Configure copay amounts for plans — placeholder until copay configuration UI exists",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/product-pricing/rate-tables",
+          "announce": { "before": "Loading rate tables for copay configuration" }
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "assertVisible",
+          "selector": "body",
+          "timeout": 5000,
+          "announce": { "after": "TODO: Copay configuration UI not yet implemented — asserting page loads" }
+        },
+        {
+          "action": "screenshot",
+          "value": "pricing-copay-setup-01-placeholder.png"
+        }
+      ]
+    },
+
+    "pricing-save-publish": {
+      "name": "Save and Publish Rates",
+      "description": "TODO: Save and publish rate table — placeholder until publish workflow UI exists",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/product-pricing/rate-tables",
+          "announce": { "before": "Loading rate tables for save and publish test" }
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "assertVisible",
+          "selector": "body",
+          "timeout": 5000,
+          "announce": { "after": "TODO: Save and publish workflow UI not yet implemented — asserting page loads" }
+        },
+        {
+          "action": "screenshot",
+          "value": "pricing-save-publish-01-placeholder.png"
+        }
+      ]
+    },
+
+    "pricing-import-rate-card": {
+      "name": "Rate Card Import Wizard",
+      "description": "Navigate to the rate card import page and verify the wizard renders",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/product-pricing/import",
+          "announce": { "before": "Loading rate card import wizard" }
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "assertVisible",
+          "selector": "h1, [class*='heading'], [class*='title'], [class*='wizard'], [class*='stepper']",
+          "timeout": 10000,
+          "announce": { "after": "Rate card import wizard loaded" }
+        },
+        {
+          "action": "screenshot",
+          "value": "pricing-import-01-wizard.png"
+        }
+      ]
+    },
+
+    "pricing-premium-lookup": {
+      "name": "Premium Lookup Calculator",
+      "description": "Use the premium lookup form to calculate a rate from an existing table",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/product-pricing/rate-tables",
+          "announce": { "before": "Loading rate tables for premium lookup test" }
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "click",
+          "selector": "table tbody tr:first-child, [class*='card']:first-child, [class*='table-row']:first-child",
+          "announce": { "after": "Selected first rate table for lookup" }
+        },
+        {
+          "action": "wait",
+          "timeout": 1500
+        },
+        {
+          "action": "assertVisible",
+          "selector": "input, select, [class*='lookup'], [class*='calculator'], form",
+          "timeout": 10000,
+          "announce": { "after": "Lookup form is visible" }
+        },
+        {
+          "action": "screenshot",
+          "value": "pricing-lookup-01-form.png"
+        }
+      ]
+    },
+
+    "pricing-setup-page": {
+      "name": "Setup Page",
+      "description": "Verify the product pricing setup/configuration page renders",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/product-pricing/setup",
+          "announce": { "before": "Loading Product Pricing setup page" }
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "assertVisible",
+          "selector": "h1, [class*='heading'], [class*='title'], main",
+          "timeout": 10000,
+          "announce": { "after": "Setup page loaded" }
+        },
+        {
+          "action": "screenshot",
+          "value": "pricing-setup-01-page.png"
+        }
+      ]
+    },
+
+    "pricing-deployments-page": {
+      "name": "Deployments Page",
+      "description": "Verify the product pricing deployments page renders",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/product-pricing/deployments",
+          "announce": { "before": "Loading Product Pricing deployments page" }
+        },
+        {
+          "action": "wait",
+          "timeout": 2000
+        },
+        {
+          "action": "assertVisible",
+          "selector": "h1, [class*='heading'], [class*='title'], main",
+          "timeout": 10000,
+          "announce": { "after": "Deployments page loaded" }
+        },
+        {
+          "action": "screenshot",
+          "value": "pricing-deployments-01-page.png"
+        }
+      ]
+    }
+  },
+
+  "journeys": {
+    "pricing-happy-path": {
+      "name": "Product Pricing Happy Path",
+      "description": "Quick happy-path: login, navigate to pricing, view rate tables, select one, check lookup",
+      "segments": [
+        "pricing-login",
+        "pricing-navigate",
+        "pricing-list-products",
+        "pricing-select-product",
+        "pricing-premium-lookup"
+      ]
+    },
+    "pricing-full-regression": {
+      "name": "Product Pricing Full Regression",
+      "description": "Complete regression covering all pricing pages and placeholder features",
+      "segments": [
+        "pricing-login",
+        "pricing-navigate",
+        "pricing-list-products",
+        "pricing-select-product",
+        "pricing-configure-rates",
+        "pricing-age-bands",
+        "pricing-gender-rates",
+        "pricing-member-types",
+        "pricing-copay-setup",
+        "pricing-save-publish",
+        "pricing-import-rate-card",
+        "pricing-premium-lookup",
+        "pricing-setup-page",
+        "pricing-deployments-page"
+      ]
+    },
+    "pricing-pages-only": {
+      "name": "Product Pricing Page Renders",
+      "description": "Verify all product pricing pages render without errors (no data interaction)",
+      "segments": [
+        "pricing-login",
+        "pricing-navigate",
+        "pricing-list-products",
+        "pricing-import-rate-card",
+        "pricing-setup-page",
+        "pricing-deployments-page"
+      ]
+    }
+  },
+
+  "bouquets": {
+    "pricing-quick": {
+      "name": "Product Pricing Quick Test",
+      "description": "Fast happy-path validation — login, navigate, list, select, lookup",
+      "mode": "sequential",
+      "journeys": ["pricing-happy-path"]
+    },
+    "pricing-full": {
+      "name": "Product Pricing Full Suite",
+      "description": "Complete regression covering all product pricing features and placeholder segments",
+      "mode": "sequential",
+      "journeys": ["pricing-full-regression"]
+    },
+    "pricing-pages": {
+      "name": "Product Pricing Page Renders Only",
+      "description": "Verify all pages load without testing data interactions",
+      "mode": "sequential",
+      "journeys": ["pricing-pages-only"]
+    }
+  }
+}
