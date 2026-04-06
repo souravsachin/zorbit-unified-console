@@ -1067,8 +1067,8 @@
   "journeys": {
     "setup": {
       "name": "Platform Setup",
-      "description": "Logout, login with admin credentials, enable MFA, and re-login to verify MFA works",
-      "segments": ["logout", "login", "enable-mfa", "mfa-relogin"]
+      "description": "Login with admin credentials, enable MFA, re-login to verify MFA, then logout",
+      "segments": ["login", "enable-mfa", "mfa-relogin"]
     },
     "org-setup": {
       "name": "AWNIC Organization Setup",

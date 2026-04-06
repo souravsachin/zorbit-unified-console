@@ -603,6 +603,8 @@ function loadConfigSync(filename: string): Config {
 }
 
 async function loadConfig(filename: string): Promise<Config> {
+  // Auto-append .json if missing
+  if (!filename.endsWith('.json')) filename += '.json';
   const configPath = path.join(CONFIGS_DIR, filename);
   const config = JSON.parse(
     fs.readFileSync(configPath, "utf-8")
@@ -991,6 +993,14 @@ async function executeStep(
       await speak(step.announce.after);
     }
 
+    // Auto-screenshot after every step (except screenshot/wait actions)
+    if (step.action !== 'screenshot' && step.action !== 'wait' && step.action !== 'apiCheck') {
+      try {
+        const autoName = `auto-${executionStatus.segment.replace(/[^a-zA-Z0-9]/g, '_')}-step${stepIndex + 1}.png`;
+        await page.screenshot({ path: path.join(runOutputDir, autoName) });
+      } catch { /* page might be navigating */ }
+    }
+
     logStep({
       segment: executionStatus.segment,
       journey: executionStatus.journey,
@@ -1149,6 +1159,12 @@ async function executeBouquet(
       } else {
         failed++;
         executionStatus.failed++;
+        // Stop sequential bouquet on first journey failure
+        console.log(
+          `\n${COLORS.red}  Bouquet stopped: journey "${journeyId}" failed. Remaining journeys skipped.${COLORS.reset}`
+        );
+        await speak(`Bouquet stopped. Journey failed.`);
+        break;
       }
       renderExecutionStatus();
     }
