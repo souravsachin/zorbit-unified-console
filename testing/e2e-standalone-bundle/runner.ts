@@ -539,17 +539,23 @@ async function promptCredentials(): Promise<Record<string, Record<string, string
   console.log(`\n${COLORS.cyan}============================================================${COLORS.reset}`);
   console.log(`${COLORS.cyan}  First-time Setup: Enter Your Zorbit Credentials${COLORS.reset}`);
   console.log(`${COLORS.cyan}============================================================${COLORS.reset}\n`);
-  console.log(`${COLORS.dim}  MFA: You'll be prompted for the 6-digit Google Authenticator`);
-  console.log(`  code each time a test logs in. Keep the app handy.${COLORS.reset}\n`);
-
   const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
   const ask = (q: string): Promise<string> => new Promise(r => rl.question(q, a => r(a.trim())));
 
   const email = await ask(`  Email: `);
   const password = await ask(`  Password: `);
 
+  // MFA setup
+  console.log(`\n${COLORS.dim}  MFA (Multi-Factor Authentication):${COLORS.reset}`);
+  console.log(`${COLORS.dim}  If MFA is enabled on your account, you have two options:${COLORS.reset}`);
+  console.log(`${COLORS.dim}    1. Paste your TOTP base32 secret below (from authenticator setup)${COLORS.reset}`);
+  console.log(`${COLORS.dim}       The runner will auto-generate 6-digit codes — no phone needed.${COLORS.reset}`);
+  console.log(`${COLORS.dim}    2. Leave blank — you'll be prompted for the code each time.${COLORS.reset}`);
+  console.log(`${COLORS.dim}  If MFA is off, just press Enter.${COLORS.reset}`);
+  const mfaSecret = await ask(`\n  TOTP Secret (or press Enter to skip): `);
+
   const creds = {
-    admin: { email, password, mfaSecret: '', mfaCommand: '' },
+    admin: { email, password, mfaSecret: mfaSecret || '', mfaCommand: '' },
   };
 
   const saveAnswer = await ask(`\n  Save credentials for next time? (y/n): `);
@@ -622,11 +628,16 @@ function createRunOutputDir(): string {
 
 function resolveValue(template: string): string {
   if (!template || !currentConfig) return template;
-  return template.replace(/\$\{([^}]+)\}/g, (_, pathStr) => {
+  return template.replace(/\$\{([^}]+)\}/g, (match, pathStr) => {
     const parts = pathStr.split(".");
     let value: unknown = currentConfig;
     for (const part of parts) {
       value = (value as Record<string, unknown>)?.[part];
+    }
+    if (value === undefined || value === null || value === "") {
+      console.log(
+        `${COLORS.yellow}  WARNING: ${match} resolved to empty — check credentials.json has this path${COLORS.reset}`
+      );
     }
     return String(value ?? "");
   });

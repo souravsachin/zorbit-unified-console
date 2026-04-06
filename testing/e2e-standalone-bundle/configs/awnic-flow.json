@@ -526,7 +526,7 @@
         {
           "action": "fill",
           "selector": "input[name='email'], input[type='email'], input[placeholder*='email' i]",
-          "value": "omar.binkhalid@awnic.ae"
+          "value": "${credentials.admin.email}"
         },
         {
           "action": "fill",
@@ -569,7 +569,7 @@
         {
           "action": "fill",
           "selector": "input[name='email'], input[type='email'], input[placeholder*='email' i]",
-          "value": "noura.alshamsi@awnic.ae"
+          "value": "${credentials.admin.email}"
         },
         {
           "action": "fill",
@@ -612,7 +612,7 @@
         {
           "action": "fill",
           "selector": "input[name='email'], input[type='email'], input[placeholder*='email' i]",
-          "value": "rashid.alfalasi@awnic.ae"
+          "value": "${credentials.admin.email}"
         },
         {
           "action": "fill",
@@ -656,12 +656,12 @@
         {
           "action": "fill",
           "selector": "input[type='email'], input[placeholder*='email' i], input[name='email']",
-          "value": "farooq.almansouri@awnic.ae"
+          "value": "${credentials.admin.email}"
         },
         {
           "action": "fill",
           "selector": "input[type='password']",
-          "value": "${credentials.awnic.farooq.password}"
+          "value": "${credentials.admin.password}"
         },
         {
           "action": "click",
@@ -698,12 +698,12 @@
         {
           "action": "fill",
           "selector": "input[type='email'], input[placeholder*='email' i], input[name='email']",
-          "value": "hessa.aldhaheri@awnic.ae"
+          "value": "${credentials.admin.email}"
         },
         {
           "action": "fill",
           "selector": "input[type='password']",
-          "value": "${credentials.awnic.hessa.password}"
+          "value": "${credentials.admin.password}"
         },
         {
           "action": "click",
@@ -740,12 +740,12 @@
         {
           "action": "fill",
           "selector": "input[type='email'], input[placeholder*='email' i], input[name='email']",
-          "value": "omar.binkhalid@awnic.ae"
+          "value": "${credentials.admin.email}"
         },
         {
           "action": "fill",
           "selector": "input[type='password']",
-          "value": "${credentials.awnic.omar.password}"
+          "value": "${credentials.admin.password}"
         },
         {
           "action": "click",
@@ -782,12 +782,12 @@
         {
           "action": "fill",
           "selector": "input[type='email'], input[placeholder*='email' i], input[name='email']",
-          "value": "noura.alshamsi@awnic.ae"
+          "value": "${credentials.admin.email}"
         },
         {
           "action": "fill",
           "selector": "input[type='password']",
-          "value": "${credentials.awnic.noura.password}"
+          "value": "${credentials.admin.password}"
         },
         {
           "action": "click",
@@ -887,12 +887,12 @@
         {
           "action": "fill",
           "selector": "input[type='email'], input[placeholder*='email' i], input[name='email']",
-          "value": "rashid.alfalasi@awnic.ae"
+          "value": "${credentials.admin.email}"
         },
         {
           "action": "fill",
           "selector": "input[type='password']",
-          "value": "${credentials.awnic.rashid.password}"
+          "value": "${credentials.admin.password}"
         },
         {
           "action": "click",
@@ -1013,12 +1013,12 @@
         {
           "action": "fill",
           "selector": "input[type='email'], input[placeholder*='email' i], input[name='email']",
-          "value": "noura.alshamsi@awnic.ae"
+          "value": "${credentials.admin.email}"
         },
         {
           "action": "fill",
           "selector": "input[type='password']",
-          "value": "${credentials.awnic.noura.password}"
+          "value": "${credentials.admin.password}"
         },
         {
           "action": "click",
