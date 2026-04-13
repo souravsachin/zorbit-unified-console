@@ -56,23 +56,26 @@ const LoginPage: React.FC = () => {
   const [otpVerifying, setOtpVerifying] = useState(false);
 
   useEffect(() => {
+    let cancelled = false;
     const fetchProviders = async () => {
       try {
         const res = await api.get(
           `${API_CONFIG.IDENTITY_URL}/api/v1/G/auth/providers`,
         );
+        if (cancelled) return;
         const data = res.data?.providers || res.data || [];
         const enabled = (Array.isArray(data) ? data : [])
           .filter((p: any) => p.enabled)
           .map((p: any) => ({ ...p, id: p.id || p.name }));
         setProviders(enabled);
       } catch {
-        setProviders([]);
+        if (!cancelled) setProviders([]);
       } finally {
-        setProvidersLoaded(true);
+        if (!cancelled) setProvidersLoaded(true);
       }
     };
     fetchProviders();
+    return () => { cancelled = true; };
   }, []);
 
   // Focus MFA input when MFA step appears
@@ -125,7 +128,10 @@ const LoginPage: React.FC = () => {
       const token = res.data.accessToken || res.data.token;
       completeLogin(token, res.data.user);
     } catch (err: any) {
-      const msg = err?.response?.data?.message || 'Invalid email or password';
+      const serverMsg = err?.response?.data?.message;
+      const msg = typeof serverMsg === 'string' ? serverMsg
+        : Array.isArray(serverMsg) ? serverMsg[0]
+        : 'Invalid email or password';
       toast(msg, 'error');
     } finally {
       setLoading(false);
