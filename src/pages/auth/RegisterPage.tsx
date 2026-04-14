@@ -11,7 +11,6 @@ const RegisterPage: React.FC = () => {
     email: '',
     password: '',
     displayName: '',
-    organizationId: '',
   });
   const [loading, setLoading] = useState(false);
 
@@ -29,8 +28,7 @@ const RegisterPage: React.FC = () => {
     try {
       const hashed = await hashPassword(form.password);
       await identityService.register({ ...form, password: hashed });
-      toast('Account created. Please sign in.', 'success');
-      navigate('/login');
+      navigate('/login?registered=true');
     } catch {
       toast('Registration failed', 'error');
     } finally {
@@ -80,16 +78,6 @@ const RegisterPage: React.FC = () => {
             showStrengthMeter
             showAutoGenerate
           />
-          <div>
-            <label className="block text-sm font-medium mb-1">Organization ID (optional)</label>
-            <input
-              name="organizationId"
-              value={form.organizationId}
-              onChange={handleChange}
-              className="input-field"
-              placeholder="O-92AF"
-            />
-          </div>
           <button type="submit" disabled={loading} className="btn-primary w-full">
             {loading ? 'Creating account...' : 'Register'}
           </button>

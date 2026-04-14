@@ -1,11 +1,14 @@
-import React from 'react';
-import { Routes, Route, Navigate, useParams } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Routes, Route, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { ToastProvider } from './components/shared/Toast';
 import { ErrorBoundary } from './components/shared/ErrorBoundary';
 import Layout from './components/layout/Layout';
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
 import AuthCallback from './pages/auth/AuthCallback';
+import NoAccessPage from './pages/auth/NoAccessPage';
+import { useAuth } from './hooks/useAuth';
+import { authorizationService } from './services/authorization';
 
 /**
  * Wrapper around React.lazy that retries chunk loads on failure.
@@ -272,12 +275,47 @@ const BrokerDashboardPage = lazyWithRetry(() => import('./pages/broker/BrokerDas
 const ChannelAnalyticsPage = lazyWithRetry(() => import('./pages/analytics/ChannelAnalyticsPage'));
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const token = localStorage.getItem('zorbit_token');
-  if (!token) {
-    // Preserve the intended URL so login can redirect back
-    const intended = window.location.pathname + window.location.search;
-    return <Navigate to={`/login?returnTo=${encodeURIComponent(intended)}`} replace />;
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const [authState, setAuthState] = useState<'loading' | 'authorized' | 'unauthorized'>('loading');
+
+  useEffect(() => {
+    const token = localStorage.getItem('zorbit_token');
+    if (!token) {
+      const intended = window.location.pathname + window.location.search;
+      navigate(`/login?returnTo=${encodeURIComponent(intended)}`, { replace: true });
+      return;
+    }
+    // Wait until useAuth has decoded the user from the token
+    if (!user) return;
+
+    const orgId = user.organizationId || 'O-DEMO';
+    authorizationService.getRoles(orgId)
+      .then((res) => {
+        const roles = res.data;
+        if (Array.isArray(roles) && roles.length > 0) {
+          setAuthState('authorized');
+        } else {
+          setAuthState('unauthorized');
+        }
+      })
+      .catch(() => {
+        setAuthState('unauthorized');
+      });
+  }, [user, navigate]);
+
+  if (authState === 'loading') {
+    return (
+      <div className="flex items-center justify-center h-screen bg-gray-50 dark:bg-gray-900">
+        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary-600" />
+      </div>
+    );
   }
+
+  if (authState === 'unauthorized') {
+    return <Navigate to="/no-access" replace />;
+  }
+
   return <>{children}</>;
 }
 
@@ -710,6 +748,7 @@ const App: React.FC = () => {
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/no-access" element={<NoAccessPage />} />
         <Route path="/auth/callback" element={<AuthCallback />} />
         <Route path="/forgot-password" element={<SafeLazy><ForgotPasswordPage /></SafeLazy>} />
         <Route path="/reset-password" element={<SafeLazy><ResetPasswordPage /></SafeLazy>} />

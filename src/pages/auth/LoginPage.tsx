@@ -45,6 +45,9 @@ const LoginPage: React.FC = () => {
   const [qrStatus, setQrStatus] = useState<'loading' | 'pending' | 'expired'>('loading');
   const qrPollRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  // Check if user just registered
+  const justRegistered = new URLSearchParams(window.location.search).get('registered') === 'true';
+
   // Passwordless login state
   const [showMoreOptions, setShowMoreOptions] = useState(false);
   const [passwordlessMode, setPasswordlessMode] = useState<'none' | 'magic-link' | 'email-otp'>('none');
@@ -594,6 +597,16 @@ const LoginPage: React.FC = () => {
           <h1 className="text-2xl font-bold">{pageTitle}</h1>
           <p className="text-gray-500 mt-1">{pageSubtitle}</p>
         </div>
+        {justRegistered && (
+          <div className="mb-4 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-lg p-4">
+            <p className="text-sm text-emerald-800 dark:text-emerald-300 font-medium mb-1">
+              Registration successful.
+            </p>
+            <p className="text-sm text-emerald-700 dark:text-emerald-400">
+              Your access request has been sent to the administrator. You will be notified when your account is approved.
+            </p>
+          </div>
+        )}
         <form onSubmit={handleSubmit} className="card p-6 space-y-4">
           <div>
             <label className="block text-sm font-medium mb-1">Email</label>
