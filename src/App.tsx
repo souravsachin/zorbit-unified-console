@@ -50,6 +50,8 @@ import EventLogPage from './pages/messaging/EventLogPage';
 import NavigationAdminPage from './pages/navigation-admin/NavigationAdminPage';
 import RoutesPage from './pages/routes/RoutesPage';
 import PiiVaultPage from './pages/pii-vault/PiiVaultPage';
+const PiiDataTypesPage = lazyWithRetry(() => import('./pages/pii-vault/PiiDataTypesPage'));
+const PiiTokenRegistryPage = lazyWithRetry(() => import('./pages/pii-vault/PiiTokenRegistryPage'));
 import ApiDocsPage from './pages/api-docs/ApiDocsPage';
 import SettingsPage from './pages/settings/SettingsPage';
 import SecretsPage from './pages/settings/SecretsPage';
@@ -330,7 +332,8 @@ function PageRoutes() {
       <Route path="navigation/routes" element={<RoutesPage />} />
       <Route path="navigation" element={<NavigationAdminPage />} />
       <Route path="pii-vault" element={<PiiVaultPage />} />
-      <Route path="pii-vault/tokens" element={<PiiVaultPage />} />
+      <Route path="pii-vault/tokens" element={<SafeLazy><PiiTokenRegistryPage /></SafeLazy>} />
+      <Route path="pii-vault/data-types" element={<SafeLazy><PiiDataTypesPage /></SafeLazy>} />
       <Route path="api-docs" element={<ApiDocsPage />} />
       <Route path="settings" element={<SettingsPage />} />
       <Route path="settings/general" element={<SettingsPage />} />
