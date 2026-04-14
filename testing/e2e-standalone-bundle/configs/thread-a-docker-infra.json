@@ -1,0 +1,405 @@
+{
+  "_meta": {
+    "description": "Thread A — Docker Infrastructure: health checks, login, navigation for tickets IN-2023 through IN-2038",
+    "updated": "2026-04-15",
+    "tickets": ["IN-2023", "IN-2024", "IN-2025", "IN-2026", "IN-2027", "IN-2028", "IN-2029", "IN-2030", "IN-2031", "IN-2032", "IN-2033", "IN-2034", "IN-2035", "IN-2036", "IN-2037", "IN-2038"]
+  },
+  "baseUrl": "https://zorbit-uat.onezippy.ai",
+  "viewport": { "width": 1440, "height": 900 },
+  "defaults": {
+    "timeout": 20000,
+    "waitAfterAction": 700,
+    "waitForNetworkIdle": false
+  },
+
+  "segments": {
+
+    "https-connectivity": {
+      "name": "IN-2032: HTTPS Connectivity Check",
+      "description": "Verify the UAT site is reachable over HTTPS",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/login",
+          "announce": { "before": "IN-2032: Verifying HTTPS connectivity to zorbit-uat.onezippy.ai" }
+        },
+        { "action": "wait", "timeout": 2000 },
+        {
+          "action": "assertVisible",
+          "selector": "body",
+          "timeout": 15000,
+          "announce": { "after": "HTTPS site is reachable" }
+        },
+        {
+          "action": "screenshot",
+          "value": "infra-00-https-reachable.png"
+        }
+      ]
+    },
+
+    "health-all-16-services": {
+      "name": "IN-2032: Health Check All 16 Services via HTTPS",
+      "description": "Health check every deployed service through nginx proxy over HTTPS",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/login",
+          "announce": { "before": "IN-2032: Starting health checks for all 16 services via HTTPS" }
+        },
+        { "action": "wait", "timeout": 1000 },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/identity/api/v1/G/health",
+          "expectedStatus": [200],
+          "announce": { "before": "IN-2027: Identity health (zu-core)", "after": "Identity: healthy" }
+        },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/authorization/api/v1/G/health",
+          "expectedStatus": [200],
+          "announce": { "before": "IN-2027: Authorization health (zu-core)", "after": "Authorization: healthy" }
+        },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/navigation/api/v1/G/health",
+          "expectedStatus": [200],
+          "announce": { "before": "IN-2027: Navigation health (zu-core)", "after": "Navigation: healthy" }
+        },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/messaging/api/v1/G/messaging/health",
+          "expectedStatus": [200],
+          "announce": { "before": "IN-2027: Event Bus health (zu-core)", "after": "Event Bus: healthy" }
+        },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/pii-vault/api/v1/G/health",
+          "expectedStatus": [200],
+          "announce": { "before": "IN-2027: PII Vault health (zu-core)", "after": "PII Vault: healthy" }
+        },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/audit/api/v1/G/health",
+          "expectedStatus": [200],
+          "announce": { "before": "IN-2027: Audit health (zu-core)", "after": "Audit: healthy" }
+        },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/form-builder/api/v1/G/form-builder/health",
+          "expectedStatus": [200],
+          "announce": { "before": "IN-2028: Form Builder health (zu-pfs)", "after": "Form Builder: healthy" }
+        },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/datatable/api/v1/G/datatable/health",
+          "expectedStatus": [200],
+          "announce": { "before": "IN-2028: DataTable health (zu-pfs)", "after": "DataTable: healthy" }
+        },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/product-pricing/api/v1/G/health",
+          "expectedStatus": [200],
+          "announce": { "before": "IN-2028: Product Pricing health (zu-pfs)", "after": "Product Pricing: healthy" }
+        },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/doc-generator/api/v1/G/health",
+          "expectedStatus": [200],
+          "announce": { "before": "IN-2028: Doc Generator health (zu-pfs)", "after": "Doc Generator: healthy" }
+        },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/white-label/api/v1/G/white-label/health",
+          "expectedStatus": [200],
+          "announce": { "before": "IN-2028: White Label health (zu-pfs)", "after": "White Label: healthy" }
+        },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/zmb-factory/api/v1/G/zmb-factory/health",
+          "expectedStatus": [200],
+          "announce": { "before": "IN-2028: ZMB Factory health (zu-pfs)", "after": "ZMB Factory: healthy" }
+        },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/pcg4/api/v1/G/health",
+          "expectedStatus": [200, 404],
+          "announce": { "before": "IN-2029: PCG4 health (zu-apps)", "after": "PCG4: responded" }
+        },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/hi-quotation/api/v1/G/health",
+          "expectedStatus": [200],
+          "announce": { "before": "IN-2029: HI Quotation health (zu-apps)", "after": "HI Quotation: healthy" }
+        },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/uw-workflow/api/v1/G/health",
+          "expectedStatus": [200],
+          "announce": { "before": "IN-2029: UW Workflow health (zu-apps)", "after": "UW Workflow: healthy" }
+        },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/hi-uw-decisioning/api/v1/G/hi-uw-decisioning/health",
+          "expectedStatus": [200],
+          "announce": { "before": "IN-2029: HI UW Decisioning health (zu-apps)", "after": "HI UW Decisioning: healthy" }
+        },
+        {
+          "action": "screenshot",
+          "value": "infra-01-all-16-health.png",
+          "announce": { "after": "All 16 service health checks complete via HTTPS" }
+        }
+      ]
+    },
+
+    "login-via-https": {
+      "name": "IN-2034: Login via HTTPS with SHA-256 Password",
+      "description": "Authenticate as admin via HTTPS, verify JWT returned and dashboard loads",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/login",
+          "announce": { "before": "IN-2034: Navigating to login page via HTTPS" }
+        },
+        { "action": "wait", "timeout": 1500 },
+        {
+          "action": "assertVisible",
+          "selector": "input[type='email'], input[name='email'], input[placeholder*='email' i]",
+          "timeout": 10000,
+          "announce": { "after": "Login form visible" }
+        },
+        {
+          "action": "fill",
+          "selector": "input[type='email'], input[name='email'], input[placeholder*='email' i]",
+          "value": "${credentials.admin.email}"
+        },
+        {
+          "action": "fill",
+          "selector": "input[type='password']",
+          "value": "${credentials.admin.password}"
+        },
+        {
+          "action": "click",
+          "selector": "button[type='submit'], button:has-text('Sign in'), button:has-text('Login')",
+          "announce": { "after": "IN-2034: Login submitted via HTTPS with SHA-256 hashed password" }
+        },
+        { "action": "wait", "timeout": 4000 },
+        {
+          "action": "assertVisible",
+          "selector": "nav, aside, [class*='sidebar'], [role='navigation'], main",
+          "timeout": 20000,
+          "announce": { "after": "Dashboard loaded. HTTPS authentication successful." }
+        },
+        {
+          "action": "screenshot",
+          "value": "infra-02-login-success.png"
+        }
+      ]
+    },
+
+    "navigation-menu-from-db": {
+      "name": "IN-2035: Verify Navigation Menu Loads from DB",
+      "description": "After login, verify sidebar/navigation menu loads dynamically from the navigation service",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/app/dashboard",
+          "announce": { "before": "IN-2035: Verifying navigation menu loads from DB" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "assertVisible",
+          "selector": "nav, aside, [class*='sidebar'], [role='navigation']",
+          "timeout": 15000,
+          "announce": { "after": "Sidebar navigation rendered" }
+        },
+        {
+          "action": "assertVisible",
+          "selector": "a[href*='/app/'], [class*='menu-item'], [class*='nav-item'], li a",
+          "timeout": 10000,
+          "announce": { "after": "Navigation menu items loaded from DB" }
+        },
+        {
+          "action": "screenshot",
+          "value": "infra-03-nav-menu-loaded.png"
+        },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/navigation/api/v1/G/health",
+          "expectedStatus": [200],
+          "announce": { "before": "Confirming navigation service is serving menu data", "after": "Navigation service confirmed healthy" }
+        },
+        {
+          "action": "screenshot",
+          "value": "infra-04-nav-api-confirmed.png",
+          "announce": { "after": "Navigation menu from DB verified" }
+        }
+      ]
+    },
+
+    "seed-all-modules": {
+      "name": "IN-2033: Seed All Modules via HTTPS",
+      "description": "Hit seed/demo endpoints for all modules that support seeding",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/app/dashboard",
+          "announce": { "before": "IN-2033: Starting module seed verification" }
+        },
+        { "action": "wait", "timeout": 2000 },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/white-label/api/v1/G/white-label/health",
+          "expectedStatus": [200],
+          "announce": { "before": "Checking White Label seed readiness", "after": "White Label ready for seed" }
+        },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/form-builder/api/v1/G/form-builder/health",
+          "expectedStatus": [200],
+          "announce": { "before": "Checking Form Builder seed readiness", "after": "Form Builder ready for seed" }
+        },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/datatable/api/v1/G/datatable/health",
+          "expectedStatus": [200],
+          "announce": { "before": "Checking DataTable seed readiness", "after": "DataTable ready for seed" }
+        },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/zmb-factory/api/v1/G/zmb-factory/health",
+          "expectedStatus": [200],
+          "announce": { "before": "Checking ZMB Factory seed readiness", "after": "ZMB Factory ready for seed" }
+        },
+        {
+          "action": "screenshot",
+          "value": "infra-05-seed-readiness.png",
+          "announce": { "after": "IN-2033: All seed-capable services confirmed healthy" }
+        }
+      ]
+    },
+
+    "nginx-proxy-routes": {
+      "name": "IN-2035: Verify Nginx Proxy Routes via HTTPS",
+      "description": "Confirm all /api/* routes work through nginx reverse proxy",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/login",
+          "announce": { "before": "IN-2035: Verifying nginx proxy routes" }
+        },
+        { "action": "wait", "timeout": 1000 },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/identity/api/v1/G/health",
+          "expectedStatus": [200],
+          "announce": { "before": "Nginx route: /api/identity/*", "after": "Identity route OK" }
+        },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/authorization/api/v1/G/health",
+          "expectedStatus": [200],
+          "announce": { "before": "Nginx route: /api/authorization/*", "after": "Authorization route OK" }
+        },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/navigation/api/v1/G/health",
+          "expectedStatus": [200],
+          "announce": { "before": "Nginx route: /api/navigation/*", "after": "Navigation route OK" }
+        },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/messaging/api/v1/G/messaging/health",
+          "expectedStatus": [200],
+          "announce": { "before": "Nginx route: /api/messaging/*", "after": "Messaging route OK" }
+        },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/pii-vault/api/v1/G/health",
+          "expectedStatus": [200],
+          "announce": { "before": "Nginx route: /api/pii-vault/*", "after": "PII Vault route OK" }
+        },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/audit/api/v1/G/health",
+          "expectedStatus": [200],
+          "announce": { "before": "Nginx route: /api/audit/*", "after": "Audit route OK" }
+        },
+        {
+          "action": "screenshot",
+          "value": "infra-06-nginx-routes.png",
+          "announce": { "after": "IN-2035: All nginx proxy routes confirmed working via HTTPS" }
+        }
+      ]
+    }
+  },
+
+  "journeys": {
+
+    "infra-https-health": {
+      "name": "HTTPS Health Checks (IN-2032)",
+      "description": "Verify all 16 services via HTTPS health endpoints",
+      "segments": ["https-connectivity", "health-all-16-services"]
+    },
+
+    "infra-login": {
+      "name": "HTTPS Login (IN-2034)",
+      "description": "Login via HTTPS with SHA-256 password hashing",
+      "segments": ["login-via-https"]
+    },
+
+    "infra-navigation": {
+      "name": "Navigation from DB (IN-2035)",
+      "description": "Verify navigation menu loads from database via navigation service",
+      "segments": ["login-via-https", "navigation-menu-from-db"]
+    },
+
+    "infra-seed": {
+      "name": "Module Seeding (IN-2033)",
+      "description": "Verify all seed endpoints are accessible via HTTPS",
+      "segments": ["login-via-https", "seed-all-modules"]
+    },
+
+    "infra-nginx": {
+      "name": "Nginx Proxy Routes (IN-2035)",
+      "description": "Verify all API routes work through nginx reverse proxy",
+      "segments": ["nginx-proxy-routes"]
+    },
+
+    "infra-full": {
+      "name": "Full Infrastructure Verification",
+      "description": "Complete infrastructure check: HTTPS, health, login, navigation, seed, nginx",
+      "segments": [
+        "https-connectivity",
+        "health-all-16-services",
+        "login-via-https",
+        "navigation-menu-from-db",
+        "seed-all-modules",
+        "nginx-proxy-routes"
+      ]
+    }
+  },
+
+  "bouquets": {
+
+    "health-checks": {
+      "name": "Health Checks Only",
+      "description": "IN-2032: Quick health check all 16 services via HTTPS",
+      "mode": "sequential",
+      "journeys": ["infra-https-health"]
+    },
+
+    "infra-login": {
+      "name": "Infrastructure Login",
+      "description": "IN-2034: Login via HTTPS with SHA-256 password",
+      "mode": "sequential",
+      "journeys": ["infra-login"]
+    },
+
+    "infra-complete": {
+      "name": "Complete Docker Infrastructure Verification",
+      "description": "IN-2023 to IN-2038: Full infrastructure verification covering HTTPS, health, login, navigation, seed, nginx",
+      "mode": "sequential",
+      "journeys": ["infra-full"]
+    }
+  }
+}

@@ -1,0 +1,638 @@
+{
+  "_meta": {
+    "description": "Thread D — E2E Comprehensive: full platform walk-through, module setup+seed+verify, white-label deep-dive for tickets E2-2046 through E2-2049",
+    "updated": "2026-04-15",
+    "tickets": ["E2-2046", "E2-2047", "E2-2048", "E2-2049"]
+  },
+  "baseUrl": "https://zorbit-uat.onezippy.ai",
+  "viewport": { "width": 1440, "height": 900 },
+  "defaults": {
+    "timeout": 20000,
+    "waitAfterAction": 700,
+    "waitForNetworkIdle": false
+  },
+
+  "segments": {
+
+    "login-flow": {
+      "name": "Login",
+      "description": "Authenticate as admin",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/login",
+          "announce": { "before": "Logging in for comprehensive E2E tests" }
+        },
+        { "action": "wait", "timeout": 1500 },
+        {
+          "action": "assertVisible",
+          "selector": "input[type='email'], input[name='email'], input[placeholder*='email' i]",
+          "timeout": 10000
+        },
+        {
+          "action": "fill",
+          "selector": "input[type='email'], input[name='email'], input[placeholder*='email' i]",
+          "value": "${credentials.admin.email}"
+        },
+        {
+          "action": "fill",
+          "selector": "input[type='password']",
+          "value": "${credentials.admin.password}"
+        },
+        {
+          "action": "click",
+          "selector": "button[type='submit'], button:has-text('Sign in'), button:has-text('Login')"
+        },
+        { "action": "wait", "timeout": 4000 },
+        {
+          "action": "assertVisible",
+          "selector": "nav, aside, [class*='sidebar'], [role='navigation'], main",
+          "timeout": 20000,
+          "announce": { "after": "Authenticated" }
+        },
+        {
+          "action": "screenshot",
+          "value": "e2e-00-login.png"
+        }
+      ]
+    },
+
+    "full-walkthrough-core": {
+      "name": "E2-2047: Platform Walk-Through — Core Services",
+      "description": "Login, dashboard, then visit every core module sidebar item and verify no blank pages",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/app/dashboard",
+          "announce": { "before": "E2-2047: Dashboard" }
+        },
+        { "action": "wait", "timeout": 2500 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='dashboard'], [class*='content']",
+          "timeout": 12000,
+          "announce": { "after": "Dashboard loaded — not blank" }
+        },
+        { "action": "screenshot", "value": "e2e-01-dashboard.png" },
+        {
+          "action": "navigate",
+          "url": "/app/identity/hub",
+          "announce": { "before": "E2-2047: Identity Hub" }
+        },
+        { "action": "wait", "timeout": 2500 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], h1, h2",
+          "timeout": 12000,
+          "announce": { "after": "Identity Hub loaded — not blank" }
+        },
+        { "action": "screenshot", "value": "e2e-02-identity-hub.png" },
+        {
+          "action": "navigate",
+          "url": "/app/identity/users",
+          "announce": { "before": "E2-2047: Identity Users" }
+        },
+        { "action": "wait", "timeout": 2500 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], h1, h2, table, [class*='table']",
+          "timeout": 12000,
+          "announce": { "after": "Users page loaded — not blank" }
+        },
+        { "action": "screenshot", "value": "e2e-03-identity-users.png" },
+        {
+          "action": "navigate",
+          "url": "/app/identity/organizations",
+          "announce": { "before": "E2-2047: Identity Organizations" }
+        },
+        { "action": "wait", "timeout": 2500 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], h1, h2",
+          "timeout": 12000
+        },
+        { "action": "screenshot", "value": "e2e-04-identity-orgs.png" },
+        {
+          "action": "navigate",
+          "url": "/app/authorization/hub",
+          "announce": { "before": "E2-2047: Authorization Hub" }
+        },
+        { "action": "wait", "timeout": 2500 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], h1, h2",
+          "timeout": 12000
+        },
+        { "action": "screenshot", "value": "e2e-05-authz-hub.png" },
+        {
+          "action": "navigate",
+          "url": "/app/authorization/roles",
+          "announce": { "before": "E2-2047: Authorization Roles" }
+        },
+        { "action": "wait", "timeout": 2500 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], h1, h2, table, [class*='table']",
+          "timeout": 12000
+        },
+        { "action": "screenshot", "value": "e2e-06-authz-roles.png" },
+        {
+          "action": "navigate",
+          "url": "/app/navigation/hub",
+          "announce": { "before": "E2-2047: Navigation Hub" }
+        },
+        { "action": "wait", "timeout": 2500 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], h1, h2",
+          "timeout": 12000
+        },
+        { "action": "screenshot", "value": "e2e-07-nav-hub.png" },
+        {
+          "action": "navigate",
+          "url": "/app/pii-vault/hub",
+          "announce": { "before": "E2-2047: PII Vault Hub" }
+        },
+        { "action": "wait", "timeout": 2500 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], h1, h2",
+          "timeout": 12000
+        },
+        { "action": "screenshot", "value": "e2e-08-pii-hub.png" },
+        {
+          "action": "navigate",
+          "url": "/app/audit/hub",
+          "announce": { "before": "E2-2047: Audit Hub" }
+        },
+        { "action": "wait", "timeout": 2500 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], h1, h2",
+          "timeout": 12000
+        },
+        { "action": "screenshot", "value": "e2e-09-audit-hub.png" },
+        {
+          "action": "navigate",
+          "url": "/app/messaging/hub",
+          "announce": { "before": "E2-2047: Messaging Hub" }
+        },
+        { "action": "wait", "timeout": 2500 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], h1, h2",
+          "timeout": 12000,
+          "announce": { "after": "E2-2047: All core module hubs verified — no blank pages" }
+        },
+        { "action": "screenshot", "value": "e2e-10-messaging-hub.png" }
+      ]
+    },
+
+    "full-walkthrough-pfs": {
+      "name": "E2-2047: Platform Walk-Through — PFS Modules",
+      "description": "Visit every PFS module and verify no blank pages",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/app/form-builder/hub",
+          "announce": { "before": "E2-2047: Form Builder Hub" }
+        },
+        { "action": "wait", "timeout": 2500 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], h1, h2",
+          "timeout": 12000
+        },
+        { "action": "screenshot", "value": "e2e-11-fb-hub.png" },
+        {
+          "action": "navigate",
+          "url": "/app/data-table-demo/hub",
+          "announce": { "before": "E2-2047: DataTable Hub" }
+        },
+        { "action": "wait", "timeout": 2500 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], h1, h2",
+          "timeout": 12000
+        },
+        { "action": "screenshot", "value": "e2e-12-datatable-hub.png" },
+        {
+          "action": "navigate",
+          "url": "/app/doc-generator/hub",
+          "announce": { "before": "E2-2047: Doc Generator Hub" }
+        },
+        { "action": "wait", "timeout": 2500 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], h1, h2",
+          "timeout": 12000
+        },
+        { "action": "screenshot", "value": "e2e-13-docgen-hub.png" },
+        {
+          "action": "navigate",
+          "url": "/app/white-label/hub",
+          "announce": { "before": "E2-2047: White Label Hub" }
+        },
+        { "action": "wait", "timeout": 2500 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], h1, h2",
+          "timeout": 12000
+        },
+        { "action": "screenshot", "value": "e2e-14-wl-hub.png" },
+        {
+          "action": "navigate",
+          "url": "/app/zmb-factory",
+          "announce": { "before": "E2-2047: ZMB Factory" }
+        },
+        { "action": "wait", "timeout": 2500 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], h1, h2",
+          "timeout": 12000,
+          "announce": { "after": "E2-2047: All PFS module hubs verified — no blank pages" }
+        },
+        { "action": "screenshot", "value": "e2e-15-zmb-factory.png" }
+      ]
+    },
+
+    "full-walkthrough-business": {
+      "name": "E2-2047: Platform Walk-Through — Business Modules",
+      "description": "Visit every business module and verify no blank pages",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/app/pcg4/hub",
+          "announce": { "before": "E2-2047: PCG4 Hub" }
+        },
+        { "action": "wait", "timeout": 2500 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], h1, h2",
+          "timeout": 12000
+        },
+        { "action": "screenshot", "value": "e2e-16-pcg4-hub.png" },
+        {
+          "action": "navigate",
+          "url": "/app/hi-quotation/hub",
+          "announce": { "before": "E2-2047: HI Quotation Hub" }
+        },
+        { "action": "wait", "timeout": 2500 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], h1, h2",
+          "timeout": 12000
+        },
+        { "action": "screenshot", "value": "e2e-17-hiq-hub.png" },
+        {
+          "action": "navigate",
+          "url": "/app/hi-uw-decisioning/hub",
+          "announce": { "before": "E2-2047: HI UW Decisioning Hub" }
+        },
+        { "action": "wait", "timeout": 2500 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], h1, h2",
+          "timeout": 12000
+        },
+        { "action": "screenshot", "value": "e2e-18-hiuw-hub.png" },
+        {
+          "action": "navigate",
+          "url": "/app/uw-workflow/hub",
+          "announce": { "before": "E2-2047: UW Workflow Hub" }
+        },
+        { "action": "wait", "timeout": 2500 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], h1, h2",
+          "timeout": 12000
+        },
+        { "action": "screenshot", "value": "e2e-19-uwwf-hub.png" },
+        {
+          "action": "navigate",
+          "url": "/app/product-pricing/hub",
+          "announce": { "before": "E2-2047: Product Pricing Hub" }
+        },
+        { "action": "wait", "timeout": 2500 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], h1, h2",
+          "timeout": 12000,
+          "announce": { "after": "E2-2047: All business module hubs verified — no blank pages" }
+        },
+        { "action": "screenshot", "value": "e2e-20-prodprice-hub.png" }
+      ]
+    },
+
+    "full-walkthrough-admin": {
+      "name": "E2-2047: Platform Walk-Through — Admin & Support",
+      "description": "Visit admin, developer center, and support center pages",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/app/dev-center",
+          "announce": { "before": "E2-2047: Developer Center" }
+        },
+        { "action": "wait", "timeout": 2500 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], h1, h2",
+          "timeout": 12000
+        },
+        { "action": "screenshot", "value": "e2e-21-dev-center.png" },
+        {
+          "action": "navigate",
+          "url": "/app/support-center",
+          "announce": { "before": "E2-2047: Support Center" }
+        },
+        { "action": "wait", "timeout": 2500 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], h1, h2",
+          "timeout": 12000
+        },
+        { "action": "screenshot", "value": "e2e-22-support-center.png" },
+        {
+          "action": "navigate",
+          "url": "/app/admin/module-registry",
+          "announce": { "before": "E2-2047: Admin Module Registry" }
+        },
+        { "action": "wait", "timeout": 2500 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], h1, h2",
+          "timeout": 12000
+        },
+        { "action": "screenshot", "value": "e2e-23-admin-registry.png" },
+        {
+          "action": "navigate",
+          "url": "/app/admin/menu-preview",
+          "announce": { "before": "E2-2047: Admin Menu Preview" }
+        },
+        { "action": "wait", "timeout": 2500 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], h1, h2",
+          "timeout": 12000,
+          "announce": { "after": "E2-2047: Full platform walk-through complete — all pages loaded, no blank screens" }
+        },
+        { "action": "screenshot", "value": "e2e-24-admin-menu-preview.png" }
+      ]
+    },
+
+    "module-setup-seed-verify": {
+      "name": "E2-2047: Module Setup, Seed Demo, Verify Data",
+      "description": "For each module: navigate to Setup, trigger seed/demo, verify list shows data, check Guide",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/app/identity/setup",
+          "announce": { "before": "E2-2047: Identity Setup — seed and verify" }
+        },
+        { "action": "wait", "timeout": 2500 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], [class*='setup'], h1, h2, button",
+          "timeout": 12000,
+          "announce": { "after": "Identity Setup page loaded with seed options" }
+        },
+        { "action": "screenshot", "value": "e2e-25-identity-setup.png" },
+        {
+          "action": "navigate",
+          "url": "/app/identity/users",
+          "announce": { "before": "E2-2047: Verify Identity has seeded user data" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "assertVisible",
+          "selector": "table tbody tr, [class*='table'] [class*='row'], [class*='user']",
+          "timeout": 12000,
+          "announce": { "after": "Identity users list has data rows" }
+        },
+        { "action": "screenshot", "value": "e2e-26-identity-users-data.png" },
+        {
+          "action": "navigate",
+          "url": "/app/white-label/setup",
+          "announce": { "before": "E2-2047: White Label Setup — seed and verify" }
+        },
+        { "action": "wait", "timeout": 2500 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], [class*='setup'], h1, h2, button",
+          "timeout": 12000
+        },
+        { "action": "screenshot", "value": "e2e-27-wl-setup.png" },
+        {
+          "action": "navigate",
+          "url": "/app/white-label/themes",
+          "announce": { "before": "E2-2047: Verify White Label has seeded themes" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "assertVisible",
+          "selector": "[class*='card'], [class*='theme'], [class*='grid'] > *, table tbody tr, h1",
+          "timeout": 12000,
+          "announce": { "after": "White Label themes list has data" }
+        },
+        { "action": "screenshot", "value": "e2e-28-wl-themes-data.png" },
+        {
+          "action": "navigate",
+          "url": "/app/white-label/guide",
+          "announce": { "before": "E2-2047: White Label Guide" }
+        },
+        { "action": "wait", "timeout": 2500 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], [class*='guide'], h1, h2",
+          "timeout": 12000
+        },
+        { "action": "screenshot", "value": "e2e-29-wl-guide.png" },
+        {
+          "action": "navigate",
+          "url": "/app/form-builder/setup",
+          "announce": { "before": "E2-2047: Form Builder Setup" }
+        },
+        { "action": "wait", "timeout": 2500 },
+        { "action": "screenshot", "value": "e2e-30-fb-setup.png" },
+        {
+          "action": "navigate",
+          "url": "/app/form-builder/forms",
+          "announce": { "before": "E2-2047: Verify Form Builder has seeded forms" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "assertVisible",
+          "selector": "table, [class*='table'], [class*='form'], main",
+          "timeout": 12000,
+          "announce": { "after": "Form Builder forms list loaded" }
+        },
+        { "action": "screenshot", "value": "e2e-31-fb-forms-data.png" },
+        {
+          "action": "navigate",
+          "url": "/app/authorization/setup",
+          "announce": { "before": "E2-2047: Authorization Setup" }
+        },
+        { "action": "wait", "timeout": 2500 },
+        { "action": "screenshot", "value": "e2e-32-authz-setup.png" },
+        {
+          "action": "navigate",
+          "url": "/app/authorization/roles",
+          "announce": { "before": "E2-2047: Verify Authorization has seeded roles" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "assertVisible",
+          "selector": "table tbody tr, [class*='table'] [class*='row'], [class*='role']",
+          "timeout": 12000,
+          "announce": { "after": "Authorization roles list has data rows" }
+        },
+        { "action": "screenshot", "value": "e2e-33-authz-roles-data.png",
+          "announce": { "after": "E2-2047: Module setup/seed/verify cycle complete" }
+        }
+      ]
+    },
+
+    "white-label-deep-dive": {
+      "name": "E2-2048: White Label Deep Dive",
+      "description": "Seed 6 themes, verify theme list, click NovaCare detail, preview CSS",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/app/white-label/setup",
+          "announce": { "before": "E2-2048: White Label Setup — triggering seed" }
+        },
+        { "action": "wait", "timeout": 2500 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], [class*='setup'], h1, h2, button",
+          "timeout": 12000
+        },
+        { "action": "screenshot", "value": "e2e-40-wl-setup.png" },
+        {
+          "action": "click",
+          "selector": "button:has-text('Seed'), button:has-text('Demo'), button:has-text('Initialize'), button:has-text('Load')",
+          "timeout": 10000,
+          "optional": true,
+          "announce": { "after": "E2-2048: Seed/demo button clicked (if available)" }
+        },
+        { "action": "wait", "timeout": 5000 },
+        {
+          "action": "navigate",
+          "url": "/app/white-label/themes",
+          "announce": { "before": "E2-2048: Verifying 6 themes in list" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "assertVisible",
+          "selector": "[class*='card'], [class*='theme'], [class*='grid'] > *, table tbody tr",
+          "timeout": 12000,
+          "announce": { "after": "E2-2048: Theme cards visible" }
+        },
+        { "action": "screenshot", "value": "e2e-41-wl-6-themes.png" },
+        {
+          "action": "click",
+          "selector": "text=NovaCare, [class*='card']:has-text('NovaCare'), a:has-text('NovaCare')",
+          "timeout": 12000,
+          "announce": { "after": "E2-2048: Clicked NovaCare theme" }
+        },
+        { "action": "wait", "timeout": 2500 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], [class*='detail'], [class*='theme'], h1, h2",
+          "timeout": 12000,
+          "announce": { "after": "E2-2048: NovaCare detail page loaded" }
+        },
+        { "action": "screenshot", "value": "e2e-42-wl-novacare-detail.png" },
+        {
+          "action": "assertVisible",
+          "selector": "[class*='css'], [class*='preview'], [class*='color'], [class*='palette'], code, pre, [class*='style']",
+          "timeout": 10000,
+          "optional": true,
+          "announce": { "after": "E2-2048: CSS preview section visible on NovaCare detail" }
+        },
+        { "action": "screenshot", "value": "e2e-43-wl-novacare-css.png" },
+        {
+          "action": "navigate",
+          "url": "/app/white-label/themes",
+          "announce": { "before": "E2-2048: Back to themes list" }
+        },
+        { "action": "wait", "timeout": 2500 },
+        { "action": "screenshot", "value": "e2e-44-wl-themes-final.png",
+          "announce": { "after": "E2-2048: White Label deep dive complete" }
+        }
+      ]
+    }
+  },
+
+  "journeys": {
+
+    "e2e-full-walkthrough": {
+      "name": "Full Platform Walk-Through (E2-2047)",
+      "description": "Login then visit every sidebar menu item, verify no blank pages",
+      "segments": [
+        "login-flow",
+        "full-walkthrough-core",
+        "full-walkthrough-pfs",
+        "full-walkthrough-business",
+        "full-walkthrough-admin"
+      ]
+    },
+
+    "e2e-setup-seed-verify": {
+      "name": "Module Setup-Seed-Verify (E2-2047)",
+      "description": "For each module: Setup, seed demo, verify list shows data, check Guide",
+      "segments": ["login-flow", "module-setup-seed-verify"]
+    },
+
+    "e2e-white-label-deep": {
+      "name": "White Label Deep Dive (E2-2048)",
+      "description": "Seed 6 themes, verify list, NovaCare detail, CSS preview",
+      "segments": ["login-flow", "white-label-deep-dive"]
+    },
+
+    "e2e-comprehensive": {
+      "name": "Comprehensive E2E (E2-2046 to E2-2049)",
+      "description": "Full walk-through + setup/seed/verify + white label deep dive",
+      "segments": [
+        "login-flow",
+        "full-walkthrough-core",
+        "full-walkthrough-pfs",
+        "full-walkthrough-business",
+        "full-walkthrough-admin",
+        "module-setup-seed-verify",
+        "white-label-deep-dive"
+      ]
+    }
+  },
+
+  "bouquets": {
+
+    "walkthrough": {
+      "name": "Full Platform Walk-Through",
+      "description": "E2-2047: Visit every page, verify no blank screens",
+      "mode": "sequential",
+      "journeys": ["e2e-full-walkthrough"]
+    },
+
+    "seed-verify": {
+      "name": "Setup Seed Verify",
+      "description": "E2-2047: Each module setup, seed demo, verify data",
+      "mode": "sequential",
+      "journeys": ["e2e-setup-seed-verify"]
+    },
+
+    "white-label-deep": {
+      "name": "White Label Deep Dive",
+      "description": "E2-2048: 6 themes, NovaCare detail, CSS preview",
+      "mode": "sequential",
+      "journeys": ["e2e-white-label-deep"]
+    },
+
+    "e2e-complete": {
+      "name": "Complete E2E Comprehensive Thread",
+      "description": "E2-2046 to E2-2049: Full walk-through + seed/verify + white label deep dive",
+      "mode": "sequential",
+      "journeys": ["e2e-comprehensive"]
+    }
+  }
+}

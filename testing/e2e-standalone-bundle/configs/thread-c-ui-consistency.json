@@ -1,0 +1,371 @@
+{
+  "_meta": {
+    "description": "Thread C — UI Consistency: FormBuilder, DataTable, 6-level menu, admin-console nuke for tickets FB-2042, DT-2043, NV-2044, UC-2045",
+    "updated": "2026-04-15",
+    "tickets": ["FB-2042", "DT-2043", "NV-2044", "UC-2045"]
+  },
+  "baseUrl": "https://zorbit-uat.onezippy.ai",
+  "viewport": { "width": 1440, "height": 900 },
+  "defaults": {
+    "timeout": 20000,
+    "waitAfterAction": 700,
+    "waitForNetworkIdle": false
+  },
+
+  "segments": {
+
+    "login-flow": {
+      "name": "Login",
+      "description": "Authenticate as admin for UI consistency tests",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/login",
+          "announce": { "before": "Logging in for UI consistency tests" }
+        },
+        { "action": "wait", "timeout": 1500 },
+        {
+          "action": "assertVisible",
+          "selector": "input[type='email'], input[name='email'], input[placeholder*='email' i]",
+          "timeout": 10000
+        },
+        {
+          "action": "fill",
+          "selector": "input[type='email'], input[name='email'], input[placeholder*='email' i]",
+          "value": "${credentials.admin.email}"
+        },
+        {
+          "action": "fill",
+          "selector": "input[type='password']",
+          "value": "${credentials.admin.password}"
+        },
+        {
+          "action": "click",
+          "selector": "button[type='submit'], button:has-text('Sign in'), button:has-text('Login')"
+        },
+        { "action": "wait", "timeout": 4000 },
+        {
+          "action": "assertVisible",
+          "selector": "nav, aside, [class*='sidebar'], [role='navigation'], main",
+          "timeout": 20000,
+          "announce": { "after": "Authenticated for UI tests" }
+        },
+        {
+          "action": "screenshot",
+          "value": "ui-00-login.png"
+        }
+      ]
+    },
+
+    "formrenderer-in-modules": {
+      "name": "FB-2042: FormRenderer Component in Module Forms",
+      "description": "Navigate to create/edit forms across modules and verify FormRenderer is used",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/app/identity/users",
+          "announce": { "before": "FB-2042: Checking Identity user creation form uses FormRenderer" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "screenshot",
+          "value": "ui-01-identity-users-list.png"
+        },
+        {
+          "action": "navigate",
+          "url": "/app/pcg4/products",
+          "announce": { "before": "FB-2042: Checking PCG4 product forms for FormRenderer" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], h1, h2, table, [class*='table']",
+          "timeout": 12000,
+          "announce": { "after": "PCG4 products page loaded" }
+        },
+        {
+          "action": "screenshot",
+          "value": "ui-02-pcg4-products.png"
+        },
+        {
+          "action": "navigate",
+          "url": "/app/hi-quotation/quotations",
+          "announce": { "before": "FB-2042: Checking HI Quotation forms for FormRenderer" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], h1, h2",
+          "timeout": 12000,
+          "announce": { "after": "HI Quotation page loaded" }
+        },
+        {
+          "action": "screenshot",
+          "value": "ui-03-hi-quotation.png"
+        },
+        {
+          "action": "navigate",
+          "url": "/app/form-builder/forms",
+          "announce": { "before": "FB-2042: Checking Form Builder itself loads forms list" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], h1, h2, table, [class*='table']",
+          "timeout": 12000,
+          "announce": { "after": "Form Builder forms list loaded" }
+        },
+        {
+          "action": "screenshot",
+          "value": "ui-04-form-builder-forms.png"
+        },
+        {
+          "action": "navigate",
+          "url": "/app/white-label/themes",
+          "announce": { "before": "FB-2042: Checking White Label theme create for FormRenderer" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "screenshot",
+          "value": "ui-05-white-label-themes.png",
+          "announce": { "after": "FB-2042: FormRenderer checks across modules complete" }
+        }
+      ]
+    },
+
+    "datatable-in-modules": {
+      "name": "DT-2043: ZorbitDataTable Component in Module List Views",
+      "description": "Navigate to list views across modules and verify ZorbitDataTable is used",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/app/identity/users",
+          "announce": { "before": "DT-2043: Checking Identity users list for ZorbitDataTable" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "assertVisible",
+          "selector": "table, [class*='table'], [class*='datatable'], [class*='DataTable']",
+          "timeout": 12000,
+          "announce": { "after": "DT-2043: Users list renders table component" }
+        },
+        {
+          "action": "screenshot",
+          "value": "ui-06-users-datatable.png"
+        },
+        {
+          "action": "navigate",
+          "url": "/app/authorization/roles",
+          "announce": { "before": "DT-2043: Checking Roles list for ZorbitDataTable" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "assertVisible",
+          "selector": "table, [class*='table'], [class*='datatable'], [class*='DataTable']",
+          "timeout": 12000,
+          "announce": { "after": "DT-2043: Roles list renders table component" }
+        },
+        {
+          "action": "screenshot",
+          "value": "ui-07-roles-datatable.png"
+        },
+        {
+          "action": "navigate",
+          "url": "/app/audit/records",
+          "announce": { "before": "DT-2043: Checking Audit records for ZorbitDataTable" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "assertVisible",
+          "selector": "table, [class*='table'], [class*='datatable'], [class*='DataTable']",
+          "timeout": 12000,
+          "announce": { "after": "DT-2043: Audit records renders table component" }
+        },
+        {
+          "action": "screenshot",
+          "value": "ui-08-audit-datatable.png"
+        },
+        {
+          "action": "navigate",
+          "url": "/app/messaging/topics",
+          "announce": { "before": "DT-2043: Checking Messaging topics for ZorbitDataTable" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "assertVisible",
+          "selector": "table, [class*='table'], [class*='datatable'], [class*='DataTable'], [class*='topic']",
+          "timeout": 12000,
+          "announce": { "after": "DT-2043: Messaging topics renders table component" }
+        },
+        {
+          "action": "screenshot",
+          "value": "ui-09-messaging-datatable.png"
+        },
+        {
+          "action": "navigate",
+          "url": "/app/pcg4/products",
+          "announce": { "before": "DT-2043: Checking PCG4 products for ZorbitDataTable" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "assertVisible",
+          "selector": "table, [class*='table'], [class*='datatable'], [class*='DataTable'], main",
+          "timeout": 12000,
+          "announce": { "after": "DT-2043: PCG4 products page loaded" }
+        },
+        {
+          "action": "screenshot",
+          "value": "ui-10-pcg4-datatable.png",
+          "announce": { "after": "DT-2043: ZorbitDataTable checks across modules complete" }
+        }
+      ]
+    },
+
+    "six-level-menu": {
+      "name": "NV-2044: Six-Level Menu Integration",
+      "description": "Verify the hamburger/sidebar menu renders all 6 levels for superadmin",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/app/dashboard",
+          "announce": { "before": "NV-2044: Checking six-level menu integration" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "assertVisible",
+          "selector": "nav, aside, [class*='sidebar'], [role='navigation']",
+          "timeout": 12000,
+          "announce": { "after": "Sidebar navigation visible" }
+        },
+        {
+          "action": "screenshot",
+          "value": "ui-11-sidebar-menu.png"
+        },
+        {
+          "action": "assertVisible",
+          "selector": "a[href*='/app/'], [class*='menu-item'], [class*='nav-item'], li a",
+          "timeout": 10000,
+          "announce": { "after": "NV-2044: Menu items rendered — checking for multi-level structure" }
+        },
+        {
+          "action": "screenshot",
+          "value": "ui-12-menu-levels.png"
+        },
+        {
+          "action": "navigate",
+          "url": "/app/admin/menu-preview",
+          "announce": { "before": "NV-2044: Checking Admin Menu Preview for 6-level structure" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], [class*='menu'], [class*='preview']",
+          "timeout": 12000,
+          "announce": { "after": "Menu Preview page loaded" }
+        },
+        {
+          "action": "screenshot",
+          "value": "ui-13-menu-preview.png",
+          "announce": { "after": "NV-2044: Six-level menu check complete" }
+        }
+      ]
+    },
+
+    "admin-console-nuke-check": {
+      "name": "UC-2045: No admin-console References",
+      "description": "Verify no admin-console references leak into the UI or API responses",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/app/dashboard",
+          "announce": { "before": "UC-2045: Checking for any admin-console references in the running app" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "screenshot",
+          "value": "ui-14-dashboard-no-admin-console.png"
+        },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/identity/api/v1/G/health",
+          "expectedStatus": [200],
+          "announce": { "before": "UC-2045: Verifying API routes use unified-console paths, not admin-console", "after": "API routes confirmed — no admin-console in path" }
+        },
+        {
+          "action": "navigate",
+          "url": "/app/admin/module-registry",
+          "announce": { "before": "UC-2045: Checking module registry for admin-console references" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "screenshot",
+          "value": "ui-15-module-registry-no-admin-console.png",
+          "announce": { "after": "UC-2045: admin-console reference check complete" }
+        }
+      ]
+    }
+  },
+
+  "journeys": {
+
+    "ui-formrenderer": {
+      "name": "FormRenderer in All Modules (FB-2042)",
+      "description": "Verify FormRenderer component used in all create/edit forms",
+      "segments": ["login-flow", "formrenderer-in-modules"]
+    },
+
+    "ui-datatable": {
+      "name": "ZorbitDataTable in All Modules (DT-2043)",
+      "description": "Verify ZorbitDataTable component used in all list views",
+      "segments": ["login-flow", "datatable-in-modules"]
+    },
+
+    "ui-menu": {
+      "name": "Six-Level Menu (NV-2044)",
+      "description": "Verify six-level menu integration for superadmin",
+      "segments": ["login-flow", "six-level-menu"]
+    },
+
+    "ui-nuke-check": {
+      "name": "Admin-Console Nuke (UC-2045)",
+      "description": "Verify all admin-console references eliminated",
+      "segments": ["login-flow", "admin-console-nuke-check"]
+    },
+
+    "ui-full": {
+      "name": "Full UI Consistency Check",
+      "description": "Complete UI consistency: FormRenderer + DataTable + menu + admin-console nuke",
+      "segments": [
+        "login-flow",
+        "formrenderer-in-modules",
+        "datatable-in-modules",
+        "six-level-menu",
+        "admin-console-nuke-check"
+      ]
+    }
+  },
+
+  "bouquets": {
+
+    "formrenderer": {
+      "name": "FormRenderer Audit",
+      "description": "FB-2042: Verify FormRenderer in all module input forms",
+      "mode": "sequential",
+      "journeys": ["ui-formrenderer"]
+    },
+
+    "datatable": {
+      "name": "DataTable Audit",
+      "description": "DT-2043: Verify ZorbitDataTable in all module list views",
+      "mode": "sequential",
+      "journeys": ["ui-datatable"]
+    },
+
+    "ui-complete": {
+      "name": "Complete UI Consistency Thread",
+      "description": "FB-2042, DT-2043, NV-2044, UC-2045: Full UI consistency verification",
+      "mode": "sequential",
+      "journeys": ["ui-full"]
+    }
+  }
+}

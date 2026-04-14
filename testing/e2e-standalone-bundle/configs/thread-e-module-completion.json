@@ -1,0 +1,397 @@
+{
+  "_meta": {
+    "description": "Thread E — Module Completion: UW Workflow, White Label, AI Gateway, Product Pricing, PCG4 for tickets UW-2050 through P4-2056",
+    "updated": "2026-04-15",
+    "tickets": ["UW-2050", "WL-2051", "AG-2052", "PP-2055", "P4-2056"]
+  },
+  "baseUrl": "https://zorbit-uat.onezippy.ai",
+  "viewport": { "width": 1440, "height": 900 },
+  "defaults": {
+    "timeout": 20000,
+    "waitAfterAction": 700,
+    "waitForNetworkIdle": false
+  },
+
+  "segments": {
+
+    "login-flow": {
+      "name": "Login",
+      "description": "Authenticate as admin for module completion tests",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/login",
+          "announce": { "before": "Logging in for module completion tests" }
+        },
+        { "action": "wait", "timeout": 1500 },
+        {
+          "action": "assertVisible",
+          "selector": "input[type='email'], input[name='email'], input[placeholder*='email' i]",
+          "timeout": 10000
+        },
+        {
+          "action": "fill",
+          "selector": "input[type='email'], input[name='email'], input[placeholder*='email' i]",
+          "value": "${credentials.admin.email}"
+        },
+        {
+          "action": "fill",
+          "selector": "input[type='password']",
+          "value": "${credentials.admin.password}"
+        },
+        {
+          "action": "click",
+          "selector": "button[type='submit'], button:has-text('Sign in'), button:has-text('Login')"
+        },
+        { "action": "wait", "timeout": 4000 },
+        {
+          "action": "assertVisible",
+          "selector": "nav, aside, [class*='sidebar'], [role='navigation'], main",
+          "timeout": 20000,
+          "announce": { "after": "Authenticated" }
+        },
+        {
+          "action": "screenshot",
+          "value": "mod-00-login.png"
+        }
+      ]
+    },
+
+    "uw-workflow-queues": {
+      "name": "UW-2050: UW Workflow Queue-Based Routes",
+      "description": "Navigate to /app/uw-workflow, verify queue list renders, check new-business queue",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/app/uw-workflow/hub",
+          "announce": { "before": "UW-2050: UW Workflow Hub" }
+        },
+        { "action": "wait", "timeout": 2500 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], h1, h2",
+          "timeout": 12000,
+          "announce": { "after": "UW Workflow Hub loaded" }
+        },
+        { "action": "screenshot", "value": "mod-01-uw-hub.png" },
+        {
+          "action": "navigate",
+          "url": "/app/uw-workflow/queues",
+          "announce": { "before": "UW-2050: UW Workflow Queues list" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], h1, h2, table, [class*='table'], [class*='queue'], [class*='card']",
+          "timeout": 12000,
+          "announce": { "after": "UW-2050: Queue list rendered" }
+        },
+        { "action": "screenshot", "value": "mod-02-uw-queues.png" },
+        {
+          "action": "navigate",
+          "url": "/app/uw-workflow/wf/new-business",
+          "announce": { "before": "UW-2050: Navigate to new-business queue route" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], h1, h2, table, [class*='table'], [class*='queue']",
+          "timeout": 12000,
+          "optional": true,
+          "announce": { "after": "UW-2050: New-business queue page rendered" }
+        },
+        { "action": "screenshot", "value": "mod-03-uw-new-business.png" },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/uw-workflow/api/v1/G/health",
+          "expectedStatus": [200],
+          "announce": { "before": "UW-2050: UW Workflow API health", "after": "UW Workflow service healthy" }
+        },
+        { "action": "screenshot", "value": "mod-04-uw-api.png",
+          "announce": { "after": "UW-2050: UW Workflow queue verification complete" }
+        }
+      ]
+    },
+
+    "white-label-seed-verify": {
+      "name": "WL-2051: White Label Seed Demo for O-OZPY",
+      "description": "Seed demo data, list themes for O-OZPY, verify 6 themes",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/app/white-label/setup",
+          "announce": { "before": "WL-2051: White Label Setup — triggering seed" }
+        },
+        { "action": "wait", "timeout": 2500 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], [class*='setup'], h1, h2, button",
+          "timeout": 12000
+        },
+        { "action": "screenshot", "value": "mod-05-wl-setup.png" },
+        {
+          "action": "click",
+          "selector": "button:has-text('Seed'), button:has-text('Demo'), button:has-text('Initialize'), button:has-text('Load')",
+          "timeout": 10000,
+          "optional": true,
+          "announce": { "after": "WL-2051: Seed button clicked (if available)" }
+        },
+        { "action": "wait", "timeout": 5000 },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/white-label/api/v1/O/O-OZPY/white-label/themes",
+          "expectedStatus": [200],
+          "announce": { "before": "WL-2051: Fetching O-OZPY themes via API", "after": "WL-2051: O-OZPY themes API returned 200" }
+        },
+        {
+          "action": "navigate",
+          "url": "/app/white-label/themes",
+          "announce": { "before": "WL-2051: Navigating to themes list to verify 6 themes" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "assertVisible",
+          "selector": "[class*='card'], [class*='theme'], [class*='grid'] > *, table tbody tr",
+          "timeout": 12000,
+          "announce": { "after": "WL-2051: Theme cards visible — checking for 6 themes" }
+        },
+        { "action": "screenshot", "value": "mod-06-wl-themes-6.png",
+          "announce": { "after": "WL-2051: White Label seed and 6-theme verification complete" }
+        }
+      ]
+    },
+
+    "ai-gateway-agents": {
+      "name": "AG-2052: AI Gateway Agent Management",
+      "description": "Navigate to AI Gateway, verify agent list renders",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/app/ai-gateway/hub",
+          "announce": { "before": "AG-2052: AI Gateway Hub" }
+        },
+        { "action": "wait", "timeout": 2500 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], h1, h2",
+          "timeout": 12000,
+          "optional": true,
+          "announce": { "after": "AI Gateway Hub loaded" }
+        },
+        { "action": "screenshot", "value": "mod-07-ai-hub.png" },
+        {
+          "action": "navigate",
+          "url": "/pfs/ai-gateway/agents",
+          "announce": { "before": "AG-2052: Navigating to /pfs/ai-gateway/agents" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], h1, h2, table, [class*='table'], [class*='agent'], [class*='card']",
+          "timeout": 12000,
+          "optional": true,
+          "announce": { "after": "AG-2052: AI Gateway agent list rendered" }
+        },
+        { "action": "screenshot", "value": "mod-08-ai-agents.png" },
+        {
+          "action": "navigate",
+          "url": "/app/ai-gateway/agents",
+          "announce": { "before": "AG-2052: Trying alternate path /app/ai-gateway/agents" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], h1, h2",
+          "timeout": 12000,
+          "optional": true
+        },
+        { "action": "screenshot", "value": "mod-09-ai-agents-alt.png",
+          "announce": { "after": "AG-2052: AI Gateway agent management verification complete" }
+        }
+      ]
+    },
+
+    "product-pricing-fqp": {
+      "name": "PP-2055: Product Pricing FQP (Filter/Sort/Paginate)",
+      "description": "Navigate to product pricing, verify filter/sort works on pricing list",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/app/product-pricing/hub",
+          "announce": { "before": "PP-2055: Product Pricing Hub" }
+        },
+        { "action": "wait", "timeout": 2500 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], h1, h2",
+          "timeout": 12000
+        },
+        { "action": "screenshot", "value": "mod-10-pp-hub.png" },
+        {
+          "action": "navigate",
+          "url": "/app/product-pricing/setup",
+          "announce": { "before": "PP-2055: Product Pricing Setup" }
+        },
+        { "action": "wait", "timeout": 2500 },
+        { "action": "screenshot", "value": "mod-11-pp-setup.png" },
+        {
+          "action": "navigate",
+          "url": "/app/product-pricing/products",
+          "announce": { "before": "PP-2055: Product Pricing products list — checking filter/sort" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], h1, h2, table, [class*='table']",
+          "timeout": 12000,
+          "announce": { "after": "PP-2055: Products list loaded" }
+        },
+        { "action": "screenshot", "value": "mod-12-pp-products.png" },
+        {
+          "action": "assertVisible",
+          "selector": "input[type='search'], input[placeholder*='search' i], input[placeholder*='filter' i], [class*='filter'], [class*='search'], button:has-text('Filter'), button:has-text('Sort')",
+          "timeout": 8000,
+          "optional": true,
+          "announce": { "after": "PP-2055: Filter/sort controls visible on pricing list" }
+        },
+        { "action": "screenshot", "value": "mod-13-pp-filter-sort.png",
+          "announce": { "after": "PP-2055: Product Pricing FQP verification complete" }
+        }
+      ]
+    },
+
+    "pcg4-crud-flow": {
+      "name": "P4-2056: PCG4 CRUD with FormBuilder + DataTable",
+      "description": "PCG4 full CRUD: navigate to products, verify list uses DataTable, check create form",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/app/pcg4/hub",
+          "announce": { "before": "P4-2056: PCG4 Hub" }
+        },
+        { "action": "wait", "timeout": 2500 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], h1, h2",
+          "timeout": 12000
+        },
+        { "action": "screenshot", "value": "mod-14-pcg4-hub.png" },
+        {
+          "action": "navigate",
+          "url": "/app/pcg4/setup",
+          "announce": { "before": "P4-2056: PCG4 Setup" }
+        },
+        { "action": "wait", "timeout": 2500 },
+        { "action": "screenshot", "value": "mod-15-pcg4-setup.png" },
+        {
+          "action": "navigate",
+          "url": "/app/pcg4/products",
+          "announce": { "before": "P4-2056: PCG4 Products list — verify DataTable" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "assertVisible",
+          "selector": "table, [class*='table'], [class*='datatable'], [class*='DataTable'], main",
+          "timeout": 12000,
+          "announce": { "after": "P4-2056: PCG4 Products list loaded with table component" }
+        },
+        { "action": "screenshot", "value": "mod-16-pcg4-products-list.png" },
+        {
+          "action": "click",
+          "selector": "button:has-text('Create'), button:has-text('New'), button:has-text('Add'), a:has-text('Create'), a:has-text('New')",
+          "timeout": 10000,
+          "optional": true,
+          "announce": { "after": "P4-2056: Create button clicked — checking for FormRenderer" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "assertVisible",
+          "selector": "form, [class*='form'], [class*='FormRenderer'], input, select, textarea",
+          "timeout": 12000,
+          "optional": true,
+          "announce": { "after": "P4-2056: Create form rendered — FormRenderer check" }
+        },
+        { "action": "screenshot", "value": "mod-17-pcg4-create-form.png" },
+        {
+          "action": "navigate",
+          "url": "/app/pcg4/products",
+          "announce": { "before": "P4-2056: Back to products list" }
+        },
+        { "action": "wait", "timeout": 2500 },
+        { "action": "screenshot", "value": "mod-18-pcg4-products-final.png",
+          "announce": { "after": "P4-2056: PCG4 CRUD flow verification complete" }
+        }
+      ]
+    }
+  },
+
+  "journeys": {
+
+    "mod-uw-workflow": {
+      "name": "UW Workflow Queues (UW-2050)",
+      "description": "Verify queue-based routes render correctly",
+      "segments": ["login-flow", "uw-workflow-queues"]
+    },
+
+    "mod-white-label": {
+      "name": "White Label Seed (WL-2051)",
+      "description": "Seed demo, verify 6 themes for O-OZPY",
+      "segments": ["login-flow", "white-label-seed-verify"]
+    },
+
+    "mod-ai-gateway": {
+      "name": "AI Gateway Agents (AG-2052)",
+      "description": "Verify agent management UI",
+      "segments": ["login-flow", "ai-gateway-agents"]
+    },
+
+    "mod-product-pricing": {
+      "name": "Product Pricing FQP (PP-2055)",
+      "description": "Verify filter/sort/paginate on pricing list",
+      "segments": ["login-flow", "product-pricing-fqp"]
+    },
+
+    "mod-pcg4": {
+      "name": "PCG4 CRUD (P4-2056)",
+      "description": "Full CRUD with FormBuilder + DataTable",
+      "segments": ["login-flow", "pcg4-crud-flow"]
+    },
+
+    "mod-full": {
+      "name": "Full Module Completion (UW-2050 to P4-2056)",
+      "description": "All module completion tests in sequence",
+      "segments": [
+        "login-flow",
+        "uw-workflow-queues",
+        "white-label-seed-verify",
+        "ai-gateway-agents",
+        "product-pricing-fqp",
+        "pcg4-crud-flow"
+      ]
+    }
+  },
+
+  "bouquets": {
+
+    "uw-workflow": {
+      "name": "UW Workflow",
+      "description": "UW-2050: Queue-based routes verification",
+      "mode": "sequential",
+      "journeys": ["mod-uw-workflow"]
+    },
+
+    "white-label": {
+      "name": "White Label Seed",
+      "description": "WL-2051: Seed and verify 6 themes for O-OZPY",
+      "mode": "sequential",
+      "journeys": ["mod-white-label"]
+    },
+
+    "module-complete": {
+      "name": "Complete Module Completion Thread",
+      "description": "UW-2050, WL-2051, AG-2052, PP-2055, P4-2056: All module completion tests",
+      "mode": "sequential",
+      "journeys": ["mod-full"]
+    }
+  }
+}

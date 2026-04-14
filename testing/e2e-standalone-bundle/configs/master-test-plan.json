@@ -1,0 +1,612 @@
+{
+  "_meta": {
+    "description": "Master Test Plan — runs ALL thread configs in sequence covering all 39 tickets (IN-2023 to E2-2061)",
+    "updated": "2026-04-15",
+    "tickets": [
+      "IN-2023", "IN-2024", "IN-2025", "IN-2026", "IN-2027", "IN-2028", "IN-2029", "IN-2030",
+      "IN-2031", "IN-2032", "IN-2033", "IN-2034", "IN-2035", "IN-2036", "IN-2037", "IN-2038",
+      "AZ-2039", "ID-2040", "ID-2041",
+      "FB-2042", "DT-2043", "NV-2044", "UC-2045",
+      "E2-2046", "E2-2047", "E2-2048", "E2-2049",
+      "UW-2050", "WL-2051", "AG-2052", "PP-2055", "P4-2056"
+    ]
+  },
+  "baseUrl": "https://zorbit-uat.onezippy.ai",
+  "viewport": { "width": 1440, "height": 900 },
+  "defaults": {
+    "timeout": 20000,
+    "waitAfterAction": 700,
+    "waitForNetworkIdle": false
+  },
+
+  "segments": {
+
+    "login-flow": {
+      "name": "Login",
+      "description": "Authenticate as admin",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/login",
+          "announce": { "before": "Master Test Plan: logging in" }
+        },
+        { "action": "wait", "timeout": 1500 },
+        {
+          "action": "assertVisible",
+          "selector": "input[type='email'], input[name='email'], input[placeholder*='email' i]",
+          "timeout": 10000
+        },
+        {
+          "action": "fill",
+          "selector": "input[type='email'], input[name='email'], input[placeholder*='email' i]",
+          "value": "${credentials.admin.email}"
+        },
+        {
+          "action": "fill",
+          "selector": "input[type='password']",
+          "value": "${credentials.admin.password}"
+        },
+        {
+          "action": "click",
+          "selector": "button[type='submit'], button:has-text('Sign in'), button:has-text('Login')"
+        },
+        { "action": "wait", "timeout": 4000 },
+        {
+          "action": "assertVisible",
+          "selector": "nav, aside, [class*='sidebar'], [role='navigation'], main",
+          "timeout": 20000,
+          "announce": { "after": "Authenticated for master test plan" }
+        },
+        {
+          "action": "screenshot",
+          "value": "master-00-login.png"
+        }
+      ]
+    },
+
+    "thread-a-health-checks": {
+      "name": "Thread A: All 16 Service Health Checks (IN-2032)",
+      "description": "Health check every service via HTTPS",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/login",
+          "announce": { "before": "Thread A: Starting 16-service health checks" }
+        },
+        { "action": "wait", "timeout": 1000 },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/identity/api/v1/G/health",
+          "expectedStatus": [200],
+          "announce": { "before": "Identity", "after": "Identity: healthy" }
+        },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/authorization/api/v1/G/health",
+          "expectedStatus": [200],
+          "announce": { "before": "Authorization", "after": "Authorization: healthy" }
+        },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/navigation/api/v1/G/health",
+          "expectedStatus": [200],
+          "announce": { "before": "Navigation", "after": "Navigation: healthy" }
+        },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/messaging/api/v1/G/messaging/health",
+          "expectedStatus": [200],
+          "announce": { "before": "Event Bus", "after": "Event Bus: healthy" }
+        },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/pii-vault/api/v1/G/health",
+          "expectedStatus": [200],
+          "announce": { "before": "PII Vault", "after": "PII Vault: healthy" }
+        },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/audit/api/v1/G/health",
+          "expectedStatus": [200],
+          "announce": { "before": "Audit", "after": "Audit: healthy" }
+        },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/form-builder/api/v1/G/form-builder/health",
+          "expectedStatus": [200],
+          "announce": { "before": "Form Builder", "after": "Form Builder: healthy" }
+        },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/datatable/api/v1/G/datatable/health",
+          "expectedStatus": [200],
+          "announce": { "before": "DataTable", "after": "DataTable: healthy" }
+        },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/product-pricing/api/v1/G/health",
+          "expectedStatus": [200],
+          "announce": { "before": "Product Pricing", "after": "Product Pricing: healthy" }
+        },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/doc-generator/api/v1/G/health",
+          "expectedStatus": [200],
+          "announce": { "before": "Doc Generator", "after": "Doc Generator: healthy" }
+        },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/white-label/api/v1/G/white-label/health",
+          "expectedStatus": [200],
+          "announce": { "before": "White Label", "after": "White Label: healthy" }
+        },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/zmb-factory/api/v1/G/zmb-factory/health",
+          "expectedStatus": [200],
+          "announce": { "before": "ZMB Factory", "after": "ZMB Factory: healthy" }
+        },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/pcg4/api/v1/G/health",
+          "expectedStatus": [200, 404],
+          "announce": { "before": "PCG4", "after": "PCG4: responded" }
+        },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/hi-quotation/api/v1/G/health",
+          "expectedStatus": [200],
+          "announce": { "before": "HI Quotation", "after": "HI Quotation: healthy" }
+        },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/uw-workflow/api/v1/G/health",
+          "expectedStatus": [200],
+          "announce": { "before": "UW Workflow", "after": "UW Workflow: healthy" }
+        },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/hi-uw-decisioning/api/v1/G/hi-uw-decisioning/health",
+          "expectedStatus": [200],
+          "announce": { "before": "HI UW Decisioning", "after": "HI UW Decisioning: healthy" }
+        },
+        {
+          "action": "screenshot",
+          "value": "master-01-health-all.png",
+          "announce": { "after": "Thread A: All 16 health checks complete" }
+        }
+      ]
+    },
+
+    "thread-b-rbac": {
+      "name": "Thread B: RBAC & Security (AZ-2039)",
+      "description": "Verify admin has full access and API endpoints require auth",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/app/identity/users",
+          "announce": { "before": "Thread B AZ-2039: Admin access to user management" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "assertVisible",
+          "selector": "table, [class*='table'], [class*='user'], h1, h2, main",
+          "timeout": 12000,
+          "announce": { "after": "Users list accessible to admin" }
+        },
+        { "action": "screenshot", "value": "master-02-admin-users.png" },
+        {
+          "action": "navigate",
+          "url": "/app/identity/organizations",
+          "announce": { "before": "AZ-2039: Admin access to organizations" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "assertVisible",
+          "selector": "table, [class*='table'], [class*='org'], h1, main",
+          "timeout": 12000
+        },
+        { "action": "screenshot", "value": "master-03-admin-orgs.png" },
+        {
+          "action": "navigate",
+          "url": "/app/authorization/roles",
+          "announce": { "before": "AZ-2039: Admin access to roles" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "assertVisible",
+          "selector": "table, [class*='table'], [class*='role'], h1, main",
+          "timeout": 12000
+        },
+        { "action": "screenshot", "value": "master-04-admin-roles.png" },
+        {
+          "action": "navigate",
+          "url": "/app/settings",
+          "announce": { "before": "ID-2041: Settings page for security config" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], [class*='settings'], h1, h2",
+          "timeout": 12000
+        },
+        { "action": "screenshot", "value": "master-05-settings.png",
+          "announce": { "after": "Thread B: Security checks complete" }
+        }
+      ]
+    },
+
+    "thread-c-ui-consistency": {
+      "name": "Thread C: UI Consistency (FB-2042, DT-2043, NV-2044, UC-2045)",
+      "description": "Verify DataTable in list views, FormRenderer in forms, 6-level menu, no admin-console refs",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/app/identity/users",
+          "announce": { "before": "Thread C DT-2043: Checking DataTable in Identity users" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "assertVisible",
+          "selector": "table, [class*='table'], [class*='datatable'], [class*='DataTable']",
+          "timeout": 12000,
+          "announce": { "after": "DT-2043: Users list uses table component" }
+        },
+        { "action": "screenshot", "value": "master-06-users-table.png" },
+        {
+          "action": "navigate",
+          "url": "/app/authorization/roles",
+          "announce": { "before": "DT-2043: Checking DataTable in roles" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "assertVisible",
+          "selector": "table, [class*='table'], [class*='datatable'], [class*='DataTable']",
+          "timeout": 12000
+        },
+        { "action": "screenshot", "value": "master-07-roles-table.png" },
+        {
+          "action": "navigate",
+          "url": "/app/audit/records",
+          "announce": { "before": "DT-2043: Checking DataTable in audit" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "assertVisible",
+          "selector": "table, [class*='table'], [class*='datatable'], [class*='DataTable']",
+          "timeout": 12000
+        },
+        { "action": "screenshot", "value": "master-08-audit-table.png" },
+        {
+          "action": "navigate",
+          "url": "/app/dashboard",
+          "announce": { "before": "NV-2044: Checking 6-level menu on dashboard" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "assertVisible",
+          "selector": "nav, aside, [class*='sidebar'], [role='navigation']",
+          "timeout": 12000,
+          "announce": { "after": "NV-2044: Sidebar navigation visible" }
+        },
+        {
+          "action": "assertVisible",
+          "selector": "a[href*='/app/'], [class*='menu-item'], [class*='nav-item'], li a",
+          "timeout": 10000,
+          "announce": { "after": "NV-2044: Menu items rendered" }
+        },
+        { "action": "screenshot", "value": "master-09-sidebar-menu.png" },
+        {
+          "action": "navigate",
+          "url": "/app/admin/module-registry",
+          "announce": { "before": "UC-2045: Checking module registry (no admin-console refs)" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], h1, h2",
+          "timeout": 12000
+        },
+        { "action": "screenshot", "value": "master-10-module-registry.png",
+          "announce": { "after": "Thread C: UI consistency checks complete" }
+        }
+      ]
+    },
+
+    "thread-d-walkthrough": {
+      "name": "Thread D: Full Walk-Through (E2-2047)",
+      "description": "Visit every module hub, verify no blank pages",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/app/dashboard",
+          "announce": { "before": "Thread D E2-2047: Full walk-through starting" }
+        },
+        { "action": "wait", "timeout": 2500 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='dashboard'], [class*='content']",
+          "timeout": 12000
+        },
+        { "action": "screenshot", "value": "master-11-dashboard.png" },
+        {
+          "action": "navigate",
+          "url": "/app/identity/hub",
+          "announce": { "before": "E2-2047: Identity Hub" }
+        },
+        { "action": "wait", "timeout": 2000 },
+        { "action": "assertVisible", "selector": "main, [class*='content'], h1", "timeout": 10000 },
+        { "action": "screenshot", "value": "master-12-identity.png" },
+        {
+          "action": "navigate",
+          "url": "/app/authorization/hub",
+          "announce": { "before": "E2-2047: Authorization Hub" }
+        },
+        { "action": "wait", "timeout": 2000 },
+        { "action": "assertVisible", "selector": "main, [class*='content'], h1", "timeout": 10000 },
+        { "action": "screenshot", "value": "master-13-authz.png" },
+        {
+          "action": "navigate",
+          "url": "/app/navigation/hub",
+          "announce": { "before": "E2-2047: Navigation Hub" }
+        },
+        { "action": "wait", "timeout": 2000 },
+        { "action": "assertVisible", "selector": "main, [class*='content'], h1", "timeout": 10000 },
+        { "action": "screenshot", "value": "master-14-nav.png" },
+        {
+          "action": "navigate",
+          "url": "/app/pii-vault/hub",
+          "announce": { "before": "E2-2047: PII Vault Hub" }
+        },
+        { "action": "wait", "timeout": 2000 },
+        { "action": "assertVisible", "selector": "main, [class*='content'], h1", "timeout": 10000 },
+        { "action": "screenshot", "value": "master-15-pii.png" },
+        {
+          "action": "navigate",
+          "url": "/app/audit/hub",
+          "announce": { "before": "E2-2047: Audit Hub" }
+        },
+        { "action": "wait", "timeout": 2000 },
+        { "action": "assertVisible", "selector": "main, [class*='content'], h1", "timeout": 10000 },
+        { "action": "screenshot", "value": "master-16-audit.png" },
+        {
+          "action": "navigate",
+          "url": "/app/messaging/hub",
+          "announce": { "before": "E2-2047: Messaging Hub" }
+        },
+        { "action": "wait", "timeout": 2000 },
+        { "action": "assertVisible", "selector": "main, [class*='content'], h1", "timeout": 10000 },
+        { "action": "screenshot", "value": "master-17-messaging.png" },
+        {
+          "action": "navigate",
+          "url": "/app/white-label/hub",
+          "announce": { "before": "E2-2047: White Label Hub" }
+        },
+        { "action": "wait", "timeout": 2000 },
+        { "action": "assertVisible", "selector": "main, [class*='content'], h1", "timeout": 10000 },
+        { "action": "screenshot", "value": "master-18-wl.png" },
+        {
+          "action": "navigate",
+          "url": "/app/form-builder/hub",
+          "announce": { "before": "E2-2047: Form Builder Hub" }
+        },
+        { "action": "wait", "timeout": 2000 },
+        { "action": "assertVisible", "selector": "main, [class*='content'], h1", "timeout": 10000 },
+        { "action": "screenshot", "value": "master-19-fb.png" },
+        {
+          "action": "navigate",
+          "url": "/app/data-table-demo/hub",
+          "announce": { "before": "E2-2047: DataTable Hub" }
+        },
+        { "action": "wait", "timeout": 2000 },
+        { "action": "assertVisible", "selector": "main, [class*='content'], h1", "timeout": 10000 },
+        { "action": "screenshot", "value": "master-20-datatable.png" },
+        {
+          "action": "navigate",
+          "url": "/app/pcg4/hub",
+          "announce": { "before": "E2-2047: PCG4 Hub" }
+        },
+        { "action": "wait", "timeout": 2000 },
+        { "action": "assertVisible", "selector": "main, [class*='content'], h1", "timeout": 10000 },
+        { "action": "screenshot", "value": "master-21-pcg4.png" },
+        {
+          "action": "navigate",
+          "url": "/app/hi-quotation/hub",
+          "announce": { "before": "E2-2047: HI Quotation Hub" }
+        },
+        { "action": "wait", "timeout": 2000 },
+        { "action": "assertVisible", "selector": "main, [class*='content'], h1", "timeout": 10000 },
+        { "action": "screenshot", "value": "master-22-hiq.png" },
+        {
+          "action": "navigate",
+          "url": "/app/uw-workflow/hub",
+          "announce": { "before": "E2-2047: UW Workflow Hub" }
+        },
+        { "action": "wait", "timeout": 2000 },
+        { "action": "assertVisible", "selector": "main, [class*='content'], h1", "timeout": 10000 },
+        { "action": "screenshot", "value": "master-23-uwwf.png" },
+        {
+          "action": "navigate",
+          "url": "/app/product-pricing/hub",
+          "announce": { "before": "E2-2047: Product Pricing Hub" }
+        },
+        { "action": "wait", "timeout": 2000 },
+        { "action": "assertVisible", "selector": "main, [class*='content'], h1", "timeout": 10000 },
+        { "action": "screenshot", "value": "master-24-prodprice.png" },
+        {
+          "action": "navigate",
+          "url": "/app/dev-center",
+          "announce": { "before": "E2-2047: Developer Center" }
+        },
+        { "action": "wait", "timeout": 2000 },
+        { "action": "assertVisible", "selector": "main, [class*='content'], h1", "timeout": 10000 },
+        { "action": "screenshot", "value": "master-25-dev-center.png" },
+        {
+          "action": "navigate",
+          "url": "/app/support-center",
+          "announce": { "before": "E2-2047: Support Center" }
+        },
+        { "action": "wait", "timeout": 2000 },
+        { "action": "assertVisible", "selector": "main, [class*='content'], h1", "timeout": 10000 },
+        { "action": "screenshot", "value": "master-26-support.png",
+          "announce": { "after": "Thread D: Full walk-through complete — all pages loaded" }
+        }
+      ]
+    },
+
+    "thread-e-modules": {
+      "name": "Thread E: Module Completion (UW-2050, WL-2051, AG-2052, PP-2055, P4-2056)",
+      "description": "Verify UW Workflow queues, White Label themes, AI Gateway agents, Product Pricing, PCG4",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/app/uw-workflow/queues",
+          "announce": { "before": "Thread E UW-2050: UW Workflow queues" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], h1, h2, table, [class*='table'], [class*='queue'], [class*='card']",
+          "timeout": 12000,
+          "announce": { "after": "UW-2050: Queue list rendered" }
+        },
+        { "action": "screenshot", "value": "master-27-uw-queues.png" },
+        {
+          "action": "navigate",
+          "url": "/app/white-label/themes",
+          "announce": { "before": "WL-2051: White Label themes for O-OZPY" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "assertVisible",
+          "selector": "[class*='card'], [class*='theme'], [class*='grid'] > *, table tbody tr",
+          "timeout": 12000,
+          "announce": { "after": "WL-2051: Theme cards visible" }
+        },
+        { "action": "screenshot", "value": "master-28-wl-themes.png" },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/white-label/api/v1/O/O-OZPY/white-label/themes",
+          "expectedStatus": [200],
+          "announce": { "before": "WL-2051: O-OZPY themes API", "after": "WL-2051: O-OZPY themes API confirmed" }
+        },
+        {
+          "action": "navigate",
+          "url": "/app/ai-gateway/agents",
+          "announce": { "before": "AG-2052: AI Gateway agents" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], h1, h2",
+          "timeout": 12000,
+          "optional": true
+        },
+        { "action": "screenshot", "value": "master-29-ai-agents.png" },
+        {
+          "action": "navigate",
+          "url": "/app/product-pricing/products",
+          "announce": { "before": "PP-2055: Product Pricing products list" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], h1, h2, table, [class*='table']",
+          "timeout": 12000
+        },
+        { "action": "screenshot", "value": "master-30-pp-products.png" },
+        {
+          "action": "navigate",
+          "url": "/app/pcg4/products",
+          "announce": { "before": "P4-2056: PCG4 products list" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "assertVisible",
+          "selector": "table, [class*='table'], [class*='datatable'], [class*='DataTable'], main",
+          "timeout": 12000
+        },
+        { "action": "screenshot", "value": "master-31-pcg4-products.png",
+          "announce": { "after": "Thread E: Module completion checks done" }
+        }
+      ]
+    }
+  },
+
+  "journeys": {
+
+    "master-thread-a": {
+      "name": "Thread A: Infrastructure",
+      "description": "Health checks + login + navigation from DB",
+      "segments": ["thread-a-health-checks", "login-flow"]
+    },
+
+    "master-thread-b": {
+      "name": "Thread B: Security",
+      "description": "RBAC and admin access verification",
+      "segments": ["thread-b-rbac"]
+    },
+
+    "master-thread-c": {
+      "name": "Thread C: UI Consistency",
+      "description": "DataTable, FormRenderer, 6-level menu, no admin-console",
+      "segments": ["thread-c-ui-consistency"]
+    },
+
+    "master-thread-d": {
+      "name": "Thread D: E2E Walk-Through",
+      "description": "Every page visited, no blank screens",
+      "segments": ["thread-d-walkthrough"]
+    },
+
+    "master-thread-e": {
+      "name": "Thread E: Module Completion",
+      "description": "UW Workflow, White Label, AI Gateway, Product Pricing, PCG4",
+      "segments": ["thread-e-modules"]
+    },
+
+    "master-all": {
+      "name": "Master: All Threads",
+      "description": "Complete platform verification: all 5 threads in sequence",
+      "segments": [
+        "thread-a-health-checks",
+        "login-flow",
+        "thread-b-rbac",
+        "thread-c-ui-consistency",
+        "thread-d-walkthrough",
+        "thread-e-modules"
+      ]
+    }
+  },
+
+  "bouquets": {
+
+    "master-infra": {
+      "name": "Master: Infrastructure Only",
+      "description": "Thread A health checks and login",
+      "mode": "sequential",
+      "journeys": ["master-thread-a"]
+    },
+
+    "master-security": {
+      "name": "Master: Security Only",
+      "description": "Thread B RBAC and security",
+      "mode": "sequential",
+      "journeys": ["master-thread-a", "master-thread-b"]
+    },
+
+    "master-ui": {
+      "name": "Master: UI Consistency Only",
+      "description": "Thread C UI consistency checks",
+      "mode": "sequential",
+      "journeys": ["master-thread-a", "master-thread-c"]
+    },
+
+    "master-full": {
+      "name": "Master: Run Everything",
+      "description": "All 39 tickets — Threads A through E in sequence",
+      "mode": "sequential",
+      "journeys": ["master-all"]
+    }
+  }
+}

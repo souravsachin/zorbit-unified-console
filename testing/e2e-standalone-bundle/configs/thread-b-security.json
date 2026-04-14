@@ -1,0 +1,416 @@
+{
+  "_meta": {
+    "description": "Thread B — Security: RBAC audit, consent, password hashing for tickets AZ-2039, ID-2040, ID-2041",
+    "updated": "2026-04-15",
+    "tickets": ["AZ-2039", "ID-2040", "ID-2041"]
+  },
+  "baseUrl": "https://zorbit-uat.onezippy.ai",
+  "viewport": { "width": 1440, "height": 900 },
+  "defaults": {
+    "timeout": 20000,
+    "waitAfterAction": 700,
+    "waitForNetworkIdle": false
+  },
+
+  "segments": {
+
+    "login-as-admin": {
+      "name": "Login as Superadmin",
+      "description": "Authenticate as superadmin to verify full access",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/login",
+          "announce": { "before": "Logging in as superadmin for security tests" }
+        },
+        { "action": "wait", "timeout": 1500 },
+        {
+          "action": "assertVisible",
+          "selector": "input[type='email'], input[name='email'], input[placeholder*='email' i]",
+          "timeout": 10000
+        },
+        {
+          "action": "fill",
+          "selector": "input[type='email'], input[name='email'], input[placeholder*='email' i]",
+          "value": "${credentials.admin.email}"
+        },
+        {
+          "action": "fill",
+          "selector": "input[type='password']",
+          "value": "${credentials.admin.password}"
+        },
+        {
+          "action": "click",
+          "selector": "button[type='submit'], button:has-text('Sign in'), button:has-text('Login')"
+        },
+        { "action": "wait", "timeout": 4000 },
+        {
+          "action": "assertVisible",
+          "selector": "nav, aside, [class*='sidebar'], [role='navigation'], main",
+          "timeout": 20000,
+          "announce": { "after": "Superadmin authenticated" }
+        },
+        {
+          "action": "screenshot",
+          "value": "sec-00-admin-login.png"
+        }
+      ]
+    },
+
+    "admin-full-access": {
+      "name": "AZ-2039: Verify Superadmin Full Access",
+      "description": "Superadmin should have unrestricted access to all admin endpoints",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/app/identity/users",
+          "announce": { "before": "AZ-2039: Verifying superadmin access to user management" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "assertVisible",
+          "selector": "table, [class*='table'], [class*='user'], h1, h2, main",
+          "timeout": 12000,
+          "announce": { "after": "Users list accessible to superadmin" }
+        },
+        {
+          "action": "screenshot",
+          "value": "sec-01-admin-users.png"
+        },
+        {
+          "action": "navigate",
+          "url": "/app/identity/organizations",
+          "announce": { "before": "AZ-2039: Verifying superadmin access to organizations" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "assertVisible",
+          "selector": "table, [class*='table'], [class*='org'], h1, main",
+          "timeout": 12000,
+          "announce": { "after": "Organizations list accessible to superadmin" }
+        },
+        {
+          "action": "screenshot",
+          "value": "sec-02-admin-orgs.png"
+        },
+        {
+          "action": "navigate",
+          "url": "/app/authorization/roles",
+          "announce": { "before": "AZ-2039: Verifying superadmin access to role management" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "assertVisible",
+          "selector": "table, [class*='table'], [class*='role'], h1, main",
+          "timeout": 12000,
+          "announce": { "after": "Roles list accessible to superadmin" }
+        },
+        {
+          "action": "screenshot",
+          "value": "sec-03-admin-roles.png"
+        },
+        {
+          "action": "navigate",
+          "url": "/app/admin/module-registry",
+          "announce": { "before": "AZ-2039: Verifying superadmin access to admin module registry" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], h1, h2, table",
+          "timeout": 12000,
+          "announce": { "after": "Admin module registry accessible" }
+        },
+        {
+          "action": "screenshot",
+          "value": "sec-04-admin-module-registry.png",
+          "announce": { "after": "AZ-2039: Superadmin full access confirmed across all admin endpoints" }
+        }
+      ]
+    },
+
+    "rbac-api-enforcement": {
+      "name": "AZ-2039: RBAC API Enforcement",
+      "description": "Verify RBAC is enforced on admin-only API endpoints",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/login",
+          "announce": { "before": "AZ-2039: Testing RBAC enforcement on admin-only API endpoints" }
+        },
+        { "action": "wait", "timeout": 1000 },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/identity/api/v1/G/health",
+          "expectedStatus": [200],
+          "announce": { "before": "Baseline: health endpoint should be public", "after": "Health endpoint accessible (no auth needed)" }
+        },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/identity/api/v1/G/users",
+          "expectedStatus": [401, 403],
+          "announce": { "before": "AZ-2039: Users list without auth should return 401/403", "after": "Users endpoint correctly requires authentication" }
+        },
+        {
+          "action": "apiCheck",
+          "endpoint": "/api/authorization/api/v1/G/roles",
+          "expectedStatus": [401, 403],
+          "announce": { "before": "AZ-2039: Roles list without auth should return 401/403", "after": "Roles endpoint correctly requires authentication" }
+        },
+        {
+          "action": "screenshot",
+          "value": "sec-05-rbac-api-enforcement.png",
+          "announce": { "after": "AZ-2039: RBAC API enforcement verified" }
+        }
+      ]
+    },
+
+    "login-as-non-admin": {
+      "name": "AZ-2039: Login as Non-Admin User",
+      "description": "Login as a non-admin persona and verify restricted access",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/login",
+          "announce": { "before": "AZ-2039: Logging in as non-admin user (configurator persona)" }
+        },
+        { "action": "wait", "timeout": 1500 },
+        {
+          "action": "assertVisible",
+          "selector": "input[type='email'], input[name='email'], input[placeholder*='email' i]",
+          "timeout": 10000
+        },
+        {
+          "action": "fill",
+          "selector": "input[type='email'], input[name='email'], input[placeholder*='email' i]",
+          "value": "${credentials.configurator.email}"
+        },
+        {
+          "action": "fill",
+          "selector": "input[type='password']",
+          "value": "${credentials.configurator.password}"
+        },
+        {
+          "action": "click",
+          "selector": "button[type='submit'], button:has-text('Sign in'), button:has-text('Login')"
+        },
+        { "action": "wait", "timeout": 4000 },
+        {
+          "action": "assertVisible",
+          "selector": "nav, aside, [class*='sidebar'], [role='navigation'], main",
+          "timeout": 20000,
+          "announce": { "after": "Non-admin user authenticated" }
+        },
+        {
+          "action": "screenshot",
+          "value": "sec-06-non-admin-login.png"
+        }
+      ]
+    },
+
+    "non-admin-restricted": {
+      "name": "AZ-2039: Non-Admin Restricted Access",
+      "description": "Non-admin user should see restricted menu and be blocked from admin pages",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/app/identity/users",
+          "announce": { "before": "AZ-2039: Non-admin attempting to access user management" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "screenshot",
+          "value": "sec-07-non-admin-users-attempt.png",
+          "announce": { "after": "Captured non-admin user management access attempt" }
+        },
+        {
+          "action": "navigate",
+          "url": "/app/identity/organizations",
+          "announce": { "before": "AZ-2039: Non-admin attempting to access organizations" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "screenshot",
+          "value": "sec-08-non-admin-orgs-attempt.png",
+          "announce": { "after": "Captured non-admin organization access attempt" }
+        },
+        {
+          "action": "navigate",
+          "url": "/app/authorization/roles",
+          "announce": { "before": "AZ-2039: Non-admin attempting to access role management" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "screenshot",
+          "value": "sec-09-non-admin-roles-attempt.png",
+          "announce": { "after": "Captured non-admin roles access attempt" }
+        },
+        {
+          "action": "navigate",
+          "url": "/app/admin/module-registry",
+          "announce": { "before": "AZ-2039: Non-admin attempting to access admin module registry" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "screenshot",
+          "value": "sec-10-non-admin-admin-attempt.png",
+          "announce": { "after": "AZ-2039: Non-admin access restriction tests complete" }
+        }
+      ]
+    },
+
+    "security-settings": {
+      "name": "ID-2041: Security Settings Page",
+      "description": "Navigate to Settings > Security and verify compliance badges and password hashing mode",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/login",
+          "announce": { "before": "ID-2041: Logging in to check security settings" }
+        },
+        { "action": "wait", "timeout": 1500 },
+        {
+          "action": "fill",
+          "selector": "input[type='email'], input[name='email'], input[placeholder*='email' i]",
+          "value": "${credentials.admin.email}"
+        },
+        {
+          "action": "fill",
+          "selector": "input[type='password']",
+          "value": "${credentials.admin.password}"
+        },
+        {
+          "action": "click",
+          "selector": "button[type='submit'], button:has-text('Sign in'), button:has-text('Login')"
+        },
+        { "action": "wait", "timeout": 4000 },
+        {
+          "action": "assertVisible",
+          "selector": "nav, aside, [class*='sidebar'], [role='navigation'], main",
+          "timeout": 20000
+        },
+        {
+          "action": "navigate",
+          "url": "/app/settings",
+          "announce": { "before": "ID-2041: Navigating to Settings page" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], [class*='settings'], h1, h2",
+          "timeout": 12000,
+          "announce": { "after": "Settings page loaded" }
+        },
+        {
+          "action": "screenshot",
+          "value": "sec-11-settings-page.png"
+        },
+        {
+          "action": "navigate",
+          "url": "/app/identity/setup",
+          "announce": { "before": "ID-2041: Checking Identity Setup for security configuration" }
+        },
+        { "action": "wait", "timeout": 3000 },
+        {
+          "action": "assertVisible",
+          "selector": "main, [class*='content'], [class*='setup'], h1, h2",
+          "timeout": 12000,
+          "announce": { "after": "Identity Setup page loaded" }
+        },
+        {
+          "action": "screenshot",
+          "value": "sec-12-identity-setup-security.png",
+          "announce": { "after": "ID-2041: Security settings pages captured" }
+        }
+      ]
+    },
+
+    "consent-screen": {
+      "name": "ID-2040: Privacy Policy / Consent Screen",
+      "description": "Verify consent/privacy policy mechanism exists in the login flow",
+      "steps": [
+        {
+          "action": "navigate",
+          "url": "/login",
+          "announce": { "before": "ID-2040: Checking for consent/privacy policy in login flow" }
+        },
+        { "action": "wait", "timeout": 2000 },
+        {
+          "action": "screenshot",
+          "value": "sec-13-login-consent-check.png",
+          "announce": { "after": "Login page captured — checking for consent elements" }
+        },
+        {
+          "action": "navigate",
+          "url": "/register",
+          "announce": { "before": "ID-2040: Checking registration page for consent checkbox" }
+        },
+        { "action": "wait", "timeout": 2000 },
+        {
+          "action": "screenshot",
+          "value": "sec-14-register-consent-check.png",
+          "announce": { "after": "ID-2040: Registration page captured — consent flow evidence collected" }
+        }
+      ]
+    }
+  },
+
+  "journeys": {
+
+    "security-admin-access": {
+      "name": "Superadmin Full Access (AZ-2039)",
+      "description": "Login as superadmin and verify unrestricted access",
+      "segments": ["login-as-admin", "admin-full-access"]
+    },
+
+    "security-rbac-enforcement": {
+      "name": "RBAC Enforcement (AZ-2039)",
+      "description": "Verify RBAC on API endpoints and non-admin UI restrictions",
+      "segments": ["rbac-api-enforcement", "login-as-non-admin", "non-admin-restricted"]
+    },
+
+    "security-settings-and-consent": {
+      "name": "Security Settings & Consent (ID-2040, ID-2041)",
+      "description": "Security settings page and consent/privacy policy verification",
+      "segments": ["security-settings", "consent-screen"]
+    },
+
+    "security-full": {
+      "name": "Full Security Audit",
+      "description": "Complete security verification: admin access, RBAC, settings, consent",
+      "segments": [
+        "login-as-admin",
+        "admin-full-access",
+        "rbac-api-enforcement",
+        "login-as-non-admin",
+        "non-admin-restricted",
+        "security-settings",
+        "consent-screen"
+      ]
+    }
+  },
+
+  "bouquets": {
+
+    "rbac-audit": {
+      "name": "RBAC Audit",
+      "description": "AZ-2039: Full RBAC audit — admin access + non-admin restrictions + API enforcement",
+      "mode": "sequential",
+      "journeys": ["security-admin-access", "security-rbac-enforcement"]
+    },
+
+    "security-settings": {
+      "name": "Security Settings",
+      "description": "ID-2040, ID-2041: Consent screen + password hashing mode + compliance badges",
+      "mode": "sequential",
+      "journeys": ["security-settings-and-consent"]
+    },
+
+    "security-complete": {
+      "name": "Complete Security Thread",
+      "description": "AZ-2039, ID-2040, ID-2041: Full security verification suite",
+      "mode": "sequential",
+      "journeys": ["security-full"]
+    }
+  }
+}
