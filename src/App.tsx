@@ -57,6 +57,11 @@ const SecurityPage = lazyWithRetry(() => import('./pages/settings/SecurityPage')
 import DemoPage from './pages/demo/DemoPage';
 import DemoTrainingCenter from './pages/DemoTrainingCenter/DemoTrainingCenter';
 import DemoSegmentEditor from './pages/DemoSegmentEditor/DemoSegmentEditor';
+const DevCenterPage = lazyWithRetry(() => import('./pages/dev-center/DevCenterPage'));
+const DevCenterGuidePage = lazyWithRetry(() => import('./pages/dev-center/DevCenterGuidePage'));
+const TutorialsPage = lazyWithRetry(() => import('./pages/dev-center/TutorialsPage'));
+const ZmbGuidePage = lazyWithRetry(() => import('./pages/dev-center/ZmbGuidePage'));
+const ArchitecturePage = lazyWithRetry(() => import('./pages/dev-center/ArchitecturePage'));
 import DashboardViewPage from './pages/DashboardView/DashboardViewPage';
 import DashboardDesignerPage from './pages/DashboardDesigner/DashboardDesignerPage';
 import DataTableDemoPage from './pages/data-table-demo/DataTableDemoPage';
@@ -92,6 +97,7 @@ const ModuleRegistryPage = lazyWithRetry(() => import('./pages/admin/ModuleRegis
 const LicensingPage = lazyWithRetry(() => import('./pages/admin/LicensingPage'));
 const SitemapPage = lazyWithRetry(() => import('./pages/admin/SitemapPage'));
 const DeveloperPage = lazyWithRetry(() => import('./pages/admin/DeveloperPage'));
+const MenuPreviewPage = lazyWithRetry(() => import('./pages/admin/MenuPreviewPage'));
 const UWWorkflowPage = lazyWithRetry(() => import('./pages/uw-workflow/UWWorkflowPage'));
 const HIDecisioningPage = lazyWithRetry(() => import('./pages/hi-decisioning/HIDecisioningPage'));
 const HIQuotationPage = lazyWithRetry(() => import('./pages/hi-quotation/HIQuotationPage'));
@@ -101,6 +107,7 @@ const RegionSelectorPage = lazyWithRetry(() => import('./pages/hi-quotation/Regi
 const NewApplicationIndiaPage = lazyWithRetry(() => import('./pages/hi-quotation/NewApplicationIndiaPage'));
 const NewApplicationUAEPage = lazyWithRetry(() => import('./pages/hi-quotation/NewApplicationUAEPage'));
 const NewApplicationUSPage = lazyWithRetry(() => import('./pages/hi-quotation/NewApplicationUSPage'));
+const GenericApplicationPage = lazyWithRetry(() => import('./pages/hi-quotation/GenericApplicationPage'));
 const HIQuotationHelpPage = lazyWithRetry(() => import('./pages/hi-quotation/HIQuotationHelpPage'));
 const UWWorkflowHelpPage = lazyWithRetry(() => import('./pages/uw-workflow/UWWorkflowHelpPage'));
 const HIDecisioningHelpPage = lazyWithRetry(() => import('./pages/hi-decisioning/HIDecisioningHelpPage'));
@@ -189,6 +196,9 @@ const RateCardImportPage = lazyWithRetry(() => import('./pages/product-pricing/R
 const ProductPricingSetupPage = lazyWithRetry(() => import('./pages/product-pricing/ProductPricingSetupPage'));
 const ProductPricingDeploymentsPage = lazyWithRetry(() => import('./pages/product-pricing/ProductPricingDeploymentsPage'));
 const FormBuilderHubPage = lazyWithRetry(() => import('./pages/form-builder/FormBuilderHubPage'));
+const FormBuilderPage = lazyWithRetry(() => import('./pages/form-builder/FormBuilderPage'));
+const FormBuilderDetailPage = lazyWithRetry(() => import('./pages/form-builder/FormBuilderDetailPage'));
+const FormBuilderTokensPage = lazyWithRetry(() => import('./pages/form-builder/FormBuilderTokensPage'));
 
 // MUW-52 Ported Module Hub Pages
 const EndorsementsHubPage = lazyWithRetry(() => import('./pages/endorsements/EndorsementsHubPage'));
@@ -254,6 +264,10 @@ const SecretsCreatePage = lazyWithRetry(() => import('./pages/secrets/SecretsCre
 const SecretsAuditPage = lazyWithRetry(() => import('./pages/secrets/SecretsAuditPage'));
 const SecretsSetupPage = lazyWithRetry(() => import('./pages/secrets/SecretsSetupPage'));
 const SecretsDeploymentsPage = lazyWithRetry(() => import('./pages/secrets/SecretsDeploymentsPage'));
+
+// Broker Dashboard & Channel Analytics
+const BrokerDashboardPage = lazyWithRetry(() => import('./pages/broker/BrokerDashboardPage'));
+const ChannelAnalyticsPage = lazyWithRetry(() => import('./pages/analytics/ChannelAnalyticsPage'));
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const token = localStorage.getItem('zorbit_token');
@@ -416,6 +430,7 @@ function PageRoutes() {
       <Route path="jayna/deployments" element={<SafeLazy><JaynaDeploymentsPage /></SafeLazy>} />
 
       {/* Form Builder */}
+      <Route path="form-builder" element={<SafeLazy><FormBuilderPage /></SafeLazy>} />
       <Route path="form-builder/templates" element={<SafeLazy><FormTemplatesPage /></SafeLazy>} />
       <Route path="form-builder/create" element={<SafeLazy><FormCreatePage /></SafeLazy>} />
       <Route path="form-builder/submissions" element={<SafeLazy><FormSubmissionsPage /></SafeLazy>} />
@@ -425,6 +440,8 @@ function PageRoutes() {
       <Route path="form-builder/guide/*" element={<SafeLazy><FormBuilderOverviewPage /></SafeLazy>} />
       <Route path="form-builder/overview" element={<Navigate to="form-builder/guide" replace />} />
       <Route path="form-builder/hub" element={<SafeLazy><FormBuilderHubPage /></SafeLazy>} />
+      <Route path="form-builder/tokens" element={<SafeLazy><FormBuilderTokensPage /></SafeLazy>} />
+      <Route path="form-builder/:slug" element={<SafeLazy><FormBuilderDetailPage /></SafeLazy>} />
 
       {/* Workflow Engine (FQP) */}
       <Route path="workflow-engine" element={<SafeLazy><WorkflowEngineHubPage /></SafeLazy>} />
@@ -440,6 +457,7 @@ function PageRoutes() {
       <Route path="admin/modules" element={<SafeLazy><ModuleRegistryPage /></SafeLazy>} />
       <Route path="admin/sitemap" element={<SafeLazy><SitemapPage /></SafeLazy>} />
       <Route path="admin/developer" element={<SafeLazy><DeveloperPage /></SafeLazy>} />
+      <Route path="admin/menu-preview" element={<SafeLazy><MenuPreviewPage /></SafeLazy>} />
 
       {/* ============================================================ */}
       {/* Module Setup & Deployments Pages                             */}
@@ -514,6 +532,7 @@ function PageRoutes() {
       <Route path="hi-quotation/new/uae" element={<SafeLazy><NewApplicationUAEPage /></SafeLazy>} />
       <Route path="hi-quotation/new/us" element={<SafeLazy><NewApplicationUSPage /></SafeLazy>} />
       <Route path="hi-quotation/new/legacy" element={<SafeLazy><NewHIApplicationPage /></SafeLazy>} />
+      <Route path="hi-quotation/new/:countrySlug" element={<SafeLazy><GenericApplicationPage /></SafeLazy>} />
       <Route path="hi-quotation/*" element={<SafeLazy><HIQuotationPage /></SafeLazy>} />
 
       {/* Business Modules — Motor Insurance */}
@@ -631,6 +650,12 @@ function PageRoutes() {
       <Route path="document-management/setup" element={<SafeLazy><DocumentManagementSetupPage /></SafeLazy>} />
       <Route path="document-management/deployments" element={<SafeLazy><DocumentManagementDeploymentsPage /></SafeLazy>} />
 
+      {/* Broker Dashboard */}
+      <Route path="broker/dashboard" element={<SafeLazy><BrokerDashboardPage /></SafeLazy>} />
+
+      {/* Channel Analytics */}
+      <Route path="analytics/channels" element={<SafeLazy><ChannelAnalyticsPage /></SafeLazy>} />
+
       {/* Verification */}
       <Route path="verification/help" element={<SafeLazy><VerificationHelpPage /></SafeLazy>} />
 
@@ -641,6 +666,7 @@ function PageRoutes() {
       <Route path="products/rating" element={<NotFoundPage />} />
       <Route path="products/rules" element={<NotFoundPage />} />
       <Route path="products/forms" element={<NotFoundPage />} />
+      <Route path="products/setup" element={<Navigate to="/app/pcg4/setup" replace />} />
       <Route path="pcg4" element={<Navigate to="/app/pcg4/configurations" replace />} />
       <Route path="pcg4/configurator" element={<Navigate to="/app/pcg4/configurations/new" replace />} />
       <Route path="pcg4/configurator/:configId" element={<PCG4ConfigRedirect />} />
@@ -655,6 +681,14 @@ function PageRoutes() {
       <Route path="data-table-demo" element={<DataTableDemoPage />} />
       <Route path="stepper-demo" element={<StepperDemoPage />} />
       <Route path="tree-picker-demo" element={<TreePickerDemoPage />} />
+
+      {/* Dev Center */}
+      <Route path="dev-center" element={<SafeLazy><DevCenterPage /></SafeLazy>} />
+      <Route path="dev-center/guide/*" element={<SafeLazy><DevCenterGuidePage /></SafeLazy>} />
+      <Route path="dev-center/tutorials" element={<SafeLazy><TutorialsPage /></SafeLazy>} />
+      <Route path="dev-center/zmb-guide" element={<SafeLazy><ZmbGuidePage /></SafeLazy>} />
+      <Route path="dev-center/architecture" element={<SafeLazy><ArchitecturePage /></SafeLazy>} />
+
       {/* Catch-all: show Not Found page instead of silent redirect */}
       <Route path="*" element={<NotFoundPage />} />
     </>

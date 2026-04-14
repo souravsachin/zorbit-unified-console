@@ -1,0 +1,1284 @@
+[
+  {
+    "id": "core-platform",
+    "label": "Core Platform Services",
+    "icon": "Server",
+    "route": null,
+    "level": 1,
+    "children": [
+      {
+        "id": "core-identity",
+        "label": "Identity",
+        "icon": "Fingerprint",
+        "route": null,
+        "level": 2,
+        "children": [
+          {
+            "id": "core-identity-guide",
+            "label": "Guide",
+            "icon": "BookOpen",
+            "route": "/identity/guide",
+            "level": 3,
+            "children": [
+              { "id": "core-identity-guide-intro", "label": "Introduction", "icon": "Info", "route": "/identity/guide/introduction", "level": 4, "children": [] },
+              { "id": "core-identity-guide-presentation", "label": "Presentation", "icon": "Presentation", "route": "/identity/guide/presentation", "level": 4, "children": [] },
+              { "id": "core-identity-guide-lifecycle", "label": "Lifecycle", "icon": "RefreshCw", "route": "/identity/guide/lifecycle", "level": 4, "children": [] },
+              { "id": "core-identity-guide-videos", "label": "Video Tutorials", "icon": "Video", "route": "/identity/guide/video-tutorials", "level": 4, "children": [] },
+              { "id": "core-identity-guide-resources", "label": "Resources & Documentation", "icon": "FileText", "route": "/identity/guide/resources", "level": 4, "children": [] },
+              { "id": "core-identity-guide-pricing", "label": "Module Pricing", "icon": "DollarSign", "route": "/identity/guide/pricing", "level": 4, "children": [] }
+            ]
+          },
+          { "id": "core-identity-setup", "label": "Setup", "icon": "Settings", "route": "/identity/setup", "level": 3, "children": [] },
+          { "id": "core-identity-deployments", "label": "Deployments", "icon": "Rocket", "route": "/identity/deployments", "level": 3, "children": [] },
+          { "id": "core-identity-users", "label": "Users", "icon": "Users", "route": "/users", "level": 3, "children": [] },
+          { "id": "core-identity-user-directory", "label": "User Directory", "icon": "Contact", "route": "/user-directory", "level": 3, "children": [] },
+          { "id": "core-identity-organizations", "label": "Organizations", "icon": "Building2", "route": "/organizations", "level": 3, "children": [] }
+        ]
+      },
+      {
+        "id": "core-authorization",
+        "label": "Authorization",
+        "icon": "ShieldCheck",
+        "route": null,
+        "level": 2,
+        "children": [
+          {
+            "id": "core-authorization-guide",
+            "label": "Guide",
+            "icon": "BookOpen",
+            "route": "/authorization/guide",
+            "level": 3,
+            "children": [
+              { "id": "core-authorization-guide-intro", "label": "Introduction", "icon": "Info", "route": "/authorization/guide/introduction", "level": 4, "children": [] },
+              { "id": "core-authorization-guide-presentation", "label": "Presentation", "icon": "Presentation", "route": "/authorization/guide/presentation", "level": 4, "children": [] },
+              { "id": "core-authorization-guide-lifecycle", "label": "Lifecycle", "icon": "RefreshCw", "route": "/authorization/guide/lifecycle", "level": 4, "children": [] },
+              { "id": "core-authorization-guide-videos", "label": "Video Tutorials", "icon": "Video", "route": "/authorization/guide/video-tutorials", "level": 4, "children": [] },
+              { "id": "core-authorization-guide-resources", "label": "Resources & Documentation", "icon": "FileText", "route": "/authorization/guide/resources", "level": 4, "children": [] },
+              { "id": "core-authorization-guide-pricing", "label": "Module Pricing", "icon": "DollarSign", "route": "/authorization/guide/pricing", "level": 4, "children": [] }
+            ]
+          },
+          { "id": "core-authorization-setup", "label": "Setup", "icon": "Settings", "route": "/authorization/setup", "level": 3, "children": [] },
+          { "id": "core-authorization-deployments", "label": "Deployments", "icon": "Rocket", "route": "/authorization/deployments", "level": 3, "children": [] },
+          { "id": "core-authorization-roles", "label": "Roles", "icon": "Shield", "route": "/roles", "level": 3, "children": [] },
+          { "id": "core-authorization-privileges", "label": "Privileges", "icon": "Key", "route": "/privileges", "level": 3, "children": [] }
+        ]
+      },
+      {
+        "id": "core-navigation",
+        "label": "Navigation",
+        "icon": "Navigation",
+        "route": null,
+        "level": 2,
+        "children": [
+          {
+            "id": "core-navigation-guide",
+            "label": "Guide",
+            "icon": "BookOpen",
+            "route": "/navigation/guide",
+            "level": 3,
+            "children": [
+              { "id": "core-navigation-guide-intro", "label": "Introduction", "icon": "Info", "route": "/navigation/guide/introduction", "level": 4, "children": [] },
+              { "id": "core-navigation-guide-presentation", "label": "Presentation", "icon": "Presentation", "route": "/navigation/guide/presentation", "level": 4, "children": [] },
+              { "id": "core-navigation-guide-lifecycle", "label": "Lifecycle", "icon": "RefreshCw", "route": "/navigation/guide/lifecycle", "level": 4, "children": [] },
+              { "id": "core-navigation-guide-videos", "label": "Video Tutorials", "icon": "Video", "route": "/navigation/guide/video-tutorials", "level": 4, "children": [] },
+              { "id": "core-navigation-guide-resources", "label": "Resources & Documentation", "icon": "FileText", "route": "/navigation/guide/resources", "level": 4, "children": [] },
+              { "id": "core-navigation-guide-pricing", "label": "Module Pricing", "icon": "DollarSign", "route": "/navigation/guide/pricing", "level": 4, "children": [] }
+            ]
+          },
+          { "id": "core-navigation-setup", "label": "Setup", "icon": "Settings", "route": "/navigation/setup", "level": 3, "children": [] },
+          { "id": "core-navigation-deployments", "label": "Deployments", "icon": "Rocket", "route": "/navigation/deployments", "level": 3, "children": [] },
+          { "id": "core-navigation-menus", "label": "Menu Management", "icon": "Menu", "route": "/navigation/menus", "level": 3, "children": [] },
+          { "id": "core-navigation-routes", "label": "Route Registry", "icon": "Route", "route": "/navigation/routes", "level": 3, "children": [] }
+        ]
+      },
+      {
+        "id": "core-messaging",
+        "label": "Event Bus (Messaging)",
+        "icon": "Radio",
+        "route": null,
+        "level": 2,
+        "children": [
+          {
+            "id": "core-messaging-guide",
+            "label": "Guide",
+            "icon": "BookOpen",
+            "route": "/messaging/guide",
+            "level": 3,
+            "children": [
+              { "id": "core-messaging-guide-intro", "label": "Introduction", "icon": "Info", "route": "/messaging/guide/introduction", "level": 4, "children": [] },
+              { "id": "core-messaging-guide-presentation", "label": "Presentation", "icon": "Presentation", "route": "/messaging/guide/presentation", "level": 4, "children": [] },
+              { "id": "core-messaging-guide-lifecycle", "label": "Lifecycle", "icon": "RefreshCw", "route": "/messaging/guide/lifecycle", "level": 4, "children": [] },
+              { "id": "core-messaging-guide-videos", "label": "Video Tutorials", "icon": "Video", "route": "/messaging/guide/video-tutorials", "level": 4, "children": [] },
+              { "id": "core-messaging-guide-resources", "label": "Resources & Documentation", "icon": "FileText", "route": "/messaging/guide/resources", "level": 4, "children": [] },
+              { "id": "core-messaging-guide-pricing", "label": "Module Pricing", "icon": "DollarSign", "route": "/messaging/guide/pricing", "level": 4, "children": [] }
+            ]
+          },
+          { "id": "core-messaging-setup", "label": "Setup", "icon": "Settings", "route": "/messaging/setup", "level": 3, "children": [] },
+          { "id": "core-messaging-deployments", "label": "Deployments", "icon": "Rocket", "route": "/messaging/deployments", "level": 3, "children": [] },
+          { "id": "core-messaging-topics", "label": "Topics", "icon": "List", "route": "/messaging/topics", "level": 3, "children": [] },
+          { "id": "core-messaging-events", "label": "Event Log", "icon": "Activity", "route": "/messaging/events", "level": 3, "children": [] }
+        ]
+      },
+      {
+        "id": "core-audit",
+        "label": "Audit",
+        "icon": "ClipboardCheck",
+        "route": null,
+        "level": 2,
+        "children": [
+          {
+            "id": "core-audit-guide",
+            "label": "Guide",
+            "icon": "BookOpen",
+            "route": "/audit/guide",
+            "level": 3,
+            "children": [
+              { "id": "core-audit-guide-intro", "label": "Introduction", "icon": "Info", "route": "/audit/guide/introduction", "level": 4, "children": [] },
+              { "id": "core-audit-guide-presentation", "label": "Presentation", "icon": "Presentation", "route": "/audit/guide/presentation", "level": 4, "children": [] },
+              { "id": "core-audit-guide-lifecycle", "label": "Lifecycle", "icon": "RefreshCw", "route": "/audit/guide/lifecycle", "level": 4, "children": [] },
+              { "id": "core-audit-guide-videos", "label": "Video Tutorials", "icon": "Video", "route": "/audit/guide/video-tutorials", "level": 4, "children": [] },
+              { "id": "core-audit-guide-resources", "label": "Resources & Documentation", "icon": "FileText", "route": "/audit/guide/resources", "level": 4, "children": [] },
+              { "id": "core-audit-guide-pricing", "label": "Module Pricing", "icon": "DollarSign", "route": "/audit/guide/pricing", "level": 4, "children": [] }
+            ]
+          },
+          { "id": "core-audit-setup", "label": "Setup", "icon": "Settings", "route": "/audit/setup", "level": 3, "children": [] },
+          { "id": "core-audit-deployments", "label": "Deployments", "icon": "Rocket", "route": "/audit/deployments", "level": 3, "children": [] },
+          { "id": "core-audit-logs", "label": "Audit Logs", "icon": "ScrollText", "route": "/audit/logs", "level": 3, "children": [] }
+        ]
+      },
+      {
+        "id": "core-pii-vault",
+        "label": "PII Vault",
+        "icon": "Lock",
+        "route": null,
+        "level": 2,
+        "children": [
+          {
+            "id": "core-pii-vault-guide",
+            "label": "Guide",
+            "icon": "BookOpen",
+            "route": "/pii-vault/guide",
+            "level": 3,
+            "children": [
+              { "id": "core-pii-vault-guide-intro", "label": "Introduction", "icon": "Info", "route": "/pii-vault/guide/introduction", "level": 4, "children": [] },
+              { "id": "core-pii-vault-guide-presentation", "label": "Presentation", "icon": "Presentation", "route": "/pii-vault/guide/presentation", "level": 4, "children": [] },
+              { "id": "core-pii-vault-guide-lifecycle", "label": "Lifecycle", "icon": "RefreshCw", "route": "/pii-vault/guide/lifecycle", "level": 4, "children": [] },
+              { "id": "core-pii-vault-guide-videos", "label": "Video Tutorials", "icon": "Video", "route": "/pii-vault/guide/video-tutorials", "level": 4, "children": [] },
+              { "id": "core-pii-vault-guide-resources", "label": "Resources & Documentation", "icon": "FileText", "route": "/pii-vault/guide/resources", "level": 4, "children": [] },
+              { "id": "core-pii-vault-guide-pricing", "label": "Module Pricing", "icon": "DollarSign", "route": "/pii-vault/guide/pricing", "level": 4, "children": [] }
+            ]
+          },
+          { "id": "core-pii-vault-setup", "label": "Setup", "icon": "Settings", "route": "/pii-vault/setup", "level": 3, "children": [] },
+          { "id": "core-pii-vault-deployments", "label": "Deployments", "icon": "Rocket", "route": "/pii-vault/deployments", "level": 3, "children": [] },
+          { "id": "core-pii-vault-tokens", "label": "Token Registry", "icon": "Hash", "route": "/pii-vault/tokens", "level": 3, "children": [] }
+        ]
+      },
+      {
+        "id": "core-secrets",
+        "label": "Secrets Vault",
+        "icon": "KeyRound",
+        "route": null,
+        "level": 2,
+        "children": [
+          {
+            "id": "core-secrets-guide",
+            "label": "Guide",
+            "icon": "BookOpen",
+            "route": "/secrets/guide",
+            "level": 3,
+            "children": [
+              { "id": "core-secrets-guide-intro", "label": "Introduction", "icon": "Info", "route": "/secrets/guide/introduction", "level": 4, "children": [] },
+              { "id": "core-secrets-guide-presentation", "label": "Presentation", "icon": "Presentation", "route": "/secrets/guide/presentation", "level": 4, "children": [] },
+              { "id": "core-secrets-guide-lifecycle", "label": "Lifecycle", "icon": "RefreshCw", "route": "/secrets/guide/lifecycle", "level": 4, "children": [] },
+              { "id": "core-secrets-guide-videos", "label": "Video Tutorials", "icon": "Video", "route": "/secrets/guide/video-tutorials", "level": 4, "children": [] },
+              { "id": "core-secrets-guide-resources", "label": "Resources & Documentation", "icon": "FileText", "route": "/secrets/guide/resources", "level": 4, "children": [] },
+              { "id": "core-secrets-guide-pricing", "label": "Module Pricing", "icon": "DollarSign", "route": "/secrets/guide/pricing", "level": 4, "children": [] }
+            ]
+          },
+          { "id": "core-secrets-setup", "label": "Setup", "icon": "Settings", "route": "/secrets/setup", "level": 3, "children": [] },
+          { "id": "core-secrets-deployments", "label": "Deployments", "icon": "Rocket", "route": "/secrets/deployments", "level": 3, "children": [] },
+          { "id": "core-secrets-list", "label": "Secrets List", "icon": "List", "route": "/secrets/list", "level": 3, "children": [] },
+          { "id": "core-secrets-audit", "label": "Secrets Audit", "icon": "Eye", "route": "/secrets/audit", "level": 3, "children": [] }
+        ]
+      },
+      {
+        "id": "core-pii-showcase",
+        "label": "PII Showcase",
+        "icon": "ShieldAlert",
+        "route": null,
+        "level": 2,
+        "children": [
+          {
+            "id": "core-pii-showcase-guide",
+            "label": "Guide",
+            "icon": "BookOpen",
+            "route": "/pii-showcase/guide",
+            "level": 3,
+            "children": [
+              { "id": "core-pii-showcase-guide-intro", "label": "Introduction", "icon": "Info", "route": "/pii-showcase/guide/introduction", "level": 4, "children": [] },
+              { "id": "core-pii-showcase-guide-presentation", "label": "Presentation", "icon": "Presentation", "route": "/pii-showcase/guide/presentation", "level": 4, "children": [] },
+              { "id": "core-pii-showcase-guide-lifecycle", "label": "Lifecycle", "icon": "RefreshCw", "route": "/pii-showcase/guide/lifecycle", "level": 4, "children": [] },
+              { "id": "core-pii-showcase-guide-videos", "label": "Video Tutorials", "icon": "Video", "route": "/pii-showcase/guide/video-tutorials", "level": 4, "children": [] },
+              { "id": "core-pii-showcase-guide-resources", "label": "Resources & Documentation", "icon": "FileText", "route": "/pii-showcase/guide/resources", "level": 4, "children": [] },
+              { "id": "core-pii-showcase-guide-pricing", "label": "Module Pricing", "icon": "DollarSign", "route": "/pii-showcase/guide/pricing", "level": 4, "children": [] }
+            ]
+          },
+          { "id": "core-pii-showcase-setup", "label": "Setup", "icon": "Settings", "route": "/pii-showcase/setup", "level": 3, "children": [] },
+          { "id": "core-pii-showcase-deployments", "label": "Deployments", "icon": "Rocket", "route": "/pii-showcase/deployments", "level": 3, "children": [] },
+          { "id": "core-pii-showcase-dashboard", "label": "Dashboard", "icon": "LayoutDashboard", "route": "/pii-showcase/dashboard", "level": 3, "children": [] },
+          { "id": "core-pii-showcase-upload", "label": "Upload", "icon": "Upload", "route": "/pii-showcase/upload", "level": 3, "children": [] },
+          { "id": "core-pii-showcase-config", "label": "Configuration", "icon": "Wrench", "route": "/pii-showcase/config", "level": 3, "children": [] }
+        ]
+      },
+      {
+        "id": "core-verification",
+        "label": "Verification",
+        "icon": "BadgeCheck",
+        "route": null,
+        "level": 2,
+        "children": [
+          {
+            "id": "core-verification-guide",
+            "label": "Guide",
+            "icon": "BookOpen",
+            "route": "/verification/guide",
+            "level": 3,
+            "children": [
+              { "id": "core-verification-guide-intro", "label": "Introduction", "icon": "Info", "route": "/verification/guide/introduction", "level": 4, "children": [] },
+              { "id": "core-verification-guide-presentation", "label": "Presentation", "icon": "Presentation", "route": "/verification/guide/presentation", "level": 4, "children": [] },
+              { "id": "core-verification-guide-lifecycle", "label": "Lifecycle", "icon": "RefreshCw", "route": "/verification/guide/lifecycle", "level": 4, "children": [] },
+              { "id": "core-verification-guide-videos", "label": "Video Tutorials", "icon": "Video", "route": "/verification/guide/video-tutorials", "level": 4, "children": [] },
+              { "id": "core-verification-guide-resources", "label": "Resources & Documentation", "icon": "FileText", "route": "/verification/guide/resources", "level": 4, "children": [] },
+              { "id": "core-verification-guide-pricing", "label": "Module Pricing", "icon": "DollarSign", "route": "/verification/guide/pricing", "level": 4, "children": [] }
+            ]
+          },
+          { "id": "core-verification-help", "label": "Help", "icon": "HelpCircle", "route": "/verification/help", "level": 3, "children": [] }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "platform-capabilities",
+    "label": "Platform Capabilities",
+    "icon": "Layers",
+    "route": null,
+    "level": 1,
+    "children": [
+      {
+        "id": "cap-datatable",
+        "label": "DataTable Engine",
+        "icon": "Table",
+        "route": null,
+        "level": 2,
+        "children": [
+          {
+            "id": "cap-datatable-guide",
+            "label": "Guide",
+            "icon": "BookOpen",
+            "route": "/dashboard/guide",
+            "level": 3,
+            "children": [
+              { "id": "cap-datatable-guide-intro", "label": "Introduction", "icon": "Info", "route": "/dashboard/guide/introduction", "level": 4, "children": [] },
+              { "id": "cap-datatable-guide-presentation", "label": "Presentation", "icon": "Presentation", "route": "/dashboard/guide/presentation", "level": 4, "children": [] },
+              { "id": "cap-datatable-guide-lifecycle", "label": "Lifecycle", "icon": "RefreshCw", "route": "/dashboard/guide/lifecycle", "level": 4, "children": [] },
+              { "id": "cap-datatable-guide-videos", "label": "Video Tutorials", "icon": "Video", "route": "/dashboard/guide/video-tutorials", "level": 4, "children": [] },
+              { "id": "cap-datatable-guide-resources", "label": "Resources & Documentation", "icon": "FileText", "route": "/dashboard/guide/resources", "level": 4, "children": [] },
+              { "id": "cap-datatable-guide-pricing", "label": "Module Pricing", "icon": "DollarSign", "route": "/dashboard/guide/pricing", "level": 4, "children": [] }
+            ]
+          },
+          { "id": "cap-datatable-setup", "label": "Setup", "icon": "Settings", "route": "/dashboard/setup", "level": 3, "children": [] },
+          { "id": "cap-datatable-deployments", "label": "Deployments", "icon": "Rocket", "route": "/dashboard/deployments", "level": 3, "children": [] },
+          { "id": "cap-datatable-demo", "label": "DataTable Demo", "icon": "Play", "route": "/data-table-demo", "level": 3, "children": [] },
+          { "id": "cap-datatable-designer", "label": "Dashboard Designer", "icon": "PenTool", "route": "/dashboard/designer", "level": 3, "children": [] }
+        ]
+      },
+      {
+        "id": "cap-form-builder",
+        "label": "Form Builder",
+        "icon": "FormInput",
+        "route": null,
+        "level": 2,
+        "children": [
+          {
+            "id": "cap-form-builder-guide",
+            "label": "Guide",
+            "icon": "BookOpen",
+            "route": "/form-builder/guide",
+            "level": 3,
+            "children": [
+              { "id": "cap-form-builder-guide-intro", "label": "Introduction", "icon": "Info", "route": "/form-builder/guide/introduction", "level": 4, "children": [] },
+              { "id": "cap-form-builder-guide-presentation", "label": "Presentation", "icon": "Presentation", "route": "/form-builder/guide/presentation", "level": 4, "children": [] },
+              { "id": "cap-form-builder-guide-lifecycle", "label": "Lifecycle", "icon": "RefreshCw", "route": "/form-builder/guide/lifecycle", "level": 4, "children": [] },
+              { "id": "cap-form-builder-guide-videos", "label": "Video Tutorials", "icon": "Video", "route": "/form-builder/guide/video-tutorials", "level": 4, "children": [] },
+              { "id": "cap-form-builder-guide-resources", "label": "Resources & Documentation", "icon": "FileText", "route": "/form-builder/guide/resources", "level": 4, "children": [] },
+              { "id": "cap-form-builder-guide-pricing", "label": "Module Pricing", "icon": "DollarSign", "route": "/form-builder/guide/pricing", "level": 4, "children": [] }
+            ]
+          },
+          { "id": "cap-form-builder-setup", "label": "Setup", "icon": "Settings", "route": "/form-builder/setup", "level": 3, "children": [] },
+          { "id": "cap-form-builder-deployments", "label": "Deployments", "icon": "Rocket", "route": "/form-builder/deployments", "level": 3, "children": [] },
+          { "id": "cap-form-builder-templates", "label": "Templates", "icon": "LayoutTemplate", "route": "/form-builder/templates", "level": 3, "children": [] },
+          { "id": "cap-form-builder-create", "label": "Create Form", "icon": "Plus", "route": "/form-builder/create", "level": 3, "children": [] },
+          { "id": "cap-form-builder-submissions", "label": "Submissions", "icon": "Inbox", "route": "/form-builder/submissions", "level": 3, "children": [] }
+        ]
+      },
+      {
+        "id": "cap-workflow-engine",
+        "label": "Workflow Engine (FQP)",
+        "icon": "GitBranch",
+        "route": null,
+        "level": 2,
+        "children": [
+          {
+            "id": "cap-workflow-guide",
+            "label": "Guide",
+            "icon": "BookOpen",
+            "route": "/workflow-engine/guide",
+            "level": 3,
+            "children": [
+              { "id": "cap-workflow-guide-intro", "label": "Introduction", "icon": "Info", "route": "/workflow-engine/guide/introduction", "level": 4, "children": [] },
+              { "id": "cap-workflow-guide-presentation", "label": "Presentation", "icon": "Presentation", "route": "/workflow-engine/guide/presentation", "level": 4, "children": [] },
+              { "id": "cap-workflow-guide-lifecycle", "label": "Lifecycle", "icon": "RefreshCw", "route": "/workflow-engine/guide/lifecycle", "level": 4, "children": [] },
+              { "id": "cap-workflow-guide-videos", "label": "Video Tutorials", "icon": "Video", "route": "/workflow-engine/guide/video-tutorials", "level": 4, "children": [] },
+              { "id": "cap-workflow-guide-resources", "label": "Resources & Documentation", "icon": "FileText", "route": "/workflow-engine/guide/resources", "level": 4, "children": [] },
+              { "id": "cap-workflow-guide-pricing", "label": "Module Pricing", "icon": "DollarSign", "route": "/workflow-engine/guide/pricing", "level": 4, "children": [] }
+            ]
+          },
+          { "id": "cap-workflow-setup", "label": "Setup", "icon": "Settings", "route": "/workflow-engine/setup", "level": 3, "children": [] },
+          { "id": "cap-workflow-deployments", "label": "Deployments", "icon": "Rocket", "route": "/workflow-engine/deployments", "level": 3, "children": [] },
+          { "id": "cap-workflow-filters", "label": "Filters", "icon": "Filter", "route": "/workflow-engine/filters", "level": 3, "children": [] },
+          { "id": "cap-workflow-queues", "label": "Queues", "icon": "ListOrdered", "route": "/workflow-engine/queues", "level": 3, "children": [] },
+          { "id": "cap-workflow-pipelines", "label": "Pipelines", "icon": "Workflow", "route": "/workflow-engine/pipelines", "level": 3, "children": [] }
+        ]
+      },
+      {
+        "id": "cap-ai-gateway",
+        "label": "AI Gateway",
+        "icon": "Brain",
+        "route": null,
+        "level": 2,
+        "children": [
+          {
+            "id": "cap-ai-gateway-guide",
+            "label": "Guide",
+            "icon": "BookOpen",
+            "route": "/ai-gateway/guide",
+            "level": 3,
+            "children": [
+              { "id": "cap-ai-gateway-guide-intro", "label": "Introduction", "icon": "Info", "route": "/ai-gateway/guide/introduction", "level": 4, "children": [] },
+              { "id": "cap-ai-gateway-guide-presentation", "label": "Presentation", "icon": "Presentation", "route": "/ai-gateway/guide/presentation", "level": 4, "children": [] },
+              { "id": "cap-ai-gateway-guide-lifecycle", "label": "Lifecycle", "icon": "RefreshCw", "route": "/ai-gateway/guide/lifecycle", "level": 4, "children": [] },
+              { "id": "cap-ai-gateway-guide-videos", "label": "Video Tutorials", "icon": "Video", "route": "/ai-gateway/guide/video-tutorials", "level": 4, "children": [] },
+              { "id": "cap-ai-gateway-guide-resources", "label": "Resources & Documentation", "icon": "FileText", "route": "/ai-gateway/guide/resources", "level": 4, "children": [] },
+              { "id": "cap-ai-gateway-guide-pricing", "label": "Module Pricing", "icon": "DollarSign", "route": "/ai-gateway/guide/pricing", "level": 4, "children": [] }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "cap-realtime",
+        "label": "Realtime (WebRTC / Chat)",
+        "icon": "Wifi",
+        "route": null,
+        "level": 2,
+        "children": [
+          {
+            "id": "cap-realtime-rtc",
+            "label": "RTC Engine",
+            "icon": "PhoneCall",
+            "route": null,
+            "level": 3,
+            "children": []
+          },
+          {
+            "id": "cap-realtime-chat",
+            "label": "Chat Engine",
+            "icon": "MessageSquare",
+            "route": null,
+            "level": 3,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "cap-interaction-recorder",
+        "label": "Interaction Recorder",
+        "icon": "Disc",
+        "route": null,
+        "level": 2,
+        "children": [
+          {
+            "id": "cap-interaction-recorder-guide",
+            "label": "Guide",
+            "icon": "BookOpen",
+            "route": "/interaction-recorder/guide",
+            "level": 3,
+            "children": [
+              { "id": "cap-interaction-recorder-guide-intro", "label": "Introduction", "icon": "Info", "route": "/interaction-recorder/guide/introduction", "level": 4, "children": [] },
+              { "id": "cap-interaction-recorder-guide-presentation", "label": "Presentation", "icon": "Presentation", "route": "/interaction-recorder/guide/presentation", "level": 4, "children": [] },
+              { "id": "cap-interaction-recorder-guide-lifecycle", "label": "Lifecycle", "icon": "RefreshCw", "route": "/interaction-recorder/guide/lifecycle", "level": 4, "children": [] },
+              { "id": "cap-interaction-recorder-guide-videos", "label": "Video Tutorials", "icon": "Video", "route": "/interaction-recorder/guide/video-tutorials", "level": 4, "children": [] },
+              { "id": "cap-interaction-recorder-guide-resources", "label": "Resources & Documentation", "icon": "FileText", "route": "/interaction-recorder/guide/resources", "level": 4, "children": [] },
+              { "id": "cap-interaction-recorder-guide-pricing", "label": "Module Pricing", "icon": "DollarSign", "route": "/interaction-recorder/guide/pricing", "level": 4, "children": [] }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "cap-notification",
+        "label": "Notification Service",
+        "icon": "Bell",
+        "route": null,
+        "level": 2,
+        "children": [
+          {
+            "id": "cap-notification-guide",
+            "label": "Guide",
+            "icon": "BookOpen",
+            "route": "/notification/guide",
+            "level": 3,
+            "children": [
+              { "id": "cap-notification-guide-intro", "label": "Introduction", "icon": "Info", "route": "/notification/guide/introduction", "level": 4, "children": [] },
+              { "id": "cap-notification-guide-presentation", "label": "Presentation", "icon": "Presentation", "route": "/notification/guide/presentation", "level": 4, "children": [] },
+              { "id": "cap-notification-guide-lifecycle", "label": "Lifecycle", "icon": "RefreshCw", "route": "/notification/guide/lifecycle", "level": 4, "children": [] },
+              { "id": "cap-notification-guide-videos", "label": "Video Tutorials", "icon": "Video", "route": "/notification/guide/video-tutorials", "level": 4, "children": [] },
+              { "id": "cap-notification-guide-resources", "label": "Resources & Documentation", "icon": "FileText", "route": "/notification/guide/resources", "level": 4, "children": [] },
+              { "id": "cap-notification-guide-pricing", "label": "Module Pricing", "icon": "DollarSign", "route": "/notification/guide/pricing", "level": 4, "children": [] }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "cap-integration",
+        "label": "Integration Service",
+        "icon": "Plug",
+        "route": null,
+        "level": 2,
+        "children": [
+          {
+            "id": "cap-integration-guide",
+            "label": "Guide",
+            "icon": "BookOpen",
+            "route": "/api-integration/guide",
+            "level": 3,
+            "children": [
+              { "id": "cap-integration-guide-intro", "label": "Introduction", "icon": "Info", "route": "/api-integration/guide/introduction", "level": 4, "children": [] },
+              { "id": "cap-integration-guide-presentation", "label": "Presentation", "icon": "Presentation", "route": "/api-integration/guide/presentation", "level": 4, "children": [] },
+              { "id": "cap-integration-guide-lifecycle", "label": "Lifecycle", "icon": "RefreshCw", "route": "/api-integration/guide/lifecycle", "level": 4, "children": [] },
+              { "id": "cap-integration-guide-videos", "label": "Video Tutorials", "icon": "Video", "route": "/api-integration/guide/video-tutorials", "level": 4, "children": [] },
+              { "id": "cap-integration-guide-resources", "label": "Resources & Documentation", "icon": "FileText", "route": "/api-integration/guide/resources", "level": 4, "children": [] },
+              { "id": "cap-integration-guide-pricing", "label": "Module Pricing", "icon": "DollarSign", "route": "/api-integration/guide/pricing", "level": 4, "children": [] }
+            ]
+          },
+          { "id": "cap-integration-setup", "label": "Setup", "icon": "Settings", "route": "/api-integration/setup", "level": 3, "children": [] },
+          { "id": "cap-integration-deployments", "label": "Deployments", "icon": "Rocket", "route": "/api-integration/deployments", "level": 3, "children": [] }
+        ]
+      },
+      {
+        "id": "cap-directory",
+        "label": "Organization Directory",
+        "icon": "BookUser",
+        "route": null,
+        "level": 2,
+        "children": [
+          {
+            "id": "cap-directory-guide",
+            "label": "Guide",
+            "icon": "BookOpen",
+            "route": "/directory/guide",
+            "level": 3,
+            "children": [
+              { "id": "cap-directory-guide-intro", "label": "Introduction", "icon": "Info", "route": "/directory/guide/introduction", "level": 4, "children": [] },
+              { "id": "cap-directory-guide-presentation", "label": "Presentation", "icon": "Presentation", "route": "/directory/guide/presentation", "level": 4, "children": [] },
+              { "id": "cap-directory-guide-lifecycle", "label": "Lifecycle", "icon": "RefreshCw", "route": "/directory/guide/lifecycle", "level": 4, "children": [] },
+              { "id": "cap-directory-guide-videos", "label": "Video Tutorials", "icon": "Video", "route": "/directory/guide/video-tutorials", "level": 4, "children": [] },
+              { "id": "cap-directory-guide-resources", "label": "Resources & Documentation", "icon": "FileText", "route": "/directory/guide/resources", "level": 4, "children": [] },
+              { "id": "cap-directory-guide-pricing", "label": "Module Pricing", "icon": "DollarSign", "route": "/directory/guide/pricing", "level": 4, "children": [] }
+            ]
+          },
+          { "id": "cap-directory-setup", "label": "Setup", "icon": "Settings", "route": "/directory/setup", "level": 3, "children": [] },
+          { "id": "cap-directory-deployments", "label": "Deployments", "icon": "Rocket", "route": "/directory/deployments", "level": 3, "children": [] },
+          { "id": "cap-directory-browse", "label": "Browse Directory", "icon": "Search", "route": "/directory", "level": 3, "children": [] }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "business-lines",
+    "label": "Business Lines (Insurance)",
+    "icon": "Briefcase",
+    "route": null,
+    "level": 1,
+    "children": [
+      {
+        "id": "biz-distribution",
+        "label": "Distribution Side",
+        "icon": "TrendingUp",
+        "route": null,
+        "level": 2,
+        "children": [
+          {
+            "id": "biz-dist-product-management",
+            "label": "Product Management",
+            "icon": "Package",
+            "route": null,
+            "level": 3,
+            "children": [
+              {
+                "id": "biz-dist-pm-pcg4",
+                "label": "Product Design / Configuration (PCG4)",
+                "icon": "Cpu",
+                "route": null,
+                "level": 4,
+                "children": [
+                  {
+                    "id": "biz-dist-pm-pcg4-guide",
+                    "label": "Guide",
+                    "icon": "BookOpen",
+                    "route": "/app/pcg4/guide",
+                    "level": 5,
+                    "children": [
+                      { "id": "biz-dist-pm-pcg4-guide-intro", "label": "Introduction", "icon": "Info", "route": "/app/pcg4/guide/introduction", "level": 6, "children": [] },
+                      { "id": "biz-dist-pm-pcg4-guide-presentation", "label": "Presentation", "icon": "Presentation", "route": "/app/pcg4/guide/presentation", "level": 6, "children": [] },
+                      { "id": "biz-dist-pm-pcg4-guide-lifecycle", "label": "Lifecycle", "icon": "RefreshCw", "route": "/app/pcg4/guide/lifecycle", "level": 6, "children": [] },
+                      { "id": "biz-dist-pm-pcg4-guide-videos", "label": "Video Tutorials", "icon": "Video", "route": "/app/pcg4/guide/video-tutorials", "level": 6, "children": [] },
+                      { "id": "biz-dist-pm-pcg4-guide-resources", "label": "Resources & Documentation", "icon": "FileText", "route": "/app/pcg4/guide/resources", "level": 6, "children": [] },
+                      { "id": "biz-dist-pm-pcg4-guide-pricing", "label": "Module Pricing", "icon": "DollarSign", "route": "/app/pcg4/guide/pricing", "level": 6, "children": [] }
+                    ]
+                  },
+                  { "id": "biz-dist-pm-pcg4-setup", "label": "Setup", "icon": "Settings", "route": "/app/pcg4/setup", "level": 5, "children": [] },
+                  { "id": "biz-dist-pm-pcg4-deployments", "label": "Deployments", "icon": "Rocket", "route": "/app/pcg4/deployments", "level": 5, "children": [] },
+                  { "id": "biz-dist-pm-pcg4-configurations", "label": "Configurations", "icon": "SlidersHorizontal", "route": "/app/pcg4/configurations", "level": 5, "children": [] },
+                  { "id": "biz-dist-pm-pcg4-reference-library", "label": "Reference Library", "icon": "Library", "route": "/app/pcg4/reference-library", "level": 5, "children": [] },
+                  { "id": "biz-dist-pm-pcg4-coverage-mapper", "label": "Coverage Mapper", "icon": "Map", "route": "/app/pcg4/coverage-mapper", "level": 5, "children": [] },
+                  { "id": "biz-dist-pm-pcg4-encounters", "label": "Encounter Types", "icon": "Layers", "route": "/app/pcg4/encounters", "level": 5, "children": [] },
+                  { "id": "biz-dist-pm-pcg4-pricing", "label": "Module Pricing", "icon": "DollarSign", "route": "/app/pcg4/pricing", "level": 5, "children": [] }
+                ]
+              },
+              {
+                "id": "biz-dist-pm-pricing",
+                "label": "Product Pricing",
+                "icon": "Calculator",
+                "route": null,
+                "level": 4,
+                "children": [
+                  {
+                    "id": "biz-dist-pm-pricing-guide",
+                    "label": "Guide",
+                    "icon": "BookOpen",
+                    "route": "/product-pricing/guide",
+                    "level": 5,
+                    "children": [
+                      { "id": "biz-dist-pm-pricing-guide-intro", "label": "Introduction", "icon": "Info", "route": "/product-pricing/guide/introduction", "level": 6, "children": [] },
+                      { "id": "biz-dist-pm-pricing-guide-presentation", "label": "Presentation", "icon": "Presentation", "route": "/product-pricing/guide/presentation", "level": 6, "children": [] },
+                      { "id": "biz-dist-pm-pricing-guide-lifecycle", "label": "Lifecycle", "icon": "RefreshCw", "route": "/product-pricing/guide/lifecycle", "level": 6, "children": [] },
+                      { "id": "biz-dist-pm-pricing-guide-videos", "label": "Video Tutorials", "icon": "Video", "route": "/product-pricing/guide/video-tutorials", "level": 6, "children": [] },
+                      { "id": "biz-dist-pm-pricing-guide-resources", "label": "Resources & Documentation", "icon": "FileText", "route": "/product-pricing/guide/resources", "level": 6, "children": [] },
+                      { "id": "biz-dist-pm-pricing-guide-pricing", "label": "Module Pricing", "icon": "DollarSign", "route": "/product-pricing/guide/pricing", "level": 6, "children": [] }
+                    ]
+                  },
+                  { "id": "biz-dist-pm-pricing-setup", "label": "Setup", "icon": "Settings", "route": "/product-pricing/setup", "level": 5, "children": [] },
+                  { "id": "biz-dist-pm-pricing-deployments", "label": "Deployments", "icon": "Rocket", "route": "/product-pricing/deployments", "level": 5, "children": [] },
+                  { "id": "biz-dist-pm-pricing-rate-tables", "label": "Rate Tables", "icon": "Table2", "route": "/product-pricing/rate-tables", "level": 5, "children": [] },
+                  { "id": "biz-dist-pm-pricing-import", "label": "Rate Card Import", "icon": "Upload", "route": "/product-pricing/import", "level": 5, "children": [] }
+                ]
+              },
+              {
+                "id": "biz-dist-pm-actuarial",
+                "label": "Actuarial Tools",
+                "icon": "BarChart3",
+                "route": null,
+                "level": 4,
+                "children": [
+                  { "id": "biz-dist-pm-actuarial-placeholder", "label": "Coming Soon", "icon": "Clock", "route": null, "level": 5, "children": [] }
+                ]
+              },
+              {
+                "id": "biz-dist-pm-testing",
+                "label": "Product Testing",
+                "icon": "TestTube2",
+                "route": null,
+                "level": 4,
+                "children": [
+                  { "id": "biz-dist-pm-testing-placeholder", "label": "Coming Soon", "icon": "Clock", "route": null, "level": 5, "children": [] }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "biz-dist-pas-retail",
+            "label": "PAS - Retail (Individual)",
+            "icon": "UserCheck",
+            "route": null,
+            "level": 3,
+            "children": [
+              {
+                "id": "biz-dist-pas-retail-channels",
+                "label": "Distribution Channel Management",
+                "icon": "Network",
+                "route": null,
+                "level": 4,
+                "children": [
+                  {
+                    "id": "biz-dist-pas-retail-hi-quotation",
+                    "label": "HI Quotation (Health Individual)",
+                    "icon": "HeartPulse",
+                    "route": null,
+                    "level": 5,
+                    "children": [
+                      {
+                        "id": "biz-dist-pas-retail-hi-quot-guide",
+                        "label": "Guide",
+                        "icon": "BookOpen",
+                        "route": "/hi-quotation/guide",
+                        "level": 6,
+                        "children": []
+                      },
+                      { "id": "biz-dist-pas-retail-hi-quot-setup", "label": "Setup", "icon": "Settings", "route": "/hi-quotation/setup", "level": 6, "children": [] },
+                      { "id": "biz-dist-pas-retail-hi-quot-deployments", "label": "Deployments", "icon": "Rocket", "route": "/hi-quotation/deployments", "level": 6, "children": [] },
+                      { "id": "biz-dist-pas-retail-hi-quot-list", "label": "Quotations", "icon": "List", "route": "/hi-quotation", "level": 6, "children": [] },
+                      { "id": "biz-dist-pas-retail-hi-quot-new", "label": "New Application", "icon": "Plus", "route": "/hi-quotation/new", "level": 6, "children": [] }
+                    ]
+                  },
+                  {
+                    "id": "biz-dist-pas-retail-mi-quotation",
+                    "label": "MI Quotation (Motor Individual)",
+                    "icon": "Car",
+                    "route": null,
+                    "level": 5,
+                    "children": [
+                      {
+                        "id": "biz-dist-pas-retail-mi-quot-guide",
+                        "label": "Guide",
+                        "icon": "BookOpen",
+                        "route": "/mi-quotation/guide",
+                        "level": 6,
+                        "children": []
+                      },
+                      { "id": "biz-dist-pas-retail-mi-quot-setup", "label": "Setup", "icon": "Settings", "route": "/mi-quotation/setup", "level": 6, "children": [] },
+                      { "id": "biz-dist-pas-retail-mi-quot-deployments", "label": "Deployments", "icon": "Rocket", "route": "/mi-quotation/deployments", "level": 6, "children": [] },
+                      { "id": "biz-dist-pas-retail-mi-quot-list", "label": "Quotations", "icon": "List", "route": "/mi-quotation", "level": 6, "children": [] }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "biz-dist-pas-retail-uw",
+                "label": "Underwriting",
+                "icon": "ClipboardList",
+                "route": null,
+                "level": 4,
+                "children": [
+                  {
+                    "id": "biz-dist-pas-retail-uw-workflow",
+                    "label": "UW Workflow",
+                    "icon": "GitMerge",
+                    "route": null,
+                    "level": 5,
+                    "children": [
+                      { "id": "biz-dist-pas-retail-uw-wf-guide", "label": "Guide", "icon": "BookOpen", "route": "/uw-workflow/guide", "level": 6, "children": [] },
+                      { "id": "biz-dist-pas-retail-uw-wf-setup", "label": "Setup", "icon": "Settings", "route": "/uw-workflow/setup", "level": 6, "children": [] },
+                      { "id": "biz-dist-pas-retail-uw-wf-deployments", "label": "Deployments", "icon": "Rocket", "route": "/uw-workflow/deployments", "level": 6, "children": [] },
+                      { "id": "biz-dist-pas-retail-uw-wf-list", "label": "Workflow Queue", "icon": "List", "route": "/uw-workflow", "level": 6, "children": [] }
+                    ]
+                  },
+                  {
+                    "id": "biz-dist-pas-retail-hi-decisioning",
+                    "label": "HI UW AE Decisioning",
+                    "icon": "Scale",
+                    "route": null,
+                    "level": 5,
+                    "children": [
+                      { "id": "biz-dist-pas-retail-hi-dec-guide", "label": "Guide", "icon": "BookOpen", "route": "/hi-decisioning/guide", "level": 6, "children": [] },
+                      { "id": "biz-dist-pas-retail-hi-dec-setup", "label": "Setup", "icon": "Settings", "route": "/hi-decisioning/setup", "level": 6, "children": [] },
+                      { "id": "biz-dist-pas-retail-hi-dec-deployments", "label": "Deployments", "icon": "Rocket", "route": "/hi-decisioning/deployments", "level": 6, "children": [] },
+                      { "id": "biz-dist-pas-retail-hi-dec-list", "label": "Decision Queue", "icon": "List", "route": "/hi-decisioning", "level": 6, "children": [] }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "biz-dist-pas-retail-payment",
+                "label": "Payment Processing",
+                "icon": "CreditCard",
+                "route": null,
+                "level": 4,
+                "children": [
+                  {
+                    "id": "biz-dist-pas-retail-fee-mgmt",
+                    "label": "Fee Management",
+                    "icon": "Receipt",
+                    "route": null,
+                    "level": 5,
+                    "children": [
+                      { "id": "biz-dist-pas-retail-fee-guide", "label": "Guide", "icon": "BookOpen", "route": "/fee-management/guide", "level": 6, "children": [] },
+                      { "id": "biz-dist-pas-retail-fee-setup", "label": "Setup", "icon": "Settings", "route": "/fee-management/setup", "level": 6, "children": [] },
+                      { "id": "biz-dist-pas-retail-fee-deployments", "label": "Deployments", "icon": "Rocket", "route": "/fee-management/deployments", "level": 6, "children": [] },
+                      { "id": "biz-dist-pas-retail-fee-list", "label": "Fee Schedules", "icon": "List", "route": "/fee-management", "level": 6, "children": [] }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "biz-dist-pas-retail-doc-verification",
+                "label": "Document Verification",
+                "icon": "FileSearch",
+                "route": null,
+                "level": 4,
+                "children": [
+                  {
+                    "id": "biz-dist-pas-retail-verification",
+                    "label": "Verification Service",
+                    "icon": "CheckCircle2",
+                    "route": null,
+                    "level": 5,
+                    "children": [
+                      { "id": "biz-dist-pas-retail-verif-help", "label": "Help", "icon": "HelpCircle", "route": "/verification/help", "level": 6, "children": [] }
+                    ]
+                  },
+                  {
+                    "id": "biz-dist-pas-retail-doc-mgmt",
+                    "label": "Document Management",
+                    "icon": "FileStack",
+                    "route": null,
+                    "level": 5,
+                    "children": [
+                      { "id": "biz-dist-pas-retail-doc-guide", "label": "Guide", "icon": "BookOpen", "route": "/document-management/guide", "level": 6, "children": [] },
+                      { "id": "biz-dist-pas-retail-doc-setup", "label": "Setup", "icon": "Settings", "route": "/document-management/setup", "level": 6, "children": [] },
+                      { "id": "biz-dist-pas-retail-doc-deployments", "label": "Deployments", "icon": "Rocket", "route": "/document-management/deployments", "level": 6, "children": [] },
+                      { "id": "biz-dist-pas-retail-doc-browse", "label": "Documents", "icon": "Files", "route": "/document-management", "level": 6, "children": [] }
+                    ]
+                  },
+                  {
+                    "id": "biz-dist-pas-retail-maf-engine",
+                    "label": "MAF Engine",
+                    "icon": "FileCheck",
+                    "route": null,
+                    "level": 5,
+                    "children": [
+                      { "id": "biz-dist-pas-retail-maf-guide", "label": "Guide", "icon": "BookOpen", "route": "/maf-engine/guide", "level": 6, "children": [] },
+                      { "id": "biz-dist-pas-retail-maf-setup", "label": "Setup", "icon": "Settings", "route": "/maf-engine/setup", "level": 6, "children": [] },
+                      { "id": "biz-dist-pas-retail-maf-deployments", "label": "Deployments", "icon": "Rocket", "route": "/maf-engine/deployments", "level": 6, "children": [] },
+                      { "id": "biz-dist-pas-retail-maf-browse", "label": "MAF Rules", "icon": "List", "route": "/maf-engine", "level": 6, "children": [] }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "biz-dist-pas-retail-issuance",
+                "label": "Policy Issuance",
+                "icon": "FileOutput",
+                "route": null,
+                "level": 4,
+                "children": [
+                  {
+                    "id": "biz-dist-pas-retail-issuance-module",
+                    "label": "Issuance Module",
+                    "icon": "Stamp",
+                    "route": null,
+                    "level": 5,
+                    "children": [
+                      { "id": "biz-dist-pas-retail-iss-guide", "label": "Guide", "icon": "BookOpen", "route": "/policy-issuance/guide", "level": 6, "children": [] },
+                      { "id": "biz-dist-pas-retail-iss-setup", "label": "Setup", "icon": "Settings", "route": "/policy-issuance/setup", "level": 6, "children": [] },
+                      { "id": "biz-dist-pas-retail-iss-deployments", "label": "Deployments", "icon": "Rocket", "route": "/policy-issuance/deployments", "level": 6, "children": [] },
+                      { "id": "biz-dist-pas-retail-iss-browse", "label": "Issued Policies", "icon": "List", "route": "/policy-issuance", "level": 6, "children": [] }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "biz-dist-pas-group",
+            "label": "PAS - Group / Corporate",
+            "icon": "Building",
+            "route": null,
+            "level": 3,
+            "children": [
+              {
+                "id": "biz-dist-pas-group-sme",
+                "label": "SME & Corporate Insurance",
+                "icon": "Landmark",
+                "route": null,
+                "level": 4,
+                "children": [
+                  {
+                    "id": "biz-dist-pas-group-sme-module",
+                    "label": "SME Corporate Module",
+                    "icon": "Building2",
+                    "route": null,
+                    "level": 5,
+                    "children": [
+                      { "id": "biz-dist-pas-group-sme-guide", "label": "Guide", "icon": "BookOpen", "route": "/sme-corporate/guide", "level": 6, "children": [] },
+                      { "id": "biz-dist-pas-group-sme-setup", "label": "Setup", "icon": "Settings", "route": "/sme-corporate/setup", "level": 6, "children": [] },
+                      { "id": "biz-dist-pas-group-sme-deployments", "label": "Deployments", "icon": "Rocket", "route": "/sme-corporate/deployments", "level": 6, "children": [] },
+                      { "id": "biz-dist-pas-group-sme-browse", "label": "Corporate Policies", "icon": "List", "route": "/sme-corporate", "level": 6, "children": [] }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "biz-dist-pas-group-reinsurance",
+                "label": "Reinsurance",
+                "icon": "Repeat",
+                "route": null,
+                "level": 4,
+                "children": [
+                  {
+                    "id": "biz-dist-pas-group-reins-module",
+                    "label": "Reinsurance Module",
+                    "icon": "ArrowRightLeft",
+                    "route": null,
+                    "level": 5,
+                    "children": [
+                      { "id": "biz-dist-pas-group-reins-guide", "label": "Guide", "icon": "BookOpen", "route": "/reinsurance/guide", "level": 6, "children": [] },
+                      { "id": "biz-dist-pas-group-reins-setup", "label": "Setup", "icon": "Settings", "route": "/reinsurance/setup", "level": 6, "children": [] },
+                      { "id": "biz-dist-pas-group-reins-deployments", "label": "Deployments", "icon": "Rocket", "route": "/reinsurance/deployments", "level": 6, "children": [] },
+                      { "id": "biz-dist-pas-group-reins-browse", "label": "Treaties", "icon": "List", "route": "/reinsurance", "level": 6, "children": [] }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "biz-servicing",
+        "label": "Servicing Side",
+        "icon": "Wrench",
+        "route": null,
+        "level": 2,
+        "children": [
+          {
+            "id": "biz-serv-network",
+            "label": "Network Management",
+            "icon": "Globe",
+            "route": null,
+            "level": 3,
+            "children": [
+              {
+                "id": "biz-serv-network-medical-coding",
+                "label": "Medical Coding",
+                "icon": "Stethoscope",
+                "route": null,
+                "level": 4,
+                "children": [
+                  {
+                    "id": "biz-serv-network-mc-module",
+                    "label": "Medical Coding Module",
+                    "icon": "Code2",
+                    "route": null,
+                    "level": 5,
+                    "children": [
+                      { "id": "biz-serv-network-mc-guide", "label": "Guide", "icon": "BookOpen", "route": "/medical-coding/guide", "level": 6, "children": [] },
+                      { "id": "biz-serv-network-mc-setup", "label": "Setup", "icon": "Settings", "route": "/medical-coding/setup", "level": 6, "children": [] },
+                      { "id": "biz-serv-network-mc-deployments", "label": "Deployments", "icon": "Rocket", "route": "/medical-coding/deployments", "level": 6, "children": [] },
+                      { "id": "biz-serv-network-mc-browse", "label": "Code Registry", "icon": "List", "route": "/medical-coding", "level": 6, "children": [] }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "biz-serv-claims",
+            "label": "Claims Management",
+            "icon": "FileWarning",
+            "route": null,
+            "level": 3,
+            "children": [
+              {
+                "id": "biz-serv-claims-core",
+                "label": "Claims Core",
+                "icon": "FileCog",
+                "route": null,
+                "level": 4,
+                "children": [
+                  {
+                    "id": "biz-serv-claims-core-module",
+                    "label": "Claims Module",
+                    "icon": "FileText",
+                    "route": null,
+                    "level": 5,
+                    "children": [
+                      { "id": "biz-serv-claims-core-guide", "label": "Guide", "icon": "BookOpen", "route": "/claims/guide", "level": 6, "children": [] },
+                      { "id": "biz-serv-claims-core-setup", "label": "Setup", "icon": "Settings", "route": "/claims/setup", "level": 6, "children": [] },
+                      { "id": "biz-serv-claims-core-deployments", "label": "Deployments", "icon": "Rocket", "route": "/claims/deployments", "level": 6, "children": [] },
+                      { "id": "biz-serv-claims-core-browse", "label": "Claims List", "icon": "List", "route": "/claims", "level": 6, "children": [] }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "biz-serv-claims-tpa",
+                "label": "Claims TPA",
+                "icon": "Building",
+                "route": null,
+                "level": 4,
+                "children": [
+                  {
+                    "id": "biz-serv-claims-tpa-module",
+                    "label": "TPA Module",
+                    "icon": "FileSearch",
+                    "route": null,
+                    "level": 5,
+                    "children": [
+                      { "id": "biz-serv-claims-tpa-guide", "label": "Guide", "icon": "BookOpen", "route": "/claims-tpa/guide", "level": 6, "children": [] },
+                      { "id": "biz-serv-claims-tpa-setup", "label": "Setup", "icon": "Settings", "route": "/claims-tpa/setup", "level": 6, "children": [] },
+                      { "id": "biz-serv-claims-tpa-deployments", "label": "Deployments", "icon": "Rocket", "route": "/claims-tpa/deployments", "level": 6, "children": [] },
+                      { "id": "biz-serv-claims-tpa-browse", "label": "TPA Claims", "icon": "List", "route": "/claims-tpa", "level": 6, "children": [] }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "biz-serv-customer",
+            "label": "Customer Servicing",
+            "icon": "HeadSet",
+            "route": null,
+            "level": 3,
+            "children": [
+              {
+                "id": "biz-serv-customer-endorsements",
+                "label": "Endorsements",
+                "icon": "FileEdit",
+                "route": null,
+                "level": 4,
+                "children": [
+                  {
+                    "id": "biz-serv-customer-endorse-module",
+                    "label": "Endorsements Module",
+                    "icon": "FileSignature",
+                    "route": null,
+                    "level": 5,
+                    "children": [
+                      { "id": "biz-serv-customer-endorse-guide", "label": "Guide", "icon": "BookOpen", "route": "/endorsements/guide", "level": 6, "children": [] },
+                      { "id": "biz-serv-customer-endorse-setup", "label": "Setup", "icon": "Settings", "route": "/endorsements/setup", "level": 6, "children": [] },
+                      { "id": "biz-serv-customer-endorse-deployments", "label": "Deployments", "icon": "Rocket", "route": "/endorsements/deployments", "level": 6, "children": [] },
+                      { "id": "biz-serv-customer-endorse-browse", "label": "Endorsement List", "icon": "List", "route": "/endorsements", "level": 6, "children": [] }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "biz-serv-customer-renewals",
+                "label": "Renewals",
+                "icon": "RotateCcw",
+                "route": null,
+                "level": 4,
+                "children": [
+                  {
+                    "id": "biz-serv-customer-renewals-module",
+                    "label": "Renewals Module",
+                    "icon": "RefreshCcw",
+                    "route": null,
+                    "level": 5,
+                    "children": [
+                      { "id": "biz-serv-customer-renewals-guide", "label": "Guide", "icon": "BookOpen", "route": "/renewals/guide", "level": 6, "children": [] },
+                      { "id": "biz-serv-customer-renewals-setup", "label": "Setup", "icon": "Settings", "route": "/renewals/setup", "level": 6, "children": [] },
+                      { "id": "biz-serv-customer-renewals-deployments", "label": "Deployments", "icon": "Rocket", "route": "/renewals/deployments", "level": 6, "children": [] },
+                      { "id": "biz-serv-customer-renewals-browse", "label": "Renewal List", "icon": "List", "route": "/renewals", "level": 6, "children": [] }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "biz-serv-customer-customers",
+                "label": "Customer Management",
+                "icon": "Users",
+                "route": null,
+                "level": 4,
+                "children": [
+                  { "id": "biz-serv-customer-customers-list", "label": "Customer List", "icon": "List", "route": "/customers", "level": 5, "children": [] }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "biz-compliance",
+        "label": "Compliance & Risk",
+        "icon": "ShieldAlert",
+        "route": null,
+        "level": 2,
+        "children": [
+          {
+            "id": "biz-compliance-reporting",
+            "label": "Reporting & Analytics",
+            "icon": "BarChart",
+            "route": null,
+            "level": 3,
+            "children": [
+              {
+                "id": "biz-compliance-reporting-module",
+                "label": "Reporting Module",
+                "icon": "PieChart",
+                "route": null,
+                "level": 4,
+                "children": [
+                  { "id": "biz-compliance-reporting-guide", "label": "Guide", "icon": "BookOpen", "route": "/reporting/guide", "level": 5, "children": [] },
+                  { "id": "biz-compliance-reporting-setup", "label": "Setup", "icon": "Settings", "route": "/reporting/setup", "level": 5, "children": [] },
+                  { "id": "biz-compliance-reporting-deployments", "label": "Deployments", "icon": "Rocket", "route": "/reporting/deployments", "level": 5, "children": [] },
+                  { "id": "biz-compliance-reporting-browse", "label": "Reports", "icon": "List", "route": "/reporting", "level": 5, "children": [] }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "biz-fwa",
+        "label": "FWA (Fraud, Waste, Abuse)",
+        "icon": "AlertTriangle",
+        "route": null,
+        "level": 2,
+        "children": [
+          {
+            "id": "biz-fwa-rpa",
+            "label": "RPA Integration",
+            "icon": "Bot",
+            "route": null,
+            "level": 3,
+            "children": [
+              {
+                "id": "biz-fwa-rpa-module",
+                "label": "RPA Module",
+                "icon": "Cpu",
+                "route": null,
+                "level": 4,
+                "children": [
+                  { "id": "biz-fwa-rpa-guide", "label": "Guide", "icon": "BookOpen", "route": "/rpa-integration/guide", "level": 5, "children": [] },
+                  { "id": "biz-fwa-rpa-setup", "label": "Setup", "icon": "Settings", "route": "/rpa-integration/setup", "level": 5, "children": [] },
+                  { "id": "biz-fwa-rpa-deployments", "label": "Deployments", "icon": "Rocket", "route": "/rpa-integration/deployments", "level": 5, "children": [] },
+                  { "id": "biz-fwa-rpa-browse", "label": "RPA Bots", "icon": "List", "route": "/rpa-integration", "level": 5, "children": [] }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "biz-fwa-api-integration",
+            "label": "API Integration",
+            "icon": "Plug2",
+            "route": null,
+            "level": 3,
+            "children": [
+              {
+                "id": "biz-fwa-api-module",
+                "label": "API Integration Module",
+                "icon": "Link2",
+                "route": null,
+                "level": 4,
+                "children": [
+                  { "id": "biz-fwa-api-guide", "label": "Guide", "icon": "BookOpen", "route": "/api-integration/guide", "level": 5, "children": [] },
+                  { "id": "biz-fwa-api-setup", "label": "Setup", "icon": "Settings", "route": "/api-integration/setup", "level": 5, "children": [] },
+                  { "id": "biz-fwa-api-deployments", "label": "Deployments", "icon": "Rocket", "route": "/api-integration/deployments", "level": 5, "children": [] },
+                  { "id": "biz-fwa-api-browse", "label": "Integrations", "icon": "List", "route": "/api-integration", "level": 5, "children": [] }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "agentic-calling",
+    "label": "Agentic Calling",
+    "icon": "Phone",
+    "route": null,
+    "level": 1,
+    "children": [
+      {
+        "id": "agent-jayna",
+        "label": "Jayna AI Calling",
+        "icon": "PhoneCall",
+        "route": null,
+        "level": 2,
+        "children": [
+          {
+            "id": "agent-jayna-guide",
+            "label": "Guide",
+            "icon": "BookOpen",
+            "route": "/jayna/guide",
+            "level": 3,
+            "children": [
+              { "id": "agent-jayna-guide-intro", "label": "Introduction", "icon": "Info", "route": "/jayna/guide/introduction", "level": 4, "children": [] },
+              { "id": "agent-jayna-guide-presentation", "label": "Presentation", "icon": "Presentation", "route": "/jayna/guide/presentation", "level": 4, "children": [] },
+              { "id": "agent-jayna-guide-lifecycle", "label": "Lifecycle", "icon": "RefreshCw", "route": "/jayna/guide/lifecycle", "level": 4, "children": [] },
+              { "id": "agent-jayna-guide-videos", "label": "Video Tutorials", "icon": "Video", "route": "/jayna/guide/video-tutorials", "level": 4, "children": [] },
+              { "id": "agent-jayna-guide-resources", "label": "Resources & Documentation", "icon": "FileText", "route": "/jayna/guide/resources", "level": 4, "children": [] },
+              { "id": "agent-jayna-guide-pricing", "label": "Module Pricing", "icon": "DollarSign", "route": "/jayna/guide/pricing", "level": 4, "children": [] }
+            ]
+          },
+          { "id": "agent-jayna-setup", "label": "Setup", "icon": "Settings", "route": "/jayna/setup", "level": 3, "children": [] },
+          { "id": "agent-jayna-deployments", "label": "Deployments", "icon": "Rocket", "route": "/jayna/deployments", "level": 3, "children": [] },
+          { "id": "agent-jayna-agents", "label": "Agents", "icon": "Bot", "route": "/jayna/agents", "level": 3, "children": [] },
+          { "id": "agent-jayna-workflows", "label": "Workflows", "icon": "Workflow", "route": "/jayna/workflows", "level": 3, "children": [] },
+          { "id": "agent-jayna-calls", "label": "Call History", "icon": "History", "route": "/jayna/calls", "level": 3, "children": [] },
+          { "id": "agent-jayna-test-call", "label": "Test Call", "icon": "PhoneOutgoing", "route": "/jayna/test-call", "level": 3, "children": [] }
+        ]
+      },
+      {
+        "id": "agent-voice-engine",
+        "label": "Voice Engine",
+        "icon": "Mic",
+        "route": null,
+        "level": 2,
+        "children": [
+          {
+            "id": "agent-voice-guide",
+            "label": "Guide",
+            "icon": "BookOpen",
+            "route": "/voice-engine/guide",
+            "level": 3,
+            "children": [
+              { "id": "agent-voice-guide-intro", "label": "Introduction", "icon": "Info", "route": "/voice-engine/guide/introduction", "level": 4, "children": [] },
+              { "id": "agent-voice-guide-presentation", "label": "Presentation", "icon": "Presentation", "route": "/voice-engine/guide/presentation", "level": 4, "children": [] },
+              { "id": "agent-voice-guide-lifecycle", "label": "Lifecycle", "icon": "RefreshCw", "route": "/voice-engine/guide/lifecycle", "level": 4, "children": [] },
+              { "id": "agent-voice-guide-videos", "label": "Video Tutorials", "icon": "Video", "route": "/voice-engine/guide/video-tutorials", "level": 4, "children": [] },
+              { "id": "agent-voice-guide-resources", "label": "Resources & Documentation", "icon": "FileText", "route": "/voice-engine/guide/resources", "level": 4, "children": [] },
+              { "id": "agent-voice-guide-pricing", "label": "Module Pricing", "icon": "DollarSign", "route": "/voice-engine/guide/pricing", "level": 4, "children": [] }
+            ]
+          },
+          { "id": "agent-voice-setup", "label": "Setup", "icon": "Settings", "route": "/voice-engine/setup", "level": 3, "children": [] },
+          { "id": "agent-voice-deployments", "label": "Deployments", "icon": "Rocket", "route": "/voice-engine/deployments", "level": 3, "children": [] },
+          { "id": "agent-voice-demo", "label": "Voice Demo", "icon": "Play", "route": "/voice-engine/demo", "level": 3, "children": [] }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "support-center",
+    "label": "Support Center",
+    "icon": "LifeBuoy",
+    "route": null,
+    "level": 1,
+    "children": [
+      {
+        "id": "support-main",
+        "label": "Platform Support",
+        "icon": "Headphones",
+        "route": null,
+        "level": 2,
+        "children": [
+          {
+            "id": "support-main-guide",
+            "label": "Guide",
+            "icon": "BookOpen",
+            "route": "/support-center/guide",
+            "level": 3,
+            "children": [
+              { "id": "support-main-guide-intro", "label": "Introduction", "icon": "Info", "route": "/support-center/guide/introduction", "level": 4, "children": [] },
+              { "id": "support-main-guide-presentation", "label": "Presentation", "icon": "Presentation", "route": "/support-center/guide/presentation", "level": 4, "children": [] },
+              { "id": "support-main-guide-lifecycle", "label": "Lifecycle", "icon": "RefreshCw", "route": "/support-center/guide/lifecycle", "level": 4, "children": [] },
+              { "id": "support-main-guide-videos", "label": "Video Tutorials", "icon": "Video", "route": "/support-center/guide/video-tutorials", "level": 4, "children": [] },
+              { "id": "support-main-guide-resources", "label": "Resources & Documentation", "icon": "FileText", "route": "/support-center/guide/resources", "level": 4, "children": [] },
+              { "id": "support-main-guide-pricing", "label": "Module Pricing", "icon": "DollarSign", "route": "/support-center/guide/pricing", "level": 4, "children": [] }
+            ]
+          },
+          { "id": "support-main-setup", "label": "Setup", "icon": "Settings", "route": "/support-center/setup", "level": 3, "children": [] },
+          { "id": "support-main-deployments", "label": "Deployments", "icon": "Rocket", "route": "/support-center/deployments", "level": 3, "children": [] },
+          { "id": "support-main-portal", "label": "Support Portal", "icon": "MessageSquare", "route": "/support-center", "level": 3, "children": [] }
+        ]
+      },
+      {
+        "id": "support-api-docs",
+        "label": "API Documentation",
+        "icon": "Code2",
+        "route": "/api-docs",
+        "level": 2,
+        "children": []
+      },
+      {
+        "id": "support-demo",
+        "label": "Demo & Training",
+        "icon": "GraduationCap",
+        "route": null,
+        "level": 2,
+        "children": [
+          { "id": "support-demo-gallery", "label": "Demo Gallery", "icon": "Image", "route": "/demo", "level": 3, "children": [] },
+          { "id": "support-demo-training", "label": "Training Center", "icon": "BookOpen", "route": "/demo-training", "level": 3, "children": [] },
+          { "id": "support-demo-stepper", "label": "Stepper Demo", "icon": "Footprints", "route": "/stepper-demo", "level": 3, "children": [] },
+          { "id": "support-demo-tree-picker", "label": "Tree Picker Demo", "icon": "TreePine", "route": "/tree-picker-demo", "level": 3, "children": [] }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "user-profile",
+    "label": "User Profile & Preferences",
+    "icon": "UserCog",
+    "route": null,
+    "level": 1,
+    "children": [
+      {
+        "id": "user-settings",
+        "label": "Settings",
+        "icon": "Settings",
+        "route": null,
+        "level": 2,
+        "children": [
+          { "id": "user-settings-general", "label": "General Settings", "icon": "SlidersHorizontal", "route": "/settings/general", "level": 3, "children": [] },
+          { "id": "user-settings-secrets", "label": "Secrets", "icon": "KeyRound", "route": "/settings/secrets", "level": 3, "children": [] },
+          { "id": "user-settings-security", "label": "Security", "icon": "ShieldCheck", "route": "/settings/security", "level": 3, "children": [] }
+        ]
+      },
+      {
+        "id": "user-admin",
+        "label": "Administration",
+        "icon": "Cog",
+        "route": null,
+        "level": 2,
+        "children": [
+          { "id": "user-admin-modules", "label": "Module Registry", "icon": "Package", "route": "/admin/modules", "level": 3, "children": [] },
+          { "id": "user-admin-sitemap", "label": "Sitemap", "icon": "Map", "route": "/admin/sitemap", "level": 3, "children": [] },
+          { "id": "user-admin-developer", "label": "Developer Tools", "icon": "Terminal", "route": "/admin/developer", "level": 3, "children": [] },
+          { "id": "user-admin-licensing", "label": "Licensing", "icon": "Award", "route": "/admin/licensing", "level": 3, "children": [] },
+          { "id": "user-admin-menu-preview", "label": "Menu Preview (6-Level)", "icon": "LayoutList", "route": "/admin/menu-preview", "level": 3, "children": [] },
+          { "id": "user-admin-setup", "label": "Admin Setup", "icon": "Settings", "route": "/admin/setup", "level": 3, "children": [] },
+          { "id": "user-admin-deployments", "label": "Admin Deployments", "icon": "Rocket", "route": "/admin/deployments", "level": 3, "children": [] }
+        ]
+      },
+      {
+        "id": "user-dashboard",
+        "label": "Dashboard",
+        "icon": "LayoutDashboard",
+        "route": "/dashboard",
+        "level": 2,
+        "children": []
+      }
+    ]
+  },
+  {
+    "id": "support-center",
+    "label": "Support Center",
+    "icon": "LifeBuoy",
+    "route": null,
+    "level": 1,
+    "children": [
+      { "id": "support-help-docs", "label": "Help & Documentation", "icon": "BookOpen", "route": "/support/docs", "level": 2, "children": [] },
+      { "id": "support-submit-ticket", "label": "Submit a Ticket", "icon": "Ticket", "route": "/support/ticket", "level": 2, "children": [] },
+      { "id": "support-community", "label": "Community Forum", "icon": "MessageSquare", "route": "/support/community", "level": 2, "children": [] },
+      { "id": "support-video-tutorials", "label": "Video Tutorials", "icon": "Video", "route": "/support/tutorials", "level": 2, "children": [] },
+      { "id": "support-api-reference", "label": "API Reference", "icon": "FileCode", "route": "/support/api-reference", "level": 2, "children": [] }
+    ]
+  },
+  {
+    "id": "developer-center",
+    "label": "Developer Center",
+    "icon": "Code2",
+    "route": null,
+    "level": 1,
+    "children": [
+      { "id": "dev-api-explorer", "label": "API Explorer", "icon": "Braces", "route": "/developer/api-explorer", "level": 2, "children": [] },
+      { "id": "dev-sdk-downloads", "label": "SDK Downloads", "icon": "Download", "route": "/developer/sdk", "level": 2, "children": [] },
+      { "id": "dev-code-samples", "label": "Code Samples", "icon": "FileCode2", "route": "/developer/samples", "level": 2, "children": [] },
+      { "id": "dev-webhooks", "label": "Webhooks", "icon": "Webhook", "route": "/developer/webhooks", "level": 2, "children": [] },
+      { "id": "dev-console", "label": "Developer Console", "icon": "Terminal", "route": "/developer/console", "level": 2, "children": [] },
+      { "id": "dev-platform-status", "label": "Platform Status", "icon": "Activity", "route": "/developer/status", "level": 2, "children": [] }
+    ]
+  }
+]
