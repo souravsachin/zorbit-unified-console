@@ -72,6 +72,10 @@ const PageComponents: Record<string, React.ComponentType<any>> = {
 
   // Manifest-v2 DB auto-page — rendered from manifest.db
   DbOperationsPanel:         React.lazy(() => import('../module-db/DbOperationsPanel')),
+
+  // Manifest-v2 composition auto-page (US-MX-2095) — orchestrates form_builder + datatable + doc_generator
+  // for any `/m/{slug}/{resource}/{new|list|:id}` route declared in `composition.resources`.
+  CompositionRenderer:       React.lazy(() => import('../module-composition/CompositionRenderer')),
 };
 
 export function componentByName(name?: string | null): React.ComponentType<any> | null {
