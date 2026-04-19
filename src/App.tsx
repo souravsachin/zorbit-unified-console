@@ -101,6 +101,7 @@ const FormBuilderHelpPage = lazyWithRetry(() => import('./pages/form-builder/For
 const FormBuilderOverviewPage = lazyWithRetry(() => import('./pages/form-builder/FormBuilderOverviewPage'));
 const FormRenderPage = lazyWithRetry(() => import('./pages/form-builder/FormRenderPage'));
 const ModuleRegistryPage = lazyWithRetry(() => import('./pages/admin/ModuleRegistryPage'));
+const ManifestRouter = lazyWithRetry(() => import('./components/layout/ManifestRouter'));
 const LicensingPage = lazyWithRetry(() => import('./pages/admin/LicensingPage'));
 const SitemapPage = lazyWithRetry(() => import('./pages/admin/SitemapPage'));
 const DeveloperPage = lazyWithRetry(() => import('./pages/admin/DeveloperPage'));
@@ -743,6 +744,13 @@ function PageRoutes() {
       {/* /admin/modules kept as a redirect-quality alias for bookmarks during migration. */}
       <Route path="m/module-registry/modules" element={<SafeLazy><ModuleRegistryPage /></SafeLazy>} />
       <Route path="admin/modules" element={<SafeLazy><ModuleRegistryPage /></SafeLazy>} />
+
+      {/* Manifest-driven catch-all: /m/:slug/* routes resolve to the
+          feComponent declared by the matching nav item's manifest.
+          See PLAN-manifest-fe-component-resolver.md (US-FC-2098). This
+          route MUST come after every explicit /m/... Route above so
+          specific routes win. */}
+      <Route path="m/:slug/*" element={<SafeLazy><ManifestRouter /></SafeLazy>} />
       <Route path="admin/sitemap" element={<SafeLazy><SitemapPage /></SafeLazy>} />
       <Route path="admin/developer" element={<SafeLazy><DeveloperPage /></SafeLazy>} />
       <Route path="admin/menu-preview" element={<SafeLazy><MenuPreviewPage /></SafeLazy>} />
