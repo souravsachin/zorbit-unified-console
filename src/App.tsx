@@ -653,29 +653,28 @@ function PageRoutes() {
       <Route path="m/jayna/setup" element={<SafeLazy><JaynaSetupPage /></SafeLazy>} />
       <Route path="m/jayna/deployments" element={<SafeLazy><JaynaDeploymentsPage /></SafeLazy>} />
 
-      {/* Backward compat: old /app/pcg4/* → new /m/pcg4/* */}
-      <Route path="app/pcg4/configurations" element={<Navigate to="/m/pcg4/configs" replace />} />
-      <Route path="app/pcg4/configurations/new" element={<Navigate to="/m/pcg4/configs/new" replace />} />
-      <Route path="app/pcg4/configurations/:configId" element={<PCG4AppConfigRedirect />} />
-      <Route path="app/pcg4/reference-library" element={<Navigate to="/m/pcg4/refs" replace />} />
-      <Route path="app/pcg4/hub" element={<Navigate to="/m/pcg4/hub" replace />} />
-      <Route path="app/pcg4/guide/*" element={<Navigate to="/m/pcg4/guide" replace />} />
-      <Route path="app/pcg4/overview" element={<Navigate to="/m/pcg4/guide" replace />} />
-      <Route path="app/pcg4/coverage-mapper" element={<Navigate to="/m/pcg4/coverage-mapper" replace />} />
-      <Route path="app/pcg4/encounters" element={<Navigate to="/m/pcg4/encounters" replace />} />
-      <Route path="app/pcg4/deployments" element={<Navigate to="/m/pcg4/deployments" replace />} />
-      <Route path="app/pcg4/setup" element={<Navigate to="/m/pcg4/setup" replace />} />
-      <Route path="app/pcg4/pricing" element={<Navigate to="/m/pcg4/pricing" replace />} />
-      <Route path="app/pcg4/configurations-fb" element={<Navigate to="/m/pcg4/configs" replace />} />
-      <Route path="app/pcg4/help" element={<Navigate to="/m/pcg4/hub" replace />} />
-
-      {/* Backward compat: /org/:orgId/app/:module/* → /m/:module/* */}
-      {/* These are handled at the top-level router via OrgLegacyRedirect → /O/:orgId/* */}
-      {/* then these per-module redirects take effect inside PageRoutes: */}
-      <Route path="app/hi-quotation/*" element={<Navigate to="/m/hi-quotation/quotes" replace />} />
-      <Route path="app/uw-workflow/*" element={<Navigate to="/m/uw-workflow/queues" replace />} />
-      <Route path="app/hi-decisioning/*" element={<Navigate to="/m/hi-decisioning/rules" replace />} />
-      <Route path="app/form-builder/*" element={<Navigate to="/m/form-builder/forms" replace />} />
+      {/* Legacy aliases retired on 2026-04-20 (US-RT-2093). Canonical paths
+          now served by explicit /m/<slug>/... Routes above and by the
+          ManifestRouter catch-all at /m/:slug/. Retired redirects:
+            /app/pcg4/configurations               -> /m/pcg4/configs
+            /app/pcg4/configurations/new           -> /m/pcg4/configs/new
+            /app/pcg4/configurations/:configId     -> /m/pcg4/configs/:configId
+            /app/pcg4/reference-library            -> /m/pcg4/refs
+            /app/pcg4/hub                          -> /m/pcg4/hub
+            /app/pcg4/guide/(splat)                -> /m/pcg4/guide
+            /app/pcg4/overview                     -> /m/pcg4/guide
+            /app/pcg4/coverage-mapper              -> /m/pcg4/coverage-mapper
+            /app/pcg4/encounters                   -> /m/pcg4/encounters
+            /app/pcg4/deployments                  -> /m/pcg4/deployments
+            /app/pcg4/setup                        -> /m/pcg4/setup
+            /app/pcg4/pricing                      -> /m/pcg4/pricing
+            /app/pcg4/configurations-fb            -> /m/pcg4/configs
+            /app/pcg4/help                         -> /m/pcg4/hub
+            /app/hi-quotation/(splat)              -> /m/hi-quotation/quotes
+            /app/uw-workflow/(splat)               -> /m/uw-workflow/queues
+            /app/hi-decisioning/(splat)            -> /m/hi-decisioning/rules
+            /app/form-builder/(splat)              -> /m/form-builder/forms
+      */}
 
       {/* Organization Directory (own section) */}
       <Route path="directory" element={<SafeLazy><DirectoryPage /></SafeLazy>} />
@@ -959,17 +958,18 @@ function PageRoutes() {
       {/* Verification */}
       <Route path="verification/help" element={<SafeLazy><VerificationHelpPage /></SafeLazy>} />
 
-      {/* Legacy redirects: old /products/* and /pcg4/* routes → /m/pcg4/* */}
-      <Route path="products" element={<Navigate to="/m/pcg4/configs" replace />} />
-      <Route path="products/designer" element={<Navigate to="/m/pcg4/configs/new" replace />} />
-      <Route path="products/encounters" element={<Navigate to="/m/pcg4/encounters" replace />} />
+      {/* Legacy aliases retired on 2026-04-20 (US-RT-2093). Canonical paths:
+            /products                       -> /m/pcg4/configs
+            /products/designer              -> /m/pcg4/configs/new
+            /products/encounters            -> /m/pcg4/encounters
+            /products/setup                 -> /m/pcg4/setup
+            /pcg4                           -> /m/pcg4/configs
+            /pcg4/configurator              -> /m/pcg4/configs/new
+            /pcg4/configurator/:configId    -> /m/pcg4/configs/:configId
+          /products/rating|rules|forms kept as NotFoundPage stubs — no canonical equivalent yet. */}
       <Route path="products/rating" element={<NotFoundPage />} />
       <Route path="products/rules" element={<NotFoundPage />} />
       <Route path="products/forms" element={<NotFoundPage />} />
-      <Route path="products/setup" element={<Navigate to="/m/pcg4/setup" replace />} />
-      <Route path="pcg4" element={<Navigate to="/m/pcg4/configs" replace />} />
-      <Route path="pcg4/configurator" element={<Navigate to="/m/pcg4/configs/new" replace />} />
-      <Route path="pcg4/configurator/:configId" element={<PCG4ConfigRedirect />} />
 
       <Route path="demo" element={<DemoPage />} />
       <Route path="demo/:id" element={<DemoPage />} />
