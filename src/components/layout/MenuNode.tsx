@@ -1,5 +1,11 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useContext, useEffect, createContext } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+
+// ─── Force-expand context ─────────────────────────────────────────────
+// Broadcasted from Sidebar6Level toolbar buttons to all nodes.
+// seq increments each click so useEffect fires even if expand direction repeats.
+export interface ForceExpandSignal { seq: number; expand: boolean }
+export const ForceExpandContext = createContext<ForceExpandSignal | null>(null);
 import {
   ChevronRight, ChevronDown,
   Server, Fingerprint, ShieldCheck, Navigation, Radio,
@@ -101,14 +107,37 @@ function rotate<T>(arr: T[], idx: number): T {
   return arr[idx % arr.length];
 }
 
+// ─── Default expand/collapse state ───────────────────────────────────
+// L1 sections that start collapsed (all others start open)
+const DEFAULT_COLLAPSED_L1 = new Set([
+  'platform-core', 'platform-feature-services', 'ai-automation', 'administration',
+]);
+// L2 nodes that start open (all others start collapsed)
+const DEFAULT_OPEN_L2 = new Set(['biz-distribution']);
+// L3 nodes that start open (all others start collapsed)
+const DEFAULT_OPEN_L3 = new Set(['biz-dist-product-mgmt', 'biz-dist-policy-admin']);
+
 // ─── Node type ────────────────────────────────────────────────────────
+export interface MenuNodePlacement {
+  edition?: string;
+  businessLine?: string;
+  capabilityArea?: string;
+  sortOrder?: number;
+  specificTo?: string[];
+}
+
 export interface MenuNodeData {
   id: string;
   label: string;
   icon: string;
   route: string | null;
+  source?: string;
+  privilegeCode?: string | null;
   level: number;
   children: MenuNodeData[];
+  // In database mode, each top-level node carries placement metadata from the
+  // module's manifest. Static mode nodes omit this.
+  placement?: MenuNodePlacement;
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────
@@ -146,7 +175,12 @@ interface L1NodeProps {
 }
 
 export const L1Node: React.FC<L1NodeProps> = ({ node, nodeIndex, filter, onNavigate }) => {
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(() => DEFAULT_COLLAPSED_L1.has(node.id));
+  const forceExpand = useContext(ForceExpandContext);
+  useEffect(() => {
+    if (forceExpand === null) return;
+    setCollapsed(!forceExpand.expand);
+  }, [forceExpand?.seq]); // eslint-disable-line react-hooks/exhaustive-deps
   const l1Color = rotate(L1_COLORS, nodeIndex);
 
   const visibleChildren = useMemo(
@@ -170,7 +204,7 @@ export const L1Node: React.FC<L1NodeProps> = ({ node, nodeIndex, filter, onNavig
         }}
       >
         <span
-          className="text-[9px] font-bold uppercase tracking-wider flex-1 text-left"
+          className="text-[9px] font-bold uppercase tracking-wider flex-1 text-left whitespace-nowrap overflow-hidden"
           style={{ color: l1Color.hex }}
         >
           {node.label}
@@ -208,7 +242,12 @@ interface L2NodeProps {
 }
 
 export const L2Node: React.FC<L2NodeProps> = ({ node, nodeIndex, filter, onNavigate }) => {
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(() => !DEFAULT_OPEN_L2.has(node.id));
+  const forceExpand = useContext(ForceExpandContext);
+  useEffect(() => {
+    if (forceExpand === null) return;
+    setCollapsed(!forceExpand.expand);
+  }, [forceExpand?.seq]); // eslint-disable-line react-hooks/exhaustive-deps
   const l2Color = rotate(L2_COLORS, nodeIndex);
   const lineColor = rotate(L2_LINE_COLORS, nodeIndex);
   const location = useLocation();
@@ -256,6 +295,11 @@ export const L2Node: React.FC<L2NodeProps> = ({ node, nodeIndex, filter, onNavig
       >
         <IconComp size={12} className="shrink-0" style={{ color: l2Color.text, opacity: 0.8 }} />
         <span className="flex-1 text-left truncate">{highlightMatch(node.label, filter)}</span>
+        {node.source && (
+          <span className="shrink-0 text-[8px] font-mono px-1 py-0.5 rounded bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-600 max-w-[56px] truncate ml-1">
+            {node.source.replace('zorbit-pfs-', '').replace('zorbit-app-', '').replace('zorbit-', '')}
+          </span>
+        )}
         {hasChildren && (
           collapsed
             ? <ChevronRight size={10} className="shrink-0 opacity-50" />
@@ -300,7 +344,12 @@ interface L3NodeProps {
 }
 
 export const L3Node: React.FC<L3NodeProps> = ({ node, nodeIndex, filter, lineColor, onNavigate }) => {
-  const [collapsed, setCollapsed] = useState(true);
+  const [collapsed, setCollapsed] = useState(() => !DEFAULT_OPEN_L3.has(node.id));
+  const forceExpand = useContext(ForceExpandContext);
+  useEffect(() => {
+    if (forceExpand === null) return;
+    setCollapsed(!forceExpand.expand);
+  }, [forceExpand?.seq]); // eslint-disable-line react-hooks/exhaustive-deps
   const l3Color = rotate(L3_COLORS, nodeIndex);
   const l3Line = rotate(L3_LINE_COLORS, nodeIndex);
   const location = useLocation();
@@ -413,6 +462,11 @@ interface L4NodeProps {
 
 export const L4Node: React.FC<L4NodeProps> = ({ node, nodeIndex, filter, lineColor, onNavigate }) => {
   const [collapsed, setCollapsed] = useState(true);
+  const forceExpand = useContext(ForceExpandContext);
+  useEffect(() => {
+    if (forceExpand === null) return;
+    setCollapsed(!forceExpand.expand);
+  }, [forceExpand?.seq]); // eslint-disable-line react-hooks/exhaustive-deps
   const location = useLocation();
 
   const visibleChildren = useMemo(
@@ -512,6 +566,11 @@ interface L5NodeProps {
 
 export const L5Node: React.FC<L5NodeProps> = ({ node, nodeIndex, filter, onNavigate }) => {
   const [collapsed, setCollapsed] = useState(true);
+  const forceExpand = useContext(ForceExpandContext);
+  useEffect(() => {
+    if (forceExpand === null) return;
+    setCollapsed(!forceExpand.expand);
+  }, [forceExpand?.seq]); // eslint-disable-line react-hooks/exhaustive-deps
   const location = useLocation();
 
   const visibleChildren = useMemo(
