@@ -16,7 +16,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import SidebarSearch from './SidebarSearch';
-import BusinessLineSelector, { BusinessLine, BUSINESS_LINE_LABELS, SHORT_LABELS } from './BusinessLineSelector';
+import BusinessLineSelector, { BusinessLine, EditionMeta, BUSINESS_LINE_LABELS, SHORT_LABELS } from './BusinessLineSelector';
 import SidebarSwitcher from './SidebarSwitcher';
 import { L1Node, MenuNodeData, MenuNodePlacement, ForceExpandContext, ForceExpandSignal } from './MenuNode';
 import staticMenuData from '../../data/menu-6level.json';
@@ -182,32 +182,11 @@ function filterByBusinessLineStatic(nodes: MenuNodeData[], line: BusinessLine): 
 
 function filterByBusinessLineDatabase(
   nodes: MenuNodeData[],
-  line: BusinessLine,
+  _line: BusinessLine,
 ): MenuNodeData[] {
-  // In database mode the top-level nodes are module sections with placement
-  // metadata attached to each node. A node is visible if ANY of these hold:
-  //   - placement.businessLine is core / feature-services (always visible)
-  //   - placement.businessLine is edition-agnostic AND placement.specificTo is
-  //     either absent or contains the selected edition
-  //   - placement.specificTo explicitly contains the selected edition
-  return nodes
-    .map((node) => {
-      const placement = node.placement || {};
-      const nodeLine = placement.businessLine;
-      const specificTo = placement.specificTo;
-
-      if (nodeLine && ALWAYS_VISIBLE_BUSINESS_LINES.has(nodeLine)) {
-        return node;
-      }
-      if (Array.isArray(specificTo) && specificTo.length > 0) {
-        return specificTo.includes(line) ? node : null;
-      }
-      if (nodeLine && EDITION_AGNOSTIC_BUSINESS_LINES.has(nodeLine)) {
-        return node;
-      }
-      return null;
-    })
-    .filter(Boolean) as MenuNodeData[];
+  // In DB mode buildDbScaffold has already filtered Business modules by the
+  // selected edition and assembled the L1 scaffolds. Nothing more to do here.
+  return nodes;
 }
 
 function filterByBusinessLine(
@@ -220,142 +199,254 @@ function filterByBusinessLine(
     : filterByBusinessLineStatic(nodes, line);
 }
 
-// ─── DB scaffold builder ──────────────────────────────────────────────
-// Wraps API sections in the same 5-scaffold L1 shape as the static tree
-// (PLATFORM CORE / PLATFORM FEATURE SERVICES / BUSINESS — INSURER /
-// AI & AUTOMATION / ADMINISTRATION). Grouping comes from the manifest's
-// placement.businessLine — no per-moduleId hardcoding.
+// ─── DB scaffold builder (auto-discovery) ─────────────────────────────
+//
+// Reads the new placement schema where each manifest declares:
+//   placement.scaffold              — L1 label (e.g. "Platform Core")
+//   placement.scaffoldSortOrder     — numeric L1 ordering (first-seen wins)
+//   placement.edition               — only for scaffold === "Business"
+//   placement.businessLine          — L2 inside Business (Distribution / Servicing / Finance)
+//   placement.capabilityArea        — L3 (or L2 for non-Business scaffolds)
+//   placement.sortOrder             — order inside the deepest grouping
+//
+// No hardcoded scaffold list. No hardcoded vocabulary. The scaffold tree
+// emerges from whatever manifests are registered. Edition filtering is
+// strict: only sections whose edition.name === selected edition show under
+// the Business scaffold. Non-Business scaffolds (Platform Core / PFS /
+// AI and Voice / Administration) ignore edition entirely.
 
 interface ApiSection {
   moduleId: string;
   moduleName?: string;
-  placement?: MenuNodePlacement;
+  placement?: MenuNodePlacement & {
+    scaffold?: string;
+    scaffoldSortOrder?: number;
+    edition?: EditionMeta | null;
+    capabilityArea?: string;
+  };
   items?: Array<{ label: string; feRoute: string; icon: string; privilege: string }>;
 }
 
-// Maps placement.businessLine -> L1 scaffold id/label. The 5 L1 scaffolds
-// match the static tree exactly. Any unmapped businessLine becomes its own
-// top-level "OTHER" bucket rather than being silently dropped.
-const L1_SCAFFOLDS: Array<{
-  id: string;
-  label: string;
-  placement: MenuNodePlacement;
-  businessLines: string[];
-}> = [
-  {
-    id: 'platform-core',
-    label: 'PLATFORM CORE',
-    placement: { businessLine: 'core' },
-    businessLines: ['core'],
-  },
-  {
-    id: 'platform-feature-services',
-    label: 'PLATFORM FEATURE SERVICES',
-    placement: { businessLine: 'feature-services' },
-    businessLines: ['feature-services'],
-  },
-  {
-    id: 'business-insurer',
-    label: 'BUSINESS — INSURER',
-    placement: { businessLine: 'distribution' },
-    businessLines: ['distribution', 'underwriting', 'claims', 'servicing'],
-  },
-  {
-    id: 'ai-automation',
-    label: 'AI & AUTOMATION',
-    placement: { businessLine: 'ai' },
-    businessLines: ['ai', 'automation'],
-  },
-  {
-    id: 'administration',
-    label: 'ADMINISTRATION',
-    placement: { businessLine: 'administration' },
-    businessLines: ['administration'],
-  },
-];
-
 function prettyModuleName(moduleId: string): string {
-  // Convention-driven: strip zorbit-{prefix}- and title-case the remainder.
-  // zorbit-cor-identity -> "Identity"; zorbit-app-hi_quotation -> "Hi Quotation".
   return moduleId
-    .replace(/^zorbit-(cor|pfs|app|ext)-/, '')
+    .replace(/^zorbit-([a-z]+)-/, '')
     .replace(/[_-]/g, ' ')
     .replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
-function buildDbScaffold(sections: ApiSection[]): MenuNodeData[] {
+interface ScaffoldGroup {
+  id: string;
+  label: string;
+  sortOrder: number;
+  // For Business scaffold, sections are first grouped by businessLine (L2),
+  // then by capabilityArea (L3). For other scaffolds, sections are grouped
+  // by capabilityArea directly (L2 == L3 in our model).
+  l2Buckets: Map<string, L2Bucket>;
+}
+
+interface L2Bucket {
+  id: string;
+  label: string;
+  sortOrder: number;
+  // For Business: { capabilityArea -> [sections] }
+  // For non-Business: { capabilityArea (= module's own area) -> [sections] }
+  l3Buckets: Map<string, L3Bucket>;
+}
+
+interface L3Bucket {
+  id: string;
+  label: string;
+  sortOrder: number;
+  sections: ApiSection[];
+}
+
+function buildDbScaffold(sections: ApiSection[], selectedEdition: BusinessLine): MenuNodeData[] {
   const visible = sections.filter((sec) => (sec.items || []).length > 0);
-  const result: MenuNodeData[] = [];
 
-  for (const scaffold of L1_SCAFFOLDS) {
-    const members = visible.filter((sec) =>
-      scaffold.businessLines.includes(sec.placement?.businessLine || ''),
-    );
-    if (members.length === 0) continue;
+  const scaffolds = new Map<string, ScaffoldGroup>();
 
-    members.sort(
-      (a, b) => (a.placement?.sortOrder ?? 999) - (b.placement?.sortOrder ?? 999),
-    );
+  for (const sec of visible) {
+    const placement = sec.placement || {};
+    const scaffoldName = (placement.scaffold as string) || 'Other';
+    const scaffoldOrder = (placement.scaffoldSortOrder as number) ?? 999;
 
-    const moduleNodes: MenuNodeData[] = members.map((sec) => ({
-      id: sec.moduleId,
-      label: sec.moduleName || prettyModuleName(sec.moduleId),
-      icon: '',
-      route: null,
-      privilegeCode: null,
-      level: 2,
-      children: (sec.items || []).map((item, idx) => ({
-        id: `${sec.moduleId}-${idx}`,
-        label: item.label,
-        icon: item.icon || 'circle',
-        route: item.feRoute || null,
-        privilegeCode: item.privilege || null,
-        level: 3,
-        children: [],
-      })),
-    }));
+    // Edition gate (strict): Business modules show only when the user-
+    // selected edition matches the manifest's declared edition.name.
+    if (scaffoldName === 'Business') {
+      const edName = placement.edition?.name;
+      if (!edName || edName !== selectedEdition) continue;
+    }
 
-    result.push({
-      id: scaffold.id,
-      label: scaffold.label,
-      icon: '',
-      route: null,
-      privilegeCode: null,
-      level: 1,
-      placement: scaffold.placement,
-      children: moduleNodes,
-    });
+    if (!scaffolds.has(scaffoldName)) {
+      scaffolds.set(scaffoldName, {
+        id: scaffoldName.toLowerCase().replace(/\s+/g, '-'),
+        label: scaffoldName.toUpperCase(),
+        sortOrder: scaffoldOrder,
+        l2Buckets: new Map(),
+      });
+    }
+    const sc = scaffolds.get(scaffoldName)!;
+    if (scaffoldOrder < sc.sortOrder) sc.sortOrder = scaffoldOrder;
+
+    // L2 bucket: businessLine for Business scaffold, capabilityArea for others.
+    const l2Label = scaffoldName === 'Business'
+      ? (placement.businessLine || 'Other')
+      : (placement.capabilityArea || prettyModuleName(sec.moduleId));
+    const l2Order = (placement.sortOrder as number) ?? 999;
+
+    if (!sc.l2Buckets.has(l2Label)) {
+      sc.l2Buckets.set(l2Label, {
+        id: `${sc.id}-${l2Label.toLowerCase().replace(/\s+/g, '-')}`,
+        label: l2Label,
+        sortOrder: l2Order,
+        l3Buckets: new Map(),
+      });
+    }
+    const l2 = sc.l2Buckets.get(l2Label)!;
+
+    if (scaffoldName === 'Business') {
+      // L3 inside Business: capabilityArea (Product Mgmt / Policy Admin / FWA / etc.).
+      const l3Label = placement.capabilityArea || 'Other';
+      if (!l2.l3Buckets.has(l3Label)) {
+        l2.l3Buckets.set(l3Label, {
+          id: `${l2.id}-${l3Label.toLowerCase().replace(/\s+/g, '-')}`,
+          label: l3Label,
+          sortOrder: l2Order,
+          sections: [],
+        });
+      }
+      l2.l3Buckets.get(l3Label)!.sections.push(sec);
+    } else {
+      // Non-Business: each module is its own L2 (already created above).
+      // We use a single synthetic L3 keyed by the module to keep the same
+      // tree-walking code below.
+      const onlyKey = '__module__';
+      if (!l2.l3Buckets.has(onlyKey)) {
+        l2.l3Buckets.set(onlyKey, {
+          id: l2.id,
+          label: l2Label,
+          sortOrder: l2Order,
+          sections: [],
+        });
+      }
+      l2.l3Buckets.get(onlyKey)!.sections.push(sec);
+    }
   }
 
-  // Any sections whose businessLine didn't map to a scaffold — surface them
-  // rather than drop silently. Each becomes its own L1 entry so the gap is
-  // visible in the UI and actionable.
-  const mappedBusinessLines = new Set(L1_SCAFFOLDS.flatMap((s) => s.businessLines));
-  const unmapped = visible.filter(
-    (sec) => !mappedBusinessLines.has(sec.placement?.businessLine || ''),
-  );
-  for (const sec of unmapped) {
-    result.push({
-      id: sec.moduleId,
-      label: `${prettyModuleName(sec.moduleId)} (unplaced)`,
-      icon: '',
-      route: null,
-      privilegeCode: null,
-      level: 1,
-      placement: sec.placement,
-      children: (sec.items || []).map((item, idx) => ({
-        id: `${sec.moduleId}-${idx}`,
-        label: item.label,
-        icon: item.icon || 'circle',
-        route: item.feRoute || null,
-        privilegeCode: item.privilege || null,
-        level: 2,
-        children: [],
-      })),
-    });
-  }
+  // Build MenuNodeData tree from the collected groups.
+  const sortedScaffolds = Array.from(scaffolds.values()).sort((a, b) => {
+    if (a.sortOrder !== b.sortOrder) return a.sortOrder - b.sortOrder;
+    return a.label.localeCompare(b.label);
+  });
 
-  return result;
+  return sortedScaffolds.map((sc): MenuNodeData => ({
+    id: sc.id,
+    label: sc.label,
+    icon: '',
+    route: null,
+    privilegeCode: null,
+    level: 1,
+    placement: { businessLine: sc.label.toLowerCase() },
+    children: Array.from(sc.l2Buckets.values())
+      .sort((a, b) => a.sortOrder - b.sortOrder || a.label.localeCompare(b.label))
+      .map((l2): MenuNodeData => {
+        if (sc.label === 'BUSINESS') {
+          // Business: emit L2 (Distribution/Servicing/Finance) with L3
+          // capability buckets containing the modules below them.
+          return {
+            id: l2.id,
+            label: l2.label,
+            icon: '',
+            route: null,
+            privilegeCode: null,
+            level: 2,
+            children: Array.from(l2.l3Buckets.values())
+              .sort((a, b) => a.sortOrder - b.sortOrder || a.label.localeCompare(b.label))
+              .map((l3): MenuNodeData => ({
+                id: l3.id,
+                label: l3.label,
+                icon: '',
+                route: null,
+                privilegeCode: null,
+                level: 3,
+                children: l3.sections
+                  .sort((a, b) => (a.placement?.sortOrder ?? 999) - (b.placement?.sortOrder ?? 999))
+                  .map((sec): MenuNodeData => ({
+                    id: sec.moduleId,
+                    label: sec.moduleName || prettyModuleName(sec.moduleId),
+                    icon: '',
+                    route: null,
+                    privilegeCode: null,
+                    level: 4,
+                    children: (sec.items || []).map((item, idx) => ({
+                      id: `${sec.moduleId}-${idx}`,
+                      label: item.label,
+                      icon: item.icon || 'circle',
+                      route: item.feRoute || null,
+                      privilegeCode: item.privilege || null,
+                      level: 5,
+                      children: [],
+                    })),
+                  })),
+              })),
+          };
+        }
+        // Non-Business: skip the synthetic L3 wrapper — sections become L2's
+        // children directly (each section a module L2, items become L3).
+        const sectionsFlat: ApiSection[] = Array.from(l2.l3Buckets.values()).flatMap((b) => b.sections);
+        sectionsFlat.sort((a, b) => (a.placement?.sortOrder ?? 999) - (b.placement?.sortOrder ?? 999));
+        return {
+          id: l2.id,
+          label: l2.label,
+          icon: '',
+          route: null,
+          privilegeCode: null,
+          level: 2,
+          children: sectionsFlat.flatMap((sec) =>
+            (sec.items || []).map((item, idx) => ({
+              id: `${sec.moduleId}-${idx}`,
+              label: item.label,
+              icon: item.icon || 'circle',
+              route: item.feRoute || null,
+              privilegeCode: item.privilege || null,
+              level: 3,
+              children: [],
+            })),
+          ),
+        };
+      }),
+  }));
+}
+
+// Static-mode-only fallback editions list. Mirrors the dropdown that
+// shipped with static mode so visual parity is preserved when no manifest
+// data is yet available. DB mode uses collectEditionsFromSections instead.
+// Will retire when static mode is removed.
+const STATIC_EDITIONS: EditionMeta[] = [
+  { name: 'Health Insurance',  category: 'Insurer',  categorySortOrder: 10, sortOrder: 10, icon: 'Heart',      iconBg: '#dcfce7', iconColor: '#15803d', iconRing: '#86efac' },
+  { name: 'Motor Insurance',   category: 'Insurer',  categorySortOrder: 10, sortOrder: 20, icon: 'Car',        iconBg: '#dbeafe', iconColor: '#1d4ed8', iconRing: '#93c5fd' },
+  { name: 'Marine Insurance',  category: 'Insurer',  categorySortOrder: 10, sortOrder: 30, icon: 'Anchor',     iconBg: '#ccfbf1', iconColor: '#0f766e', iconRing: '#5eead4' },
+  { name: 'Property Insurance',category: 'Insurer',  categorySortOrder: 10, sortOrder: 40, icon: 'Home',       iconBg: '#fef3c7', iconColor: '#b45309', iconRing: '#fcd34d' },
+  { name: 'Life Insurance',    category: 'Insurer',  categorySortOrder: 10, sortOrder: 50, icon: 'Activity',   iconBg: '#f3e8ff', iconColor: '#7c3aed', iconRing: '#c4b5fd' },
+  { name: 'UHC — Health',      category: 'UHC',      categorySortOrder: 20, sortOrder: 10, icon: 'Landmark',   iconBg: '#e0f2fe', iconColor: '#0284c7', iconRing: '#7dd3fc' },
+  { name: 'TPA — Health',      category: 'TPA',      categorySortOrder: 30, sortOrder: 10, icon: 'Stethoscope',iconBg: '#ffedd5', iconColor: '#c2410c', iconRing: '#fdba74' },
+  { name: 'TPA — Motor',       category: 'TPA',      categorySortOrder: 30, sortOrder: 20, icon: 'Truck',      iconBg: '#fff7ed', iconColor: '#9a3412', iconRing: '#fb923c' },
+  { name: 'Broker — All Lines',category: 'Broker',   categorySortOrder: 40, sortOrder: 10, icon: 'Briefcase',  iconBg: '#ede9fe', iconColor: '#7c3aed', iconRing: '#a78bfa' },
+  { name: 'Provider — Hospital',category:'Provider', categorySortOrder: 50, sortOrder: 10, icon: 'Plus',       iconBg: '#d1fae5', iconColor: '#059669', iconRing: '#6ee7b7' },
+  { name: 'Regulator — All Lines',category:'Regulator',categorySortOrder:60,sortOrder: 10, icon: 'Scale',      iconBg: '#fee2e2', iconColor: '#dc2626', iconRing: '#fca5a5' },
+];
+
+// Collect unique editions from API sections. First-seen wins on conflicting
+// metadata for the same edition name (logged once).
+function collectEditionsFromSections(sections: ApiSection[]): EditionMeta[] {
+  const byName = new Map<string, EditionMeta>();
+  for (const sec of sections) {
+    const ed = sec.placement?.edition;
+    if (!ed || !ed.name) continue;
+    if (byName.has(ed.name)) continue;   // first-seen wins
+    byName.set(ed.name, ed);
+  }
+  return Array.from(byName.values());
 }
 
 // Expand/collapse state tracker
@@ -393,8 +484,9 @@ const Sidebar6Level: React.FC<Sidebar6LevelProps> = ({
 
   // Static fallback — always the ground truth until full pipeline is wired
   const [staticData] = useState<MenuNodeData[]>(staticMenuData as MenuNodeData[]);
-  // Nav-service data fetched in background for comparison (NOT auto-promoted to active)
-  const [navServiceData, setNavServiceData] = useState<MenuNodeData[]>([]);
+  // API sections cached as-received from the nav service. We re-bucket on
+  // edition change rather than re-fetching.
+  const [apiSections, setApiSections] = useState<ApiSection[]>([]);
   const [autoMenuSource, setAutoMenuSource] = useState<'static' | 'database'>('static');
   const fetchedRef = useRef(false);
 
@@ -425,23 +517,13 @@ const Sidebar6Level: React.FC<Sidebar6LevelProps> = ({
           }>;
         };
         const isStale = data?.stale !== false;
-        const sections = data?.sections || [];
+        const sections = (data?.sections || []) as ApiSection[];
 
-        // Build a 6-level scaffold wrapping API sections so DB mode matches
-        // the static tree shape: PLATFORM CORE / PLATFORM FEATURE SERVICES /
-        // BUSINESS — INSURER / AI & AUTOMATION / ADMINISTRATION at L1, each
-        // module at L2, items at L3. Each L1 scaffold carries placement.
-        // metadata so filterByBusinessLineDatabase can honor the edition
-        // selection without prefix hacks.
-        const dbNodes: MenuNodeData[] = buildDbScaffold(sections);
-
-        if (!isStale && dbNodes.length > 0) {
-          // Full pipeline confirmed: Module→Kafka→registry→platform.module.ready→navigation→here
-          setNavServiceData(dbNodes);
+        if (!isStale && sections.length > 0) {
+          setApiSections(sections);
           setAutoMenuSource('database');
-        } else if (dbNodes.length > 0) {
-          // Nav service reachable but serving static fallback — store for manual comparison only
-          setNavServiceData(dbNodes);
+        } else if (sections.length > 0) {
+          setApiSections(sections);
           // autoMenuSource stays 'static' — pipeline not fully wired yet
         }
       })
@@ -452,9 +534,26 @@ const Sidebar6Level: React.FC<Sidebar6LevelProps> = ({
 
   // Local state
   const [filter, setFilter] = useState('');
-  const [businessLine, setBusinessLine] = useState<BusinessLine>('health');
+  // Edition (BusinessLine) is now a free-form string — the edition.name
+  // declared by some module's manifest. Default to first discovered edition
+  // when DB mode kicks in; static mode keeps the legacy 'health' default.
+  const [businessLine, setBusinessLine] = useState<BusinessLine>('Health Insurance');
   const [forceExpand, setForceExpand] = useState<ForceExpandSignal | null>(null);
   const [iconOnly, setIconOnly] = useState(false);
+
+  // Auto-discovered editions from API placements, deduped by name.
+  const dbEditions: EditionMeta[] = useMemo(
+    () => collectEditionsFromSections(apiSections),
+    [apiSections],
+  );
+
+  // When new editions are discovered and current selection is unknown, snap
+  // to the first one so the dropdown shows a valid value out of the gate.
+  useEffect(() => {
+    if (dbEditions.length === 0) return;
+    if (dbEditions.find((e) => e.name === businessLine)) return;
+    setBusinessLine(dbEditions[0].name);
+  }, [dbEditions, businessLine]);
 
   // menuSource: auto-promoted to 'database' when the full pipeline delivers data.
   // Pipeline: Module → Kafka → module-registry → platform.module.ready → nav service → here.
@@ -471,8 +570,14 @@ const Sidebar6Level: React.FC<Sidebar6LevelProps> = ({
     });
   }, []);
 
-  // Effective data: when user forces 'database', use nav service data (or empty)
+  // Effective data: when 'database' is the active source, build the tree
+  // afresh from API sections + currently selected edition. Cheap (in the
+  // tens of milliseconds) and correct on every edition switch.
   const effectiveSource = forceSource ?? menuSource;
+  const navServiceData: MenuNodeData[] = useMemo(
+    () => buildDbScaffold(apiSections, businessLine),
+    [apiSections, businessLine],
+  );
   const menuData = effectiveSource === 'database' ? navServiceData : staticData;
 
   // Height resize state — null = fill full screen height
@@ -768,8 +873,12 @@ const Sidebar6Level: React.FC<Sidebar6LevelProps> = ({
             placeholder={`Search ${totalItems} items...`}
           />
 
-          {/* Business line selector */}
-          <BusinessLineSelector value={businessLine} onChange={setBusinessLine} />
+          {/* Business line selector — auto-derived in DB mode, fixed list in static mode */}
+          <BusinessLineSelector
+            value={businessLine}
+            editions={effectiveSource === 'database' ? dbEditions : STATIC_EDITIONS}
+            onChange={setBusinessLine}
+          />
 
           {/* Nav tree */}
           <nav className="flex-1 overflow-y-auto overflow-x-hidden py-1 scrollbar-thin scrollbar-thumb-gray-200 dark:scrollbar-thumb-gray-700">
