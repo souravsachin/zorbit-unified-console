@@ -1,5 +1,5 @@
 import React, { Suspense, useEffect, useMemo, useRef, useState } from 'react';
-import { useParams, Link, useLocation } from 'react-router-dom';
+import { useParams, Link, useLocation, Navigate } from 'react-router-dom';
 import { API_CONFIG } from '../../config';
 import api from '../../services/api';
 import { useAuth } from '../../hooks/useAuth';
@@ -17,6 +17,7 @@ interface NavItem {
   icon?: string;
   privilege?: string;
   feComponent?: string | null;
+  sortOrder?: number;
 }
 interface NavSection {
   moduleId: string;
@@ -28,21 +29,70 @@ interface MenuResponse {
   sections?: NavSection[];
 }
 
+/**
+ * Returns the first slug segment of a /m/{slug}/... style path.
+ * Empty string for non-module paths.
+ */
+function firstModuleSlug(path: string): string {
+  // expected shape: "/m/<slug>[/...]"
+  if (!path.startsWith('/m/')) return '';
+  const rest = path.slice(3);
+  const idx = rest.indexOf('/');
+  return idx === -1 ? rest : rest.slice(0, idx);
+}
+
 function findMatchingItem(sections: NavSection[], path: string): { section: NavSection; item: NavItem } | null {
   let bestExact: { section: NavSection; item: NavItem } | null = null;
   let bestPrefix: { section: NavSection; item: NavItem; len: number } | null = null;
+  const pathSlug = firstModuleSlug(path);
   for (const section of sections) {
     for (const item of section.items || []) {
       if (!item.feRoute) continue;
       if (item.feRoute === path) {
         bestExact = { section, item };
       } else if (path.startsWith(item.feRoute.endsWith('/') ? item.feRoute : item.feRoute + '/')) {
+        // Guard against greedy prefix matches across sibling modules.
+        // Require the first slug segment of the path to equal the first
+        // slug segment of item.feRoute; otherwise /m/hi-decisioning/*
+        // would accept a prefix match against /m/sample-rates/*.
+        const itemSlug = firstModuleSlug(item.feRoute);
+        if (pathSlug && itemSlug && pathSlug !== itemSlug) continue;
         const len = item.feRoute.length;
         if (!bestPrefix || len > bestPrefix.len) bestPrefix = { section, item, len };
       }
     }
   }
   return bestExact || (bestPrefix ? { section: bestPrefix.section, item: bestPrefix.item } : null);
+}
+
+/**
+ * When the user navigates to a bare `/m/{slug}` with no feature path,
+ * return the first nav item registered for that slug (lowest sortOrder,
+ * or first in array order as tiebreak). Returns null if the slug has no
+ * registered items.
+ */
+function firstItemForSlug(sections: NavSection[], slug: string): NavItem | null {
+  if (!slug) return null;
+  const candidates: NavItem[] = [];
+  for (const section of sections) {
+    for (const item of section.items || []) {
+      if (!item.feRoute) continue;
+      if (firstModuleSlug(item.feRoute) === slug) {
+        candidates.push(item);
+      }
+    }
+  }
+  if (candidates.length === 0) return null;
+  // Stable sort: sortOrder ascending (undefined treated as Infinity),
+  // preserving original order on tie.
+  const withIdx = candidates.map((item, idx) => ({ item, idx }));
+  withIdx.sort((a, b) => {
+    const sa = a.item.sortOrder ?? Number.POSITIVE_INFINITY;
+    const sb = b.item.sortOrder ?? Number.POSITIVE_INFINITY;
+    if (sa !== sb) return sa - sb;
+    return a.idx - b.idx;
+  });
+  return withIdx[0].item;
 }
 
 const StubNoMatch: React.FC<{ path: string; slug: string }> = ({ path, slug }) => {
@@ -177,7 +227,20 @@ const ManifestRouter: React.FC = () => {
   }, [moduleId]);
 
   if (loadingMenu) return <div className="p-6 text-gray-500 text-sm">Loading module manifest…</div>;
-  if (!match) return <StubNoMatch path={path} slug={slug} />;
+
+  // Bare `/m/{slug}` (no feature path) — redirect to the first nav item
+  // registered for that slug so users see a module-landing page instead
+  // of being bounced to Dashboard via StubNoMatch.
+  if (!match) {
+    const isBareSlug = path === `/m/${slug}` || path === `/m/${slug}/`;
+    if (isBareSlug && slug) {
+      const landing = firstItemForSlug(sections, slug);
+      if (landing && landing.feRoute && landing.feRoute !== path) {
+        return <Navigate to={landing.feRoute} replace />;
+      }
+    }
+    return <StubNoMatch path={path} slug={slug} />;
+  }
 
   const { item, section } = match;
   const Component = componentByName(item.feComponent);

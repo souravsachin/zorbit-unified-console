@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Routes, Route, Navigate, useNavigate, useParams } from 'react-router-dom';
+import { Routes, Route, Navigate, useNavigate, useParams, useLocation } from 'react-router-dom';
 import { ToastProvider, useToast } from './components/shared/Toast';
 import { ErrorBoundary } from './components/shared/ErrorBoundary';
 import Layout from './components/layout/Layout';
@@ -437,11 +437,21 @@ function PCG4AppConfigRedirect() {
 }
 
 /**
- * /m/:moduleSlug/* — module-level redirect to the primary feature page.
- * This catches bare /m/pcg4 and redirects to /m/pcg4/configs, etc.
+ * /m/:slug — module-level redirect to the primary feature page for
+ * modules that have an explicit literal Route match (e.g. `m/pcg4`).
+ *
+ * Bug-fix 2026-04-20 (US-RT-2093 P1 Cluster 2): the original impl read
+ * useParams<{ moduleSlug: string }>() but the Route declarations use
+ * literal paths like `m/pcg4` with no `:moduleSlug` placeholder, so the
+ * param was always undefined and the fallback target `/` kicked in —
+ * sending every bare `/m/<slug>` to Dashboard. Now we derive the slug
+ * from the pathname directly.
  */
 function ModuleIndexRedirect() {
-  const { moduleSlug } = useParams<{ moduleSlug: string }>();
+  const location = useLocation();
+  // Path shape: "/m/<slug>" or "/m/<slug>/"
+  const match = location.pathname.match(/^\/m\/([^/]+)\/?$/);
+  const slug = match ? match[1] : '';
   const MODULE_DEFAULTS: Record<string, string> = {
     'pcg4':           '/m/pcg4/configs',
     'hi-quotation':   '/m/hi-quotation/quotes',
@@ -451,7 +461,7 @@ function ModuleIndexRedirect() {
     'form-builder':   '/m/form-builder/forms',
     'datatable':      '/m/datatable/tables',
   };
-  const target = MODULE_DEFAULTS[moduleSlug || ''] || '/';
+  const target = MODULE_DEFAULTS[slug] || '/';
   return <Navigate to={target} replace />;
 }
 
