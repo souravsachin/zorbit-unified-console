@@ -1,15 +1,51 @@
 import React from 'react';
 import { useModuleContext } from '../../contexts/ModuleContext';
+import { useResolvedContent } from '../../hooks/useResolvedContent';
 import { Info, Check } from 'lucide-react';
+
+type PricingTier = { name: string; monthlyPrice: number | null; features: string[] };
 
 /**
  * Renders `guide.pricing.tiers[]` as 3-column pricing cards.
+ *
+ * US-MF-2100 — supports inline OR `{ $src: "..." }` externalised tiers.
  */
 const PricingTable: React.FC = () => {
   const { manifest, moduleId, loading } = useModuleContext();
-  const tiers = manifest?.guide?.pricing?.tiers || [];
+  const {
+    data: resolvedTiers,
+    loading: resolving,
+    error: resolveError,
+  } = useResolvedContent<PricingTier[]>(
+    manifest?.guide?.pricing?.tiers as PricingTier[] | { $src: string } | undefined,
+    manifest?.version,
+  );
+  const tiers: PricingTier[] = resolvedTiers || [];
 
-  if (loading) return <div className="p-6 text-gray-500 text-sm">Loading pricing…</div>;
+  if (loading || resolving) return <div className="p-6 text-gray-500 text-sm">Loading pricing…</div>;
+
+  if (resolveError) {
+    const srcUrl = (manifest?.guide?.pricing?.tiers as { $src?: string } | undefined)?.$src;
+    return (
+      <div className="max-w-3xl mx-auto p-8">
+        <div className="rounded-lg border border-red-300 bg-red-50 dark:bg-red-900/20 dark:border-red-700 p-5 flex gap-3 items-start">
+          <Info className="text-red-600 shrink-0 mt-0.5" size={20} />
+          <div>
+            <h2 className="font-semibold text-red-900 dark:text-red-200">Pricing failed to load</h2>
+            <p className="text-sm text-red-800 dark:text-red-300 mt-1">{resolveError.message}</p>
+            {srcUrl && (
+              <p className="text-[11px] font-mono text-red-700 dark:text-red-400 mt-2 break-all">
+                $src = {srcUrl}
+              </p>
+            )}
+            <p className="text-[11px] text-red-700 dark:text-red-400 mt-1">
+              Manifest path: <code>guide.pricing.tiers</code> on module <code>{moduleId || '?'}</code>
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (tiers.length === 0) {
     return (

@@ -1,15 +1,51 @@
 import React from 'react';
 import { useModuleContext } from '../../contexts/ModuleContext';
+import { useResolvedContent } from '../../hooks/useResolvedContent';
 import { Info, FileText, ExternalLink } from 'lucide-react';
+
+type DocLink = { label: string; href: string };
 
 /**
  * Renders `guide.docs.links[]` as a clean link list.
+ *
+ * US-MF-2100 — supports inline OR `{ $src: "..." }` externalised links.
  */
 const DocsLinkList: React.FC = () => {
   const { manifest, moduleId, loading } = useModuleContext();
-  const links = manifest?.guide?.docs?.links || [];
+  const {
+    data: resolvedLinks,
+    loading: resolving,
+    error: resolveError,
+  } = useResolvedContent<DocLink[]>(
+    manifest?.guide?.docs?.links as DocLink[] | { $src: string } | undefined,
+    manifest?.version,
+  );
+  const links: DocLink[] = resolvedLinks || [];
 
-  if (loading) return <div className="p-6 text-gray-500 text-sm">Loading docs…</div>;
+  if (loading || resolving) return <div className="p-6 text-gray-500 text-sm">Loading docs…</div>;
+
+  if (resolveError) {
+    const srcUrl = (manifest?.guide?.docs?.links as { $src?: string } | undefined)?.$src;
+    return (
+      <div className="max-w-3xl mx-auto p-8">
+        <div className="rounded-lg border border-red-300 bg-red-50 dark:bg-red-900/20 dark:border-red-700 p-5 flex gap-3 items-start">
+          <Info className="text-red-600 shrink-0 mt-0.5" size={20} />
+          <div>
+            <h2 className="font-semibold text-red-900 dark:text-red-200">Docs failed to load</h2>
+            <p className="text-sm text-red-800 dark:text-red-300 mt-1">{resolveError.message}</p>
+            {srcUrl && (
+              <p className="text-[11px] font-mono text-red-700 dark:text-red-400 mt-2 break-all">
+                $src = {srcUrl}
+              </p>
+            )}
+            <p className="text-[11px] text-red-700 dark:text-red-400 mt-1">
+              Manifest path: <code>guide.docs.links</code> on module <code>{moduleId || '?'}</code>
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (links.length === 0) {
     return (

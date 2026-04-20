@@ -38,9 +38,14 @@ export interface ManifestData {
 
   guide?: {
     intro?: { headline?: string; summary?: string; feRoute?: string };
+    // US-MF-2100 — content-heavy array fields (deck, entries, links, tiers)
+    // accept either an inline array OR an externalised `{ $src: "/url" }`.
+    // The `useResolvedContent` hook transparently resolves both shapes.
     slides?: {
       feRoute?: string;
-      deck?: Array<{ title: string; body: string; image?: string }>;
+      deck?:
+        | Array<{ title: string; body: string; image?: string }>
+        | { $src: string };
     };
     lifecycle?: {
       feRoute?: string;
@@ -48,26 +53,33 @@ export interface ManifestData {
     };
     videos?: {
       feRoute?: string;
-      entries?: Array<{
-        title: string;
-        duration?: number;
-        playerType: 'simple' | 'chapter-list' | 'sidebyside' | 'picture-in-picture' | 'quiz' | 'tour';
-        src: string;
-        src2?: string;
-        poster?: string;
-        chapters?: Array<{
-          t: number;
-          label: string;
-          src2?: string;
-          annotation?: string;
-          quiz?: { q: string; options: string[]; answerIndex: number };
-        }>;
-      }>;
+      entries?:
+        | Array<{
+            title: string;
+            duration?: number;
+            playerType: 'simple' | 'chapter-list' | 'sidebyside' | 'picture-in-picture' | 'quiz' | 'tour';
+            src: string;
+            src2?: string;
+            poster?: string;
+            chapters?: Array<{
+              t: number;
+              label: string;
+              src2?: string;
+              annotation?: string;
+              quiz?: { q: string; options: string[]; answerIndex: number };
+            }>;
+          }>
+        | { $src: string };
     };
-    docs?: { feRoute?: string; links?: Array<{ label: string; href: string }> };
+    docs?: {
+      feRoute?: string;
+      links?: Array<{ label: string; href: string }> | { $src: string };
+    };
     pricing?: {
       feRoute?: string;
-      tiers?: Array<{ name: string; monthlyPrice: number | null; features: string[] }>;
+      tiers?:
+        | Array<{ name: string; monthlyPrice: number | null; features: string[] }>
+        | { $src: string };
     };
   };
 

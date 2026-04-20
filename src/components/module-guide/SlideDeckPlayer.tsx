@@ -1,10 +1,16 @@
 import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { useModuleContext } from '../../contexts/ModuleContext';
+import { useResolvedContent } from '../../hooks/useResolvedContent';
 import { ChevronLeft, ChevronRight, Maximize, Minimize, Info } from 'lucide-react';
+
+type Slide = { title: string; body: string; image?: string };
 
 /**
  * Renders `guide.slides.deck[]` with prev/next, keyboard arrows,
  * fullscreen toggle, and progress dots.
+ *
+ * US-MF-2100 — supports both inline `deck: [...]` and externalised
+ * `deck: { $src: "/api/.../slides.json" }`.
  */
 const SlideDeckPlayer: React.FC = () => {
   const { manifest, moduleId, loading } = useModuleContext();
@@ -12,7 +18,16 @@ const SlideDeckPlayer: React.FC = () => {
   const [fullscreen, setFullscreen] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  const deck = manifest?.guide?.slides?.deck || [];
+  // Resolve deck through $src-aware resolver. If inline → returned as-is.
+  const {
+    data: resolvedDeck,
+    loading: resolving,
+    error: resolveError,
+  } = useResolvedContent<Slide[]>(
+    manifest?.guide?.slides?.deck as Slide[] | { $src: string } | undefined,
+    manifest?.version,
+  );
+  const deck: Slide[] = resolvedDeck || [];
 
   const next = useCallback(() => setIdx((i) => Math.min(i + 1, deck.length - 1)), [deck.length]);
   const prev = useCallback(() => setIdx((i) => Math.max(i - 1, 0)), []);
@@ -36,7 +51,30 @@ const SlideDeckPlayer: React.FC = () => {
     setFullscreen((v) => !v);
   };
 
-  if (loading) return <div className="p-6 text-gray-500 text-sm">Loading slides…</div>;
+  if (loading || resolving) return <div className="p-6 text-gray-500 text-sm">Loading slide deck…</div>;
+
+  if (resolveError) {
+    const srcUrl = (manifest?.guide?.slides?.deck as { $src?: string } | undefined)?.$src;
+    return (
+      <div className="max-w-3xl mx-auto p-8">
+        <div className="rounded-lg border border-red-300 bg-red-50 dark:bg-red-900/20 dark:border-red-700 p-5 flex gap-3 items-start">
+          <Info className="text-red-600 shrink-0 mt-0.5" size={20} />
+          <div>
+            <h2 className="font-semibold text-red-900 dark:text-red-200">Slide deck failed to load</h2>
+            <p className="text-sm text-red-800 dark:text-red-300 mt-1">{resolveError.message}</p>
+            {srcUrl && (
+              <p className="text-[11px] font-mono text-red-700 dark:text-red-400 mt-2 break-all">
+                $src = {srcUrl}
+              </p>
+            )}
+            <p className="text-[11px] text-red-700 dark:text-red-400 mt-1">
+              Manifest path: <code>guide.slides.deck</code> on module <code>{moduleId || '?'}</code>
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (deck.length === 0) {
     return (

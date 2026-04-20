@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useModuleContext } from '../../contexts/ModuleContext';
+import { useResolvedContent } from '../../hooks/useResolvedContent';
 import { Info, Play, X, CheckCircle2, XCircle } from 'lucide-react';
 
 type PlayerType = 'simple' | 'chapter-list' | 'sidebyside' | 'picture-in-picture' | 'quiz' | 'tour';
@@ -251,7 +252,17 @@ const renderPlayer = (v: VideoEntry): React.ReactNode => {
 const VideoList: React.FC = () => {
   const { manifest, moduleId, loading } = useModuleContext();
   const [activeIdx, setActiveIdx] = useState<number | null>(null);
-  const entries = manifest?.guide?.videos?.entries || [];
+
+  // US-MF-2100 — resolve inline OR $src-externalised entries.
+  const {
+    data: resolvedEntries,
+    loading: resolving,
+    error: resolveError,
+  } = useResolvedContent<VideoEntry[]>(
+    manifest?.guide?.videos?.entries as VideoEntry[] | { $src: string } | undefined,
+    manifest?.version,
+  );
+  const entries: VideoEntry[] = resolvedEntries || [];
 
   // Keyboard: escape closes modal
   useEffect(() => {
@@ -262,7 +273,30 @@ const VideoList: React.FC = () => {
     return () => window.removeEventListener('keydown', h);
   }, []);
 
-  if (loading) return <div className="p-6 text-gray-500 text-sm">Loading videos…</div>;
+  if (loading || resolving) return <div className="p-6 text-gray-500 text-sm">Loading videos…</div>;
+
+  if (resolveError) {
+    const srcUrl = (manifest?.guide?.videos?.entries as { $src?: string } | undefined)?.$src;
+    return (
+      <div className="max-w-3xl mx-auto p-8">
+        <div className="rounded-lg border border-red-300 bg-red-50 dark:bg-red-900/20 dark:border-red-700 p-5 flex gap-3 items-start">
+          <Info className="text-red-600 shrink-0 mt-0.5" size={20} />
+          <div>
+            <h2 className="font-semibold text-red-900 dark:text-red-200">Videos failed to load</h2>
+            <p className="text-sm text-red-800 dark:text-red-300 mt-1">{resolveError.message}</p>
+            {srcUrl && (
+              <p className="text-[11px] font-mono text-red-700 dark:text-red-400 mt-2 break-all">
+                $src = {srcUrl}
+              </p>
+            )}
+            <p className="text-[11px] text-red-700 dark:text-red-400 mt-1">
+              Manifest path: <code>guide.videos.entries</code> on module <code>{moduleId || '?'}</code>
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (entries.length === 0) {
     return (
