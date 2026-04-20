@@ -156,16 +156,21 @@ const ConfigurableDataTable: React.FC<DataTableProps> = (props) => {
 
   // ──────────────────────────────────────────────────────────────────────
   // Resolve columns (inline or $src)
+  // When no columns are configured AND data is loaded, auto-derive from the
+  // first row's top-level keys. Acts as "SELECT *" for debugging and for
+  // seeing what the BE actually serves before authoring a column config.
   // ──────────────────────────────────────────────────────────────────────
   const columnsRes = useResolvedSrc<Column[]>(effective.columns, cacheKey);
-  const columns: Column[] = useMemo(() => {
+  const configuredColumns: Column[] = useMemo(() => {
     if (Array.isArray(columnsRes.data)) return columnsRes.data;
     if (columnsRes.data && Array.isArray((columnsRes.data as any).columns)) {
       return (columnsRes.data as any).columns as Column[];
     }
-    // If columnsRes still loading, fall back to empty so header shows a spinner.
     return ensureArray(effective.columns as any);
   }, [columnsRes.data, effective.columns]);
+
+  // `columns` is resolved below, after `rows` state is declared, because
+  // the auto-derive path inspects rows[0] when configuredColumns is empty.
 
   // ──────────────────────────────────────────────────────────────────────
   // Lookups — fetch + shape into {value,label,avatar} triples
@@ -244,8 +249,14 @@ const ConfigurableDataTable: React.FC<DataTableProps> = (props) => {
       })
       .then((res) => {
         if (cancelled) return;
-        const items: any[] =
-          res.data?.items || res.data?.quotations || res.data?.rows || res.data?.data || [];
+        const items: any[] = Array.isArray(res.data)
+          ? res.data
+          : res.data?.items ||
+            res.data?.users ||
+            res.data?.quotations ||
+            res.data?.rows ||
+            res.data?.data ||
+            [];
         const count: number =
           res.data?.total ?? res.data?.totalCount ?? res.data?.count ?? items.length;
         setRows(items);
@@ -264,6 +275,31 @@ const ConfigurableDataTable: React.FC<DataTableProps> = (props) => {
       cancelled = true;
     };
   }, [beRoute, orgId, page, pageSize, search, sortBy?.field, sortBy?.order, refreshTick]);
+
+  // ──────────────────────────────────────────────────────────────────────
+  // Column resolution — use configured columns, or auto-derive from first
+  // row when none are given. Auto-derive acts like SELECT * for debug.
+  // ──────────────────────────────────────────────────────────────────────
+  const columns: Column[] = useMemo(() => {
+    if (configuredColumns && configuredColumns.length > 0) return configuredColumns;
+    const sample = rows[0];
+    if (!sample || typeof sample !== 'object') return [];
+    return Object.keys(sample).map((key) => {
+      const v = (sample as any)[key];
+      const looksLikeDate =
+        typeof v === 'string' && /^\d{4}-\d{2}-\d{2}T/.test(v) && !Number.isNaN(Date.parse(v));
+      const looksLikeId = /(^|_)(id|hashId)$/i.test(key) || key.toLowerCase().endsWith('id');
+      return {
+        key,
+        label: key
+          .replace(/([A-Z])/g, ' $1')
+          .replace(/[_-]+/g, ' ')
+          .replace(/^./, (c) => c.toUpperCase())
+          .trim(),
+        type: looksLikeDate ? 'datetime' : looksLikeId ? 'id' : 'text',
+      } as Column;
+    });
+  }, [configuredColumns, rows]);
 
   // ──────────────────────────────────────────────────────────────────────
   // FE-side masking (defence-in-depth)
