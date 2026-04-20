@@ -243,7 +243,11 @@ const ManifestRouter: React.FC = () => {
   }
 
   const { item, section } = match;
-  const Component = componentByName(item.feComponent);
+  // Pass currentModuleId so unqualified `feComponent` strings can resolve
+  // against the owning module's registry (per SPEC-cross-module-feComponent
+  // §"Runtime behaviour"). Qualified `<moduleId>:X` / `@platform:X` strings
+  // ignore currentModuleId.
+  const Component = componentByName(item.feComponent, section.moduleId);
   if (!Component) return <StubNoComponent item={item} section={section} />;
 
   return (
