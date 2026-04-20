@@ -571,7 +571,7 @@ function PageRoutes() {
       <Route path="m/pcg4/refs" element={<SafeLazy><PCG4ReferenceLibraryPage /></SafeLazy>} />
       <Route path="m/pcg4/coverage-mapper" element={<SafeLazy><PCG4CoverageMapperPage /></SafeLazy>} />
       <Route path="m/pcg4/encounters" element={<SafeLazy><PCG4AdminPage /></SafeLazy>} />
-      <Route path="m/pcg4/deployments" element={<SafeLazy><PCG4DeploymentsPage /></SafeLazy>} />
+      {/* /m/pcg4/deployments now served via ManifestRouter → DeploymentsModulePage (Phase 3 of deployment-registry rollout). Route intentionally removed so the manifest feComponent wins. */}
       <Route path="m/pcg4/setup" element={<SafeLazy><PCG4SetupPage /></SafeLazy>} />
       <Route path="m/pcg4/pricing" element={<SafeLazy><PCG4PricingPage /></SafeLazy>} />
       <Route path="m/pcg4/help" element={<Navigate to="/m/pcg4/hub" replace />} />

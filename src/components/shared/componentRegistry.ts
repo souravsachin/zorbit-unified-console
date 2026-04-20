@@ -42,6 +42,10 @@ const PageComponents: Record<string, React.ComponentType<any>> = {
 
   // Deployment Registry (US-DR-2200 — Phase 2)
   DeploymentEnvironmentsPage: React.lazy(() => import('../../pages/deployment-registry/DeploymentEnvironmentsPage')),
+
+  // Deployment Registry (Phase 3) — maker-side wizard + DR list
+  DeploymentsModulePage:     React.lazy(() => import('../../pages/deployment-registry/DeploymentsModulePage')),
+  DeploymentRequestsPage:    React.lazy(() => import('../../pages/deployment-registry/DeploymentRequestsPage')),
   LicensingPage:             React.lazy(() => import('../../pages/admin/LicensingPage')),
   SitemapPage:               React.lazy(() => import('../../pages/admin/SitemapPage')),
   DeveloperPage:             React.lazy(() => import('../../pages/admin/DeveloperPage')),
