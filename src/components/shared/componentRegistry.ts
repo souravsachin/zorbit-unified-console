@@ -137,10 +137,16 @@ const DEPLOYMENT_REGISTRY_COMPONENTS: ComponentMap = {
 };
 
 // ---- zorbit-pfs-form_builder -----------------------------------------------
+//
+// FormRenderer is the cross-module exported component — any module can
+// reference `zorbit-pfs-form_builder:FormRenderer` from its manifest (see
+// SPEC-cross-module-feComponent.md v1.0). It renders a form definition
+// fetched from the form-builder BE.
 const FORM_BUILDER_COMPONENTS: ComponentMap = {
   FormBuilderPage:           React.lazy(() => import('../../pages/form-builder/FormBuilderPage')),
   FormTemplatesPage:         React.lazy(() => import('../../pages/form-builder/FormTemplatesPage')),
   FormSubmissionsPage:       React.lazy(() => import('../../pages/form-builder/FormSubmissionsPage')),
+  FormRenderer:              React.lazy(() => import('./FormRenderer')),
 };
 
 // ---- zorbit-pfs-datatable --------------------------------------------------
