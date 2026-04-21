@@ -22,6 +22,7 @@ import SidebarSwitcher from './SidebarSwitcher';
 import { L1Node, MenuNodeData, MenuNodePlacement, ForceExpandContext, ForceExpandSignal } from './MenuNode';
 import staticMenuData from '../../data/menu-6level.json';
 import { navigationService, MenuItem } from '../../services/navigation';
+import { moduleRegistryService } from '../../services/moduleRegistry';
 import type { MenuStyle } from '../../hooks/useMenuPreference';
 import type { UserPreferences } from '../../services/preferences';
 
@@ -664,11 +665,47 @@ const Sidebar6Level: React.FC<Sidebar6LevelProps> = ({
   const [forceExpand, setForceExpand] = useState<ForceExpandSignal | null>(null);
   const [iconOnly, setIconOnly] = useState(false);
 
-  // Auto-discovered editions from API placements, deduped by name.
-  const dbEditions: EditionMeta[] = useMemo(
+  // Editions auto-discovered from the nav service's section placements,
+  // deduped by name.
+  const sectionEditions: EditionMeta[] = useMemo(
     () => collectEditionsFromSections(apiSections),
     [apiSections],
   );
+
+  // Editions fetched from the module-registry union endpoint
+  // (manifests + default catalog). This is the source of truth when DB mode
+  // is active so the dropdown shows every edition the platform plans to host,
+  // not just the 1-2 that happen to have live modules right now.
+  const [registryEditions, setRegistryEditions] = useState<EditionMeta[]>([]);
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await moduleRegistryService.getEditions();
+        const list = (res.data?.editions ?? []) as EditionMeta[];
+        if (!cancelled && list.length > 0) setRegistryEditions(list);
+      } catch {
+        // Registry unreachable — fall back to section-derived editions.
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // DB-mode dropdown = union of registry editions + section-derived editions,
+  // section-derived wins on conflict (it carries any override a live manifest
+  // has declared). First-seen wins within each source.
+  const dbEditions: EditionMeta[] = useMemo(() => {
+    const byName = new Map<string, EditionMeta>();
+    for (const e of registryEditions) {
+      if (!byName.has(e.name)) byName.set(e.name, e);
+    }
+    for (const e of sectionEditions) {
+      byName.set(e.name, e); // override
+    }
+    return Array.from(byName.values());
+  }, [registryEditions, sectionEditions]);
 
   // When new editions are discovered and current selection is unknown, snap
   // to the first one so the dropdown shows a valid value out of the gate.
