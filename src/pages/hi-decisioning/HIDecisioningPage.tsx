@@ -205,7 +205,7 @@ const OverviewTab: React.FC = () => {
             <XCircle className="h-5 w-5 text-red-500" />
           )}
           <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-            Service: <span className="font-mono">{health?.service || 'zorbit-app-hi_decisioning'}</span>
+            Service: <span className="font-mono">{health?.service || 'zorbit-app-hi_uw_decisioning'}</span>
           </span>
           <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${isHealthy ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'}`}>
             {health?.status || 'checking...'}

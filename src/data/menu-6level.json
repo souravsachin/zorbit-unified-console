@@ -308,17 +308,18 @@
         ]
       },
       {
-        "id": "pfs-verification",
-        "label": "Verification",
+        "id": "pfs-kyc",
+        "label": "KYC",
         "icon": "FileCheck",
         "route": null,
-        "source": "zorbit-pfs-verification",
+        "source": "zorbit-pfs-kyc",
         "level": 2,
         "children": [
-          { "id": "pfs-ver-guide", "label": "Guide", "icon": "BookOpen", "route": "/verification/guide", "level": 3, "children": [] },
-          { "id": "pfs-ver-setup", "label": "Setup", "icon": "Settings", "route": "/verification/setup", "level": 3, "children": [] },
-          { "id": "pfs-ver-deployments", "label": "Deployments", "icon": "Rocket", "route": "/verification/deployments", "level": 3, "children": [] },
-          { "id": "pfs-ver-evidence", "label": "Evidence Vault", "icon": "FolderOpen", "route": "/verification/evidence", "level": 3, "children": [] }
+          { "id": "pfs-kyc-guide", "label": "Guide", "icon": "BookOpen", "route": "/m/kyc/guide/intro", "level": 3, "children": [] },
+          { "id": "pfs-kyc-setup", "label": "Setup", "icon": "Settings", "route": "/m/kyc/setup", "level": 3, "children": [] },
+          { "id": "pfs-kyc-deployments", "label": "Deployments", "icon": "Rocket", "route": "/m/kyc/deployments", "level": 3, "children": [] },
+          { "id": "pfs-kyc-evidence", "label": "Evidence", "icon": "FolderOpen", "route": "/m/kyc/evidence", "level": 3, "children": [] },
+          { "id": "pfs-kyc-providers", "label": "Providers", "icon": "Puzzle", "route": "/m/kyc/providers", "level": 3, "children": [] }
         ]
       },
       {

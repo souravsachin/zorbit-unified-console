@@ -43,7 +43,7 @@ SERVICES=(
   "zorbit-app-pcg4:3011:mongodb"
   "zorbit-app-hi_quotation:3017:mongodb"
   "zorbit-app-uw_workflow:3015:mongodb"
-  "zorbit-app-hi_decisioning:3016:mongodb"
+  "zorbit-app-hi_uw_decisioning:3016:mongodb"
 )
 
 FRONTEND="zorbit-unified-console"
