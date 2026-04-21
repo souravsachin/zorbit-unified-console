@@ -12,14 +12,14 @@ const VIEWPORT = { width: 1920, height: 1080 };
 // ================================================================
 function getMfaSecret() {
   return execSync(
-    `ssh sovpn "docker exec zorbit-identity-db psql -U zorbit -d zorbit_identity -t -A -c \\"SELECT mfa_secret FROM users WHERE \\\\\\\"hashId\\\\\\\" = 'U-0113'\\""`,
+    `ssh ilri-arm-uat "docker exec zorbit-identity-db psql -U zorbit -d zorbit_identity -t -A -c \\"SELECT mfa_secret FROM users WHERE \\\\\\\"hashId\\\\\\\" = 'U-0113'\\""`,
     { encoding: 'utf-8' }
   ).trim();
 }
 
 function generateTotp(secret) {
   return execSync(
-    `ssh sovpn "source ~/.nvm/nvm.sh && nvm use 20 > /dev/null 2>&1 && node -e \\"const {generateSync}=require('/home/sourav/apps/zorbit-platform/zorbit-identity/node_modules/otplib'); console.log(generateSync({secret:'${secret}'}))\\"" 2>/dev/null`,
+    `ssh ilri-arm-uat "source ~/.nvm/nvm.sh && nvm use 20 > /dev/null 2>&1 && node -e \\"const {generateSync}=require('/home/sourav/apps/zorbit-platform/zorbit-identity/node_modules/otplib'); console.log(generateSync({secret:'${secret}'}))\\"" 2>/dev/null`,
     { encoding: 'utf-8' }
   ).trim();
 }
@@ -434,14 +434,14 @@ function findWebm(dir) {
   console.log('\nDeploying to server...');
   try {
     execSync(
-      `rsync -avz --progress ${OUT_DIR}/*.mp4 sovpn:/var/www/zorbit-demos/segments-v2/desktop/`,
+      `rsync -avz --progress ${OUT_DIR}/*.mp4 ilri-arm-uat:/var/www/zorbit-demos/segments-v2/desktop/`,
       { stdio: 'inherit' }
     );
     console.log('Deployed successfully!');
   } catch (e) {
     console.error(`Deploy failed: ${e.message}`);
     console.log('You can manually deploy with:');
-    console.log(`  rsync -avz ${OUT_DIR}/*.mp4 sovpn:/var/www/zorbit-demos/segments-v2/desktop/`);
+    console.log(`  rsync -avz ${OUT_DIR}/*.mp4 ilri-arm-uat:/var/www/zorbit-demos/segments-v2/desktop/`);
   }
 
   console.log('\nDone!\n');

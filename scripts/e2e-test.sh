@@ -3,8 +3,8 @@ set -euo pipefail
 
 ###############################################################################
 # Zorbit Platform — E2E Integration Test Suite
-# Run on server: ssh sovpn 'bash -s' < scripts/e2e-test.sh
-# Or directly:   ssh sovpn && bash /path/to/e2e-test.sh
+# Run on server: ssh ilri-arm-uat 'bash -s' < scripts/e2e-test.sh
+# Or directly:   ssh ilri-arm-uat && bash /path/to/e2e-test.sh
 ###############################################################################
 
 # ---------------------------------------------------------------------------

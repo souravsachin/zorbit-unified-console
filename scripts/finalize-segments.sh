@@ -3,14 +3,14 @@
 set -e
 
 SEGMENTS_DIR="./scripts/recordings/segments"
-REMOTE="sovpn:/home/sourav/apps/zorbit-platform/demos/segments"
+REMOTE="ilri-arm-uat:/home/sourav/apps/zorbit-platform/demos/segments"
 
 echo "=== Converting segments to MP4 ==="
 
 for mode in desktop mobile; do
   echo ""
   echo "--- $mode ---"
-  ssh sovpn "mkdir -p /home/sourav/apps/zorbit-platform/demos/segments/$mode"
+  ssh ilri-arm-uat "mkdir -p /home/sourav/apps/zorbit-platform/demos/segments/$mode"
 
   for dir in "$SEGMENTS_DIR/$mode"/*/; do
     name=$(basename "$dir")

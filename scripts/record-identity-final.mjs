@@ -11,7 +11,7 @@ mkdirSync(OUT, { recursive: true });
 // ── MFA helpers ──────────────────────────────────────────────────────
 function getMfaSecret() {
   return execSync(
-    `ssh sovpn "docker exec zorbit-identity-db psql -U zorbit -d zorbit_identity -t -A -c \\"SELECT mfa_secret FROM users WHERE \\\\\\\"hashId\\\\\\\" = 'U-0113'\\""`,
+    `ssh ilri-arm-uat "docker exec zorbit-identity-db psql -U zorbit -d zorbit_identity -t -A -c \\"SELECT mfa_secret FROM users WHERE \\\\\\\"hashId\\\\\\\" = 'U-0113'\\""`,
     { encoding: 'utf-8' },
   ).trim();
 }

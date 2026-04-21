@@ -5,7 +5,7 @@ import { execSync } from 'child_process';
 function getMfaSecret() {
   try {
     const result = execSync(
-      `ssh sovpn 'docker exec zorbit-identity-db psql -U zorbit -d zorbit_identity -t -A -c "SELECT mfa_secret FROM users WHERE \\"hashId\\" = '"'"'U-0113'"'"'"'`,
+      `ssh ilri-arm-uat 'docker exec zorbit-identity-db psql -U zorbit -d zorbit_identity -t -A -c "SELECT mfa_secret FROM users WHERE \\"hashId\\" = '"'"'U-0113'"'"'"'`,
       { encoding: 'utf-8' }
     ).trim();
     return result;
@@ -19,7 +19,7 @@ function getMfaSecret() {
 function generateTotp(secret) {
   try {
     const result = execSync(
-      `ssh sovpn "source ~/.nvm/nvm.sh && nvm use 20 > /dev/null 2>&1 && node -e \\"const {generateSync}=require('/home/sourav/apps/zorbit-platform/zorbit-identity/node_modules/otplib'); console.log(generateSync({secret:'${secret}'}))\\"" 2>/dev/null`,
+      `ssh ilri-arm-uat "source ~/.nvm/nvm.sh && nvm use 20 > /dev/null 2>&1 && node -e \\"const {generateSync}=require('/home/sourav/apps/zorbit-platform/zorbit-identity/node_modules/otplib'); console.log(generateSync({secret:'${secret}'}))\\"" 2>/dev/null`,
       { encoding: 'utf-8' }
     ).trim();
     return result;

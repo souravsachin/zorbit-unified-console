@@ -7,7 +7,7 @@
 set -euo pipefail
 
 LOCAL_DIR="/Users/s/workspace/zorbit/02_repos/zorbit-unified-console"
-REMOTE="sovpn"
+REMOTE="ilri-arm-uat"
 REMOTE_CONSOLE="/home/sourav/apps/zorbit-platform/zorbit-unified-console"
 REMOTE_DEMOS="/home/sourav/apps/zorbit-platform/demos"
 
@@ -41,8 +41,8 @@ echo "Console: https://scalatics.com"
 echo "Demos:   https://scalatics.com/demos/"
 echo ""
 echo "To generate narrated videos on the server:"
-echo "  ssh sovpn 'bash /home/sourav/apps/zorbit-platform/scripts/video-gen/generate-narrated-videos.sh'"
+echo "  ssh ilri-arm-uat 'bash /home/sourav/apps/zorbit-platform/scripts/video-gen/generate-narrated-videos.sh'"
 echo ""
 echo "To set up nginx /demos/ location:"
-echo "  scp /tmp/nginx-demos-separate.py sovpn:/tmp/"
-echo "  ssh sovpn 'sudo python3 /tmp/nginx-demos-separate.py && sudo nginx -t && sudo systemctl reload nginx'"
+echo "  scp /tmp/nginx-demos-separate.py ilri-arm-uat:/tmp/"
+echo "  ssh ilri-arm-uat 'sudo python3 /tmp/nginx-demos-separate.py && sudo nginx -t && sudo systemctl reload nginx'"

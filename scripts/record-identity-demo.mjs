@@ -21,14 +21,14 @@ mkdirSync(OUT, { recursive: true });
 
 function getMfaSecret() {
   return execSync(
-    `ssh sovpn "docker exec zorbit-identity-db psql -U zorbit -d zorbit_identity -t -A -c \\"SELECT mfa_secret FROM users WHERE \\\\\\\"hashId\\\\\\\" = 'U-0113'\\""`,
+    `ssh ilri-arm-uat "docker exec zorbit-identity-db psql -U zorbit -d zorbit_identity -t -A -c \\"SELECT mfa_secret FROM users WHERE \\\\\\\"hashId\\\\\\\" = 'U-0113'\\""`,
     { encoding: 'utf-8' },
   ).trim();
 }
 
 function generateTotp(secret) {
   return execSync(
-    `ssh sovpn "source ~/.nvm/nvm.sh && nvm use 20 > /dev/null 2>&1 && node -e \\"const {generateSync}=require('/home/sourav/apps/zorbit-platform/zorbit-identity/node_modules/otplib'); console.log(generateSync({secret:'${secret}'}))\\"" 2>/dev/null`,
+    `ssh ilri-arm-uat "source ~/.nvm/nvm.sh && nvm use 20 > /dev/null 2>&1 && node -e \\"const {generateSync}=require('/home/sourav/apps/zorbit-platform/zorbit-identity/node_modules/otplib'); console.log(generateSync({secret:'${secret}'}))\\"" 2>/dev/null`,
     { encoding: 'utf-8' },
   ).trim();
 }
@@ -394,8 +394,8 @@ This is enterprise-grade identity management — built for regulated industries 
 
   // Deploy
   console.log('Deploying to server...');
-  execSync(`ssh sovpn 'mkdir -p /home/sourav/apps/zorbit-platform/demos/identity/'`);
-  execSync(`rsync -avz "${output}" "${OUT}/thumb.jpg" sovpn:/home/sourav/apps/zorbit-platform/demos/identity/`);
+  execSync(`ssh ilri-arm-uat 'mkdir -p /home/sourav/apps/zorbit-platform/demos/identity/'`);
+  execSync(`rsync -avz "${output}" "${OUT}/thumb.jpg" ilri-arm-uat:/home/sourav/apps/zorbit-platform/demos/identity/`);
 
   console.log('\nDone! Video deployed to demos/identity/zorbit-identity-demo.mp4');
 })();

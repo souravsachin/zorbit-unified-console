@@ -119,17 +119,17 @@ cd testing/e2e-standalone-bundle
 
 ### API Integration Test
 ```bash
-ssh sovpn 'bash /tmp/api-integration-test.sh localhost'
+ssh ilri-arm-uat 'bash /tmp/api-integration-test.sh localhost'
 ```
 
 ### Individual Service Restart
 ```bash
-ssh sovpn 'source ~/.nvm/nvm.sh && nvm use 20 && pm2 restart <service-name>'
+ssh ilri-arm-uat 'source ~/.nvm/nvm.sh && nvm use 20 && pm2 restart <service-name>'
 ```
 
 ### DocGenerator Template Reseed
 ```bash
-ssh sovpn 'cd /home/sourav/apps/zorbit-platform/zorbit-pfs-doc_generator && \
+ssh ilri-arm-uat 'cd /home/sourav/apps/zorbit-platform/zorbit-pfs-doc_generator && \
   source ~/.nvm/nvm.sh && nvm use 20 && \
   MONGO_URI="mongodb://localhost:27018/zorbit_doc_generator?directConnection=true" \
   node dist/seeds/seed-templates.js'

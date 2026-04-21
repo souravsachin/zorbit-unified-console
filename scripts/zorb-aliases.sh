@@ -5,7 +5,7 @@
 
 _ZORB_PROJECT="/Users/s/workspace/zorbit/02_repos/zorbit-unified-console"
 _ZORB_E2E="$_ZORB_PROJECT/testing/e2e-standalone-bundle"
-_ZORB_SERVER="sovpn"
+_ZORB_SERVER="ilri-arm-uat"
 _ZORB_REMOTE="~/apps/zorbit-platform/zorbit-unified-console/"
 
 # ---------------------------------------------------------------------------

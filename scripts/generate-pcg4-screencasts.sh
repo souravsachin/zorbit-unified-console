@@ -278,11 +278,11 @@ echo "================================================================"
 
 REMOTE_DIR="/home/sourav/apps/zorbit-platform/zorbit-unified-console/demos/pcg4"
 
-ssh sovpn "mkdir -p $REMOTE_DIR" 2>/dev/null && \
+ssh ilri-arm-uat "mkdir -p $REMOTE_DIR" 2>/dev/null && \
   rsync -az --progress \
     "$FINAL_DIR/" \
-    "sovpn:$REMOTE_DIR/" && \
-  echo "  Deployed to sovpn:$REMOTE_DIR/" || \
+    "ilri-arm-uat:$REMOTE_DIR/" && \
+  echo "  Deployed to ilri-arm-uat:$REMOTE_DIR/" || \
   echo "  WARNING: Deploy failed (server not reachable?). Files are in $FINAL_DIR/"
 
 # =============================================================================

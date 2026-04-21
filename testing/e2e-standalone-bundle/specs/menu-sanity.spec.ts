@@ -44,7 +44,7 @@ test.describe("Menu Sanity Crawl", () => {
     );
     if ((await mfaInput.count()) > 0) {
       try {
-        const totp = execSync(creds.admin.mfaCommand || "ssh sovpn 'bash /tmp/get-totp.sh'", {
+        const totp = execSync(creds.admin.mfaCommand || "ssh ilri-arm-uat 'bash /tmp/get-totp.sh'", {
           encoding: "utf-8",
           timeout: 15000,
         }).trim();

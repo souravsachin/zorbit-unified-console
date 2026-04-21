@@ -43,7 +43,7 @@ const GUIDE_VIDEO_ROUTES = [
 function getMfaSecret() {
   try {
     return execSync(
-      `ssh sovpn "docker exec zorbit-identity-db psql -U zorbit -d zorbit_identity -t -A -c \\"SELECT mfa_secret FROM users WHERE \\\\\\\"hashId\\\\\\\" = '${USER_HASH}'\\""`,
+      `ssh ilri-arm-uat "docker exec zorbit-identity-db psql -U zorbit -d zorbit_identity -t -A -c \\"SELECT mfa_secret FROM users WHERE \\\\\\\"hashId\\\\\\\" = '${USER_HASH}'\\""`,
       { encoding: 'utf8', timeout: 15000 }
     ).trim();
   } catch (e) {
@@ -55,7 +55,7 @@ function getMfaSecret() {
 function generateTotp(secret) {
   try {
     return execSync(
-      `ssh sovpn "source ~/.nvm/nvm.sh && nvm use 20 > /dev/null 2>&1 && node -e \\"const {generateSync}=require('/home/sourav/apps/zorbit-platform/zorbit-identity/node_modules/otplib'); console.log(generateSync({secret:'${secret}'}))\\"" 2>/dev/null`,
+      `ssh ilri-arm-uat "source ~/.nvm/nvm.sh && nvm use 20 > /dev/null 2>&1 && node -e \\"const {generateSync}=require('/home/sourav/apps/zorbit-platform/zorbit-identity/node_modules/otplib'); console.log(generateSync({secret:'${secret}'}))\\"" 2>/dev/null`,
       { encoding: 'utf8', timeout: 15000 }
     ).trim();
   } catch (e) {

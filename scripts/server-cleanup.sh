@@ -1,6 +1,6 @@
 #!/bin/bash
-# Server cleanup script — run on sovpn
-# Usage: ssh sovpn 'bash -s' < scripts/server-cleanup.sh
+# Server cleanup script — run on ilri-arm-uat
+# Usage: ssh ilri-arm-uat 'bash -s' < scripts/server-cleanup.sh
 
 set -e  # Exit on any error
 
