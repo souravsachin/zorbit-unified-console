@@ -36,16 +36,35 @@ export const navigationService = {
     api.get<MenuItem[]>(`${API_CONFIG.NAVIGATION_URL}/api/v1/O/${orgId}/navigation/menus`),
 
   /**
-   * Get the privilege-filtered, tree-structured menu for a user.
-   * Endpoint: /api/v1/U/:userId/navigation/menu (per uri-conventions.md §3)
+   * Get the cascade-resolved effective menu for a user.
+   * Endpoint: /api/v1/U/:userId/menu (EPIC 19 Phase 1).
+   *
+   * Reads live from registered_modules + nav_overrides (platform → org → user).
    * This is the primary endpoint for the 6-level sidebar.
+   *
+   * Pass `refresh=true` to bypass the in-memory cache and recompute.
    */
-  getMenu: (userId: string) =>
-    api.get<ResolvedMenuResponse>(`${API_CONFIG.NAVIGATION_URL}/api/v1/U/${userId}/navigation/menu`),
+  getMenu: (userId: string, opts?: { refresh?: boolean }) => {
+    const suffix = opts?.refresh ? '?refresh=true' : '';
+    return api.get<ResolvedMenuResponse>(
+      `${API_CONFIG.NAVIGATION_URL}/api/v1/U/${userId}/menu${suffix}`,
+    );
+  },
 
   /**
-   * @deprecated Use getMenu(). Kept for backward compatibility — remove after
-   * all callers are migrated.
+   * Force-invalidate the nav service's effective-menu cache for a scope.
+   * Users may always invalidate their own cache.
+   */
+  invalidateMenuCache: (scope: 'G' | 'O' | 'U', scopeId: string) =>
+    api.post(
+      `${API_CONFIG.NAVIGATION_URL}/api/v1/G/cache/invalidate?scope=${scope}&scopeId=${encodeURIComponent(scopeId)}`,
+      {},
+    ),
+
+  /**
+   * @deprecated Use getMenu(). Kept for backward compatibility — points at
+   * the legacy navigation/menu endpoint that still works until fully
+   * decommissioned.
    */
   getResolvedMenu: (userId: string) =>
     api.get<ResolvedMenuResponse>(`${API_CONFIG.NAVIGATION_URL}/api/v1/U/${userId}/navigation/menu`),

@@ -13,6 +13,7 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   LogOut,
+  RefreshCw,
 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import SidebarSearch from './SidebarSearch';
@@ -582,22 +583,23 @@ const Sidebar6Level: React.FC<Sidebar6LevelProps> = ({
   // Parse JWT privileges for client-side filtering
   const { privileges: jwtPrivileges, isSuperAdmin } = useMemo(() => getJwtPrivileges(), []);
 
-  useEffect(() => {
-    if (fetchedRef.current) return;
-    const userId = user?.id;
-    if (!userId) return;
-    fetchedRef.current = true;
-
-    // Fetch nav service data. Auto-promotes to 'database' source when:
-    //   1. The nav service returns source: 'database' (registry cache populated)
-    //   2. There are actual menu items to show
-    // This means the full pipeline is working:
-    //   Module → Kafka → module-registry → platform.module.ready → navigation → here
-    navigationService
-      .getMenu(userId)
-      .then((res) => {
+  /**
+   * Fetch the effective menu from the cascade resolver endpoint.
+   * When `refresh=true` is passed, the nav service bypasses its in-memory
+   * cache and recomputes from the live registered_modules + nav_overrides.
+   */
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const fetchMenu = useCallback(
+    async (refresh = false) => {
+      const userId = user?.id;
+      if (!userId) return;
+      if (refresh) setIsRefreshing(true);
+      try {
+        const res = await navigationService.getMenu(userId, { refresh });
         const data = res.data as {
           stale?: boolean;
+          source?: string;
+          bundleHash?: string;
           sections?: Array<{
             moduleId: string;
             moduleName?: string;
@@ -605,21 +607,53 @@ const Sidebar6Level: React.FC<Sidebar6LevelProps> = ({
             items?: Array<{ label: string; feRoute: string; icon: string; privilege: string }>;
           }>;
         };
-        const isStale = data?.stale !== false;
+        // The new endpoint returns source='live' when the cascade resolver
+        // served real data from registered_modules. The old endpoint still
+        // used stale!==false — accept either signal.
+        const isLive = data?.source === 'live' || data?.stale === false;
         const sections = (data?.sections || []) as ApiSection[];
-
-        if (!isStale && sections.length > 0) {
+        if (isLive && sections.length > 0) {
           setApiSections(sections);
           setAutoMenuSource('database');
         } else if (sections.length > 0) {
           setApiSections(sections);
           // autoMenuSource stays 'static' — pipeline not fully wired yet
         }
-      })
-      .catch(() => {
+      } catch {
         // Nav service unreachable — navServiceData stays empty
-      });
-  }, [user?.id, orgId]);
+      } finally {
+        if (refresh) setIsRefreshing(false);
+      }
+    },
+    [user?.id],
+  );
+
+  useEffect(() => {
+    if (fetchedRef.current) return;
+    const userId = user?.id;
+    if (!userId) return;
+    fetchedRef.current = true;
+    void fetchMenu(false);
+  }, [user?.id, orgId, fetchMenu]);
+
+  /**
+   * Header Refresh button handler (EPIC 19 Phase 1).
+   *
+   * Posts to the cache-invalidate endpoint for scope=U/self, then re-fetches
+   * the menu with refresh=true so the next response is a guaranteed cache
+   * bypass. This surfaces retired modules (e.g. 'Sample Rates') and new
+   * modules within seconds of the registry change.
+   */
+  const handleRefreshMenu = useCallback(async () => {
+    const userId = user?.id;
+    if (!userId) return;
+    try {
+      await navigationService.invalidateMenuCache('U', userId);
+    } catch {
+      // Non-fatal — we'll still force a recompute via refresh=true below.
+    }
+    await fetchMenu(true);
+  }, [user?.id, fetchMenu]);
 
   // Local state
   const [filter, setFilter] = useState('');
@@ -938,6 +972,16 @@ const Sidebar6Level: React.FC<Sidebar6LevelProps> = ({
             <span className="text-[9px] text-gray-400 dark:text-gray-600 mr-1.5">
               {totalItems} items
             </span>
+
+            {/* Refresh menu — clears nav cache + re-fetches (EPIC 19 Phase 1) */}
+            <button
+              onClick={handleRefreshMenu}
+              disabled={isRefreshing}
+              className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700/60 rounded transition-colors text-gray-500 dark:text-gray-400 disabled:opacity-50"
+              title="Refresh menu from live registry"
+            >
+              <RefreshCw size={14} className={isRefreshing ? 'animate-spin' : ''} />
+            </button>
 
             <button
               onClick={() => setForceExpand((p) => ({ seq: (p?.seq ?? 0) + 1, expand: false }))}
