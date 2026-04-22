@@ -598,12 +598,12 @@ function PageRoutes() {
       <Route path="m/medical_coding" element={<SafeLazy><MedicalCodingCatalogPage /></SafeLazy>} />
       <Route path="m/medical_coding/correlations" element={<SafeLazy><MedicalCodingCorrelationsPage /></SafeLazy>} />
 
-      {/* Seeder Generator — /m/seeder/seed-bundles/* (added 2026-04-23) */}
-      <Route path="m/seeder/seed-bundles" element={<SafeLazy><SeedBundlesListPage /></SafeLazy>} />
-      <Route path="m/seeder/seed-bundles/new" element={<SafeLazy><SeedBundleWizardPage /></SafeLazy>} />
-      <Route path="m/seeder/seed-bundles/:bundleId" element={<SafeLazy><SeedBundleDetailPage /></SafeLazy>} />
-      <Route path="m/seeder/seed-bundles/:bundleId/runs" element={<SafeLazy><SeedBundleDetailPage /></SafeLazy>} />
-      <Route path="m/seeder/seed-bundles/:bundleId/runs/:runId" element={<SafeLazy><SeedBundleRunDetailPage /></SafeLazy>} />
+      {/* Seeder Generator — /m/seeder/seed_bundles/* (added 2026-04-23) */}
+      <Route path="m/seeder/seed_bundles" element={<SafeLazy><SeedBundlesListPage /></SafeLazy>} />
+      <Route path="m/seeder/seed_bundles/new" element={<SafeLazy><SeedBundleWizardPage /></SafeLazy>} />
+      <Route path="m/seeder/seed_bundles/:bundleId" element={<SafeLazy><SeedBundleDetailPage /></SafeLazy>} />
+      <Route path="m/seeder/seed_bundles/:bundleId/runs" element={<SafeLazy><SeedBundleDetailPage /></SafeLazy>} />
+      <Route path="m/seeder/seed_bundles/:bundleId/runs/:runId" element={<SafeLazy><SeedBundleRunDetailPage /></SafeLazy>} />
 
       {/* HI Quotation — /m/hi_quotation/* */}
       <Route path="m/hi_quotation" element={<ModuleIndexRedirect />} />

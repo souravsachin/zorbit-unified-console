@@ -1,5 +1,5 @@
 /**
- * Seeder Generator Wizard — /m/seeder/seed-bundles/new.
+ * Seeder Generator Wizard — /m/seeder/seed_bundles/new.
  *
  * 10-step flow (per the owner directive 2026-04-23):
  *   1. Pick module
@@ -126,7 +126,7 @@ export default function SeedBundleWizardPage() {
       });
       setBundleId(created.bundleId);
       flashMsg(true, `Bundle ${created.bundleId} generated`);
-      nav(`/m/seeder/seed-bundles/${created.bundleId}`);
+      nav(`/m/seeder/seed_bundles/${created.bundleId}`);
     } catch (e: any) {
       flashMsg(false, e?.response?.data?.message || e?.message || 'save failed');
     } finally {
@@ -140,7 +140,7 @@ export default function SeedBundleWizardPage() {
     try {
       const res = await seederBundlesService.startRun(bundleId);
       flashMsg(true, `Run ${res.runId} started (${res.total} requests)`);
-      nav(`/m/seeder/seed-bundles/${bundleId}/runs/${res.runId}`);
+      nav(`/m/seeder/seed_bundles/${bundleId}/runs/${res.runId}`);
     } catch (e: any) {
       flashMsg(false, e?.response?.data?.message || e?.message || 'run failed');
     } finally {
@@ -185,7 +185,7 @@ export default function SeedBundleWizardPage() {
         <button
           type="button"
           className="text-sm px-2 py-1 rounded border border-gray-300 dark:border-gray-600 inline-flex items-center gap-1"
-          onClick={() => nav('/m/seeder/seed-bundles')}
+          onClick={() => nav('/m/seeder/seed_bundles')}
         >
           <ChevronLeft size={14} /> Back
         </button>

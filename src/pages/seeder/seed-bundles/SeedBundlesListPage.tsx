@@ -46,7 +46,7 @@ export default function SeedBundlesListPage() {
           <RefreshCw size={14} /> Refresh
         </button>
         <Link
-          to="/m/seeder/seed-bundles/new"
+          to="/m/seeder/seed_bundles/new"
           className="text-sm px-3 py-1.5 rounded bg-indigo-600 text-white inline-flex items-center gap-1 hover:bg-indigo-700"
         >
           <Plus size={14} /> New bundle
@@ -84,7 +84,7 @@ export default function SeedBundlesListPage() {
               <tr>
                 <td colSpan={7} className="px-3 py-6 text-center text-gray-500">
                   No bundles yet.{' '}
-                  <Link to="/m/seeder/seed-bundles/new" className="text-indigo-600 underline">
+                  <Link to="/m/seeder/seed_bundles/new" className="text-indigo-600 underline">
                     Create one →
                   </Link>
                 </td>
@@ -93,7 +93,7 @@ export default function SeedBundlesListPage() {
             {rows.map((r) => (
               <tr key={r.bundleId} className="border-t border-gray-100 dark:border-gray-800">
                 <td className="px-3 py-2 font-mono text-xs">
-                  <Link to={`/m/seeder/seed-bundles/${r.bundleId}`} className="text-indigo-600 hover:underline">
+                  <Link to={`/m/seeder/seed_bundles/${r.bundleId}`} className="text-indigo-600 hover:underline">
                     {r.bundleId}
                   </Link>
                 </td>
@@ -133,7 +133,7 @@ export default function SeedBundlesListPage() {
                       <Download size={12} /> Postman
                     </a>
                     <Link
-                      to={`/m/seeder/seed-bundles/${r.bundleId}/runs`}
+                      to={`/m/seeder/seed_bundles/${r.bundleId}/runs`}
                       className="text-xs px-2 py-1 rounded border border-gray-300 dark:border-gray-600 inline-flex items-center gap-1 hover:bg-gray-50 dark:hover:bg-gray-800"
                     >
                       <Play size={12} /> Runs

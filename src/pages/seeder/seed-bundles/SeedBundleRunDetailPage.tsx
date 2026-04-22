@@ -1,6 +1,6 @@
 /**
  * Seeder Generator — single run detail with live log stream.
- * Route: /m/seeder/seed-bundles/:bundleId/runs/:runId.
+ * Route: /m/seeder/seed_bundles/:bundleId/runs/:runId.
  * Added 2026-04-23 by Soldier AV.
  */
 import React, { useEffect, useState } from 'react';
@@ -32,7 +32,7 @@ export default function SeedBundleRunDetailPage() {
   return (
     <div className="p-6 max-w-5xl mx-auto">
       <div className="flex items-center gap-2 mb-4">
-        <Link to={`/m/seeder/seed-bundles/${bundleId}`} className="text-sm px-2 py-1 rounded border border-gray-300 dark:border-gray-600 inline-flex items-center gap-1">
+        <Link to={`/m/seeder/seed_bundles/${bundleId}`} className="text-sm px-2 py-1 rounded border border-gray-300 dark:border-gray-600 inline-flex items-center gap-1">
           <ChevronLeft size={14} /> Back
         </Link>
         <h1 className="text-xl font-semibold">Run <span className="font-mono">{runId}</span></h1>

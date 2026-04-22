@@ -1,6 +1,6 @@
 /**
  * Seeder Generator — single-bundle detail page.
- * Route: /m/seeder/seed-bundles/:bundleId. Added 2026-04-23 by Soldier AV.
+ * Route: /m/seeder/seed_bundles/:bundleId. Added 2026-04-23 by Soldier AV.
  */
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
@@ -48,7 +48,7 @@ export default function SeedBundleDetailPage() {
     try {
       const res = await seederBundlesService.startRun(bundleId);
       setMsg({ ok: true, msg: `Run ${res.runId} started (${res.total} requests)` });
-      nav(`/m/seeder/seed-bundles/${bundleId}/runs/${res.runId}`);
+      nav(`/m/seeder/seed_bundles/${bundleId}/runs/${res.runId}`);
     } catch (e: any) {
       setMsg({ ok: false, msg: e?.response?.data?.message || e?.message || 'run failed' });
     } finally {
@@ -76,7 +76,7 @@ export default function SeedBundleDetailPage() {
   return (
     <div className="p-6 max-w-5xl mx-auto">
       <div className="flex items-center gap-2 mb-4">
-        <Link to="/m/seeder/seed-bundles" className="text-sm px-2 py-1 rounded border border-gray-300 dark:border-gray-600 inline-flex items-center gap-1">
+        <Link to="/m/seeder/seed_bundles" className="text-sm px-2 py-1 rounded border border-gray-300 dark:border-gray-600 inline-flex items-center gap-1">
           <ChevronLeft size={14} /> Back
         </Link>
         <Package size={18} className="text-indigo-600" />
@@ -141,7 +141,7 @@ export default function SeedBundleDetailPage() {
             {runs.map((r) => (
               <tr key={r.runId} className="border-t border-gray-100 dark:border-gray-800">
                 <td className="px-3 py-2 font-mono text-xs">
-                  <Link to={`/m/seeder/seed-bundles/${bundle.bundleId}/runs/${r.runId}`} className="text-indigo-600 hover:underline">
+                  <Link to={`/m/seeder/seed_bundles/${bundle.bundleId}/runs/${r.runId}`} className="text-indigo-600 hover:underline">
                     {r.runId}
                   </Link>
                 </td>
