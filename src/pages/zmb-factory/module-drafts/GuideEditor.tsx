@@ -16,10 +16,10 @@ import {
   Volume2,
   Sparkles,
 } from 'lucide-react';
-import type { ComposeManifest, GuideSlide, GuideVideo } from './types';
-import { playNarration, zmbComposeService } from '../../../services/zmbCompose';
+import type { ModuleDraftManifest, GuideSlide, GuideVideo } from './types';
+import { playNarration, zmbModuleDraftsService } from '../../../services/zmbModuleDrafts';
 
-type Patch = (m: ComposeManifest) => ComposeManifest;
+type Patch = (m: ModuleDraftManifest) => ModuleDraftManifest;
 
 const inputCls =
   'w-full px-3 py-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500';
@@ -109,7 +109,7 @@ function NarrationField({
 }
 
 // ---------------- Intro ----------------
-function IntroEditor({ manifest, apply }: { manifest: ComposeManifest; apply: (p: Patch) => void }) {
+function IntroEditor({ manifest, apply }: { manifest: ModuleDraftManifest; apply: (p: Patch) => void }) {
   const intro = manifest.guide?.intro || {};
   const mut = (patch: Partial<typeof intro>) =>
     apply((m) => ({
@@ -138,7 +138,7 @@ function IntroEditor({ manifest, apply }: { manifest: ComposeManifest; apply: (p
 }
 
 // ---------------- Presentation / Slides ----------------
-function SlidesEditor({ manifest, apply }: { manifest: ComposeManifest; apply: (p: Patch) => void }) {
+function SlidesEditor({ manifest, apply }: { manifest: ModuleDraftManifest; apply: (p: Patch) => void }) {
   const deck: GuideSlide[] = manifest.guide?.slides?.deck || [];
   const set = (next: GuideSlide[]) =>
     apply((m) => ({
@@ -165,7 +165,7 @@ function SlidesEditor({ manifest, apply }: { manifest: ComposeManifest; apply: (
       .map((s, i) => ({ id: `slide-${i}`, text: s.narration || '' }))
       .filter((i) => i.text.trim());
     if (items.length === 0) return;
-    const rsp = await zmbComposeService.synthNarrations(items);
+    const rsp = await zmbModuleDraftsService.synthNarrations(items);
     const next = [...deck];
     rsp.items.forEach((it) => {
       const m = /^slide-(\d+)$/.exec(it.id);
@@ -322,7 +322,7 @@ function SlidesEditor({ manifest, apply }: { manifest: ComposeManifest; apply: (
 }
 
 // ---------------- Lifecycle ----------------
-function LifecycleEditor({ manifest, apply }: { manifest: ComposeManifest; apply: (p: Patch) => void }) {
+function LifecycleEditor({ manifest, apply }: { manifest: ModuleDraftManifest; apply: (p: Patch) => void }) {
   const lc = manifest.guide?.lifecycle || { phases: [] };
   const mut = (patch: Partial<typeof lc>) =>
     apply((m) => ({
@@ -388,7 +388,7 @@ function LifecycleEditor({ manifest, apply }: { manifest: ComposeManifest; apply
 }
 
 // ---------------- Videos ----------------
-function VideosEditor({ manifest, apply }: { manifest: ComposeManifest; apply: (p: Patch) => void }) {
+function VideosEditor({ manifest, apply }: { manifest: ModuleDraftManifest; apply: (p: Patch) => void }) {
   const vids: GuideVideo[] = manifest.guide?.videos?.entries || [];
   const set = (next: GuideVideo[]) =>
     apply((m) => ({
@@ -472,7 +472,7 @@ function VideosEditor({ manifest, apply }: { manifest: ComposeManifest; apply: (
 }
 
 // ---------------- Pricing ----------------
-function PricingEditor({ manifest, apply }: { manifest: ComposeManifest; apply: (p: Patch) => void }) {
+function PricingEditor({ manifest, apply }: { manifest: ModuleDraftManifest; apply: (p: Patch) => void }) {
   const pr = manifest.guide?.pricing || { tiers: [] };
   const mut = (patch: Partial<typeof pr>) =>
     apply((m) => ({ ...m, guide: { ...(m.guide || {}), pricing: { ...(m.guide?.pricing || {}), ...patch } } }));
@@ -546,7 +546,7 @@ function PricingEditor({ manifest, apply }: { manifest: ComposeManifest; apply: 
 }
 
 // ---------------- Docs ----------------
-function DocsEditor({ manifest, apply }: { manifest: ComposeManifest; apply: (p: Patch) => void }) {
+function DocsEditor({ manifest, apply }: { manifest: ModuleDraftManifest; apply: (p: Patch) => void }) {
   const dc = manifest.guide?.docs || { links: [] };
   const links = dc.links || [];
   const mut = (patch: Partial<typeof dc>) =>
@@ -605,7 +605,7 @@ export function GuideEditor({
   manifest,
   apply,
 }: {
-  manifest: ComposeManifest;
+  manifest: ModuleDraftManifest;
   apply: (p: Patch) => void;
 }) {
   return (

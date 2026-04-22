@@ -6,8 +6,8 @@
  */
 import React, { useState } from 'react';
 import { X, ChevronDown, ChevronRight, Play } from 'lucide-react';
-import type { ComposeManifest, MenuItem } from './types';
-import { playNarration } from '../../../services/zmbCompose';
+import type { ModuleDraftManifest, MenuItem } from './types';
+import { playNarration } from '../../../services/zmbModuleDrafts';
 
 function MenuItemView({ item, depth = 0 }: { item: MenuItem; depth?: number }) {
   const [open, setOpen] = useState(depth < 1);
@@ -34,7 +34,7 @@ function MenuItemView({ item, depth = 0 }: { item: MenuItem; depth?: number }) {
   );
 }
 
-function SidebarPreview({ manifest }: { manifest: ComposeManifest }) {
+function SidebarPreview({ manifest }: { manifest: ModuleDraftManifest }) {
   const placement = manifest.placement || {};
   return (
     <div className="w-full">
@@ -71,7 +71,7 @@ function SidebarPreview({ manifest }: { manifest: ComposeManifest }) {
   );
 }
 
-function GuidePreview({ manifest }: { manifest: ComposeManifest }) {
+function GuidePreview({ manifest }: { manifest: ModuleDraftManifest }) {
   const g = manifest.guide || {};
   const slides = g.slides?.deck || [];
   const [slideIdx, setSlideIdx] = useState(0);
@@ -174,7 +174,7 @@ function GuidePreview({ manifest }: { manifest: ComposeManifest }) {
   );
 }
 
-function EntityPreview({ manifest }: { manifest: ComposeManifest }) {
+function EntityPreview({ manifest }: { manifest: ModuleDraftManifest }) {
   const ents = manifest.entities || [];
   if (ents.length === 0)
     return <div className="text-xs text-gray-500">No entities declared — nothing to preview.</div>;
@@ -216,7 +216,7 @@ export default function PreviewModal({
   manifest,
   onClose,
 }: {
-  manifest: ComposeManifest;
+  manifest: ModuleDraftManifest;
   onClose: () => void;
 }) {
   const [tab, setTab] = useState<'sidebar' | 'guide' | 'entities'>('sidebar');

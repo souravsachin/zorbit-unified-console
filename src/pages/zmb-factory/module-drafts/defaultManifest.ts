@@ -4,9 +4,9 @@
  *
  * Added 2026-04-22 by Soldier AU.
  */
-import type { ComposeManifest } from './types';
+import type { ModuleDraftManifest } from './types';
 
-export function buildDefaultManifest(): ComposeManifest {
+export function buildDefaultManifest(): ModuleDraftManifest {
   const slug = 'new-module';
   const apiPrefix = `/${slug}/api/v1`;
   return {

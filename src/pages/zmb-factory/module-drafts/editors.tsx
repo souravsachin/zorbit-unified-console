@@ -1,12 +1,12 @@
 /**
- * Inline section editors for the ZMB Compose UI.
+ * Inline section editors for the ZMB Module Drafts UI.
  * Each editor takes (manifest, patch) and emits patches rather than the full
- * manifest so wiring is cheap. Added 2026-04-22 by Soldier AU.
+ * manifest so wiring is cheap.
  */
 import React, { useState } from 'react';
 import { Plus, Trash2, MoveUp, MoveDown, ChevronDown, ChevronRight } from 'lucide-react';
 import type {
-  ComposeManifest,
+  ModuleDraftManifest,
   NavSection,
   MenuItem,
   FeComponentDecl,
@@ -16,7 +16,7 @@ import type {
   EntityFieldDecl,
 } from './types';
 
-type Patch = (m: ComposeManifest) => ComposeManifest;
+type Patch = (m: ModuleDraftManifest) => ModuleDraftManifest;
 
 function field<K extends keyof any>(
   label: string,
@@ -43,7 +43,7 @@ export function IdentityEditor({
   manifest,
   apply,
 }: {
-  manifest: ComposeManifest;
+  manifest: ModuleDraftManifest;
   apply: (p: Patch) => void;
 }) {
   return (
@@ -151,7 +151,7 @@ export function PlacementEditor({
   manifest,
   apply,
 }: {
-  manifest: ComposeManifest;
+  manifest: ModuleDraftManifest;
   apply: (p: Patch) => void;
 }) {
   const p = manifest.placement || {};
@@ -308,7 +308,7 @@ export function MenuEditor({
   manifest,
   apply,
 }: {
-  manifest: ComposeManifest;
+  manifest: ModuleDraftManifest;
   apply: (p: Patch) => void;
 }) {
   const sections = manifest.navigation?.sections || [];
@@ -443,7 +443,7 @@ export function FeComponentsEditor({
   manifest,
   apply,
 }: {
-  manifest: ComposeManifest;
+  manifest: ModuleDraftManifest;
   apply: (p: Patch) => void;
 }) {
   const comps = (manifest.frontend?.components as FeComponentDecl[]) || [];
@@ -522,7 +522,7 @@ export function BeRoutesEditor({
   manifest,
   apply,
 }: {
-  manifest: ComposeManifest;
+  manifest: ModuleDraftManifest;
   apply: (p: Patch) => void;
 }) {
   const rts = (manifest.backend?.endpoints as BeRouteDecl[]) || [];
@@ -598,7 +598,7 @@ export function DependenciesEditor({
   manifest,
   apply,
 }: {
-  manifest: ComposeManifest;
+  manifest: ModuleDraftManifest;
   apply: (p: Patch) => void;
 }) {
   const deps: any = manifest.dependencies || {};
@@ -663,7 +663,7 @@ export function PrivilegesEditor({
   manifest,
   apply,
 }: {
-  manifest: ComposeManifest;
+  manifest: ModuleDraftManifest;
   apply: (p: Patch) => void;
 }) {
   const privs = (manifest.privileges as PrivilegeDecl[]) || [];
@@ -870,7 +870,7 @@ export function EntitiesEditor({
   manifest,
   apply,
 }: {
-  manifest: ComposeManifest;
+  manifest: ModuleDraftManifest;
   apply: (p: Patch) => void;
 }) {
   const ents = (manifest.entities as EntityDecl[]) || [];
@@ -926,7 +926,7 @@ export function SeedsEditor({
   manifest,
   apply,
 }: {
-  manifest: ComposeManifest;
+  manifest: ModuleDraftManifest;
   apply: (p: Patch) => void;
 }) {
   const sm = manifest.seed?.systemMin || '';
@@ -966,7 +966,7 @@ export function EventsEditor({
   manifest,
   apply,
 }: {
-  manifest: ComposeManifest;
+  manifest: ModuleDraftManifest;
   apply: (p: Patch) => void;
 }) {
   const pub = manifest.events?.publishes || [];

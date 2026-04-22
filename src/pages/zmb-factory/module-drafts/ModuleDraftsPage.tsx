@@ -1,12 +1,13 @@
 /**
- * ZMB Compose — authoring UI at /m/zmb-factory/compose.
+ * ZMB Module Drafts — authoring UI at /m/zmb-factory/module-drafts.
  *
  * Left rail  = tree of manifest sections.
  * Center     = contextual editor for the selected section.
  * Right rail = live manifest JSON + validation + toolbar (Import / Preview /
  *              Export to server / Download ZIP).
  *
- * Added 2026-04-22 by Soldier AU.
+ * Renamed 2026-04-23 from ComposePage. Old /compose path hard-deleted,
+ * no Navigate shim. Pre-launch; clean code wins.
  */
 import React, { useCallback, useMemo, useReducer, useState } from 'react';
 import {
@@ -31,10 +32,10 @@ import {
 } from 'lucide-react';
 import JsonViewer from '../../../components/shared/JsonViewer';
 import {
-  zmbComposeService,
-  type ComposeValidationResult,
-} from '../../../services/zmbCompose';
-import type { ComposeManifest, SectionKey } from './types';
+  zmbModuleDraftsService,
+  type ModuleDraftValidationResult,
+} from '../../../services/zmbModuleDrafts';
+import type { ModuleDraftManifest, SectionKey } from './types';
 import { SECTION_LABELS } from './types';
 import { buildDefaultManifest } from './defaultManifest';
 import {
@@ -52,17 +53,17 @@ import {
 import { GuideEditor } from './GuideEditor';
 import PreviewModal from './PreviewModal';
 
-type Patch = (m: ComposeManifest) => ComposeManifest;
+type Patch = (m: ModuleDraftManifest) => ModuleDraftManifest;
 
 interface State {
-  manifest: ComposeManifest;
+  manifest: ModuleDraftManifest;
   selected: SectionKey;
 }
 
 type Action =
   | { type: 'apply'; patch: Patch }
   | { type: 'select'; key: SectionKey }
-  | { type: 'replace'; manifest: ComposeManifest };
+  | { type: 'replace'; manifest: ModuleDraftManifest };
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
@@ -105,13 +106,13 @@ const SECTIONS: SectionKey[] = [
   'events',
 ];
 
-export default function ComposePage() {
+export default function ModuleDraftsPage() {
   const [state, dispatch] = useReducer(reducer, undefined, () => ({
     manifest: buildDefaultManifest(),
     selected: 'identity' as SectionKey,
   }));
 
-  const [validation, setValidation] = useState<ComposeValidationResult | null>(null);
+  const [validation, setValidation] = useState<ModuleDraftValidationResult | null>(null);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [busy, setBusy] = useState<string | null>(null);
   const [flash, setFlash] = useState<{ kind: 'success' | 'error' | 'info'; message: string } | null>(null);
@@ -129,7 +130,7 @@ export default function ComposePage() {
   const handleValidate = useCallback(async () => {
     setBusy('validate');
     try {
-      const r = await zmbComposeService.validate(state.manifest);
+      const r = await zmbModuleDraftsService.validate(state.manifest);
       setValidation(r);
       flashMsg(
         r.valid ? 'success' : 'error',
@@ -151,7 +152,7 @@ export default function ComposePage() {
         targetRoot === 'dev'
           ? '/Users/s/workspace/zorbit/02_repos'
           : '/opt/zorbit-platform/services';
-      const res = await zmbComposeService.exportToServer(state.manifest, undefined, root);
+      const res = await zmbModuleDraftsService.materialiseModule(state.manifest, undefined, root);
       flashMsg(
         'success',
         `Exported to ${res.modulePath} (${res.fileCount} files, ${res.audioBundleCount || 0} audio)`,
@@ -170,7 +171,7 @@ export default function ComposePage() {
   const handleDownloadZip = useCallback(async () => {
     setBusy('zip');
     try {
-      const { blob, fileName } = await zmbComposeService.downloadZip(state.manifest);
+      const { blob, fileName } = await zmbModuleDraftsService.createExport(state.manifest);
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -192,7 +193,7 @@ export default function ComposePage() {
     try {
       const text = await file.text();
       const parsed = JSON.parse(text);
-      const res = await zmbComposeService.importManifest(parsed);
+      const res = await zmbModuleDraftsService.createDraft(parsed);
       dispatch({ type: 'replace', manifest: res.manifest });
       setValidation(res.validation);
       flashMsg('success', `Imported ${res.manifest?.moduleId || file.name} (${res.hash})`);
@@ -252,7 +253,7 @@ export default function ComposePage() {
       {/* Toolbar */}
       <div className="flex items-center gap-2 px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
         <Factory size={18} className="text-indigo-600" />
-        <h1 className="text-lg font-semibold">ZMB Compose</h1>
+        <h1 className="text-lg font-semibold">ZMB Module Drafts</h1>
         <span className="text-xs text-gray-400 hidden md:inline">
           — author a Zorbit module manifest end-to-end
         </span>

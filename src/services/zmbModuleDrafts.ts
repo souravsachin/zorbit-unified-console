@@ -1,25 +1,28 @@
 /**
- * zorbit-unified-console — ZMB Compose service client
+ * zorbit-unified-console — ZMB Module-Drafts service client
  *
- * Wraps the HTTP surface of zorbit-pfs-zmb_factory's /api/v1/G/compose/*
- * endpoints. Added 2026-04-22 by Soldier AU for the Compose authoring UI.
+ * Wraps the HTTP surface of zorbit-pfs-zmb_factory's noun-based
+ * /api/v1/G/module-drafts/* and /api/v1/G/modules endpoints.
+ *
+ * Renamed 2026-04-23 from zmbCompose.ts (verb -> noun). The old file has
+ * been hard-deleted — no re-export shim, no back-compat. Pre-launch.
  */
 import api from './api';
 
 const BASE = (import.meta.env.VITE_ZMB_FACTORY_URL as string | undefined) || '/api/zmb-factory';
 
-export interface ComposeValidationIssue {
+export interface ModuleDraftValidationIssue {
   level: 'error' | 'warning';
   path: string;
   message: string;
 }
 
-export interface ComposeValidationResult {
+export interface ModuleDraftValidationResult {
   valid: boolean;
-  issues: ComposeValidationIssue[];
+  issues: ModuleDraftValidationIssue[];
 }
 
-export interface ComposePreviewResult {
+export interface ModuleDraftPreviewResult {
   moduleId: string;
   summary: {
     navigationItems: number;
@@ -30,7 +33,7 @@ export interface ComposePreviewResult {
   manifest: any;
 }
 
-export interface ExportToServerResult {
+export interface ModuleMaterialisationResult {
   modulePath: string;
   fileCount: number;
   files: string[];
@@ -54,28 +57,32 @@ export interface SynthNarrationResult {
   synthesiser: 'voice-engine' | 'browser-fallback';
 }
 
-export const zmbComposeService = {
-  validate: async (manifest: any): Promise<ComposeValidationResult> => {
-    const { data } = await api.post(`${BASE}/api/v1/G/compose/validate`, { manifest });
+export const zmbModuleDraftsService = {
+  validate: async (manifest: any): Promise<ModuleDraftValidationResult> => {
+    const { data } = await api.post(`${BASE}/api/v1/G/module-drafts/validations`, { manifest });
     return data;
   },
 
-  preview: async (manifest: any): Promise<ComposePreviewResult> => {
-    const { data } = await api.post(`${BASE}/api/v1/G/compose/preview`, { manifest });
+  preview: async (manifest: any): Promise<ModuleDraftPreviewResult> => {
+    const { data } = await api.post(`${BASE}/api/v1/G/module-drafts/previews`, { manifest });
     return data;
   },
 
   deriveConfig: async (manifest: any): Promise<any> => {
-    const { data } = await api.post(`${BASE}/api/v1/G/compose/derive-config`, { manifest });
+    const { data } = await api.post(`${BASE}/api/v1/G/module-drafts/configs`, { manifest });
     return data;
   },
 
-  exportToServer: async (
+  /**
+   * Materialises a module on the server filesystem. The REST resource
+   * created IS a module (/api/v1/G/modules, noun).
+   */
+  materialiseModule: async (
     manifest: any,
     config?: any,
     targetRoot?: string,
-  ): Promise<ExportToServerResult> => {
-    const { data } = await api.post(`${BASE}/api/v1/G/compose/export-to-server`, {
+  ): Promise<ModuleMaterialisationResult> => {
+    const { data } = await api.post(`${BASE}/api/v1/G/modules`, {
       manifest,
       config,
       targetRoot,
@@ -83,9 +90,15 @@ export const zmbComposeService = {
     return data;
   },
 
-  downloadZip: async (manifest: any, config?: any): Promise<{ blob: Blob; fileName: string }> => {
+  /**
+   * Creates a downloadable export (zip) of a draft.
+   */
+  createExport: async (
+    manifest: any,
+    config?: any,
+  ): Promise<{ blob: Blob; fileName: string }> => {
     const rsp = await api.post(
-      `${BASE}/api/v1/G/compose/download-zip`,
+      `${BASE}/api/v1/G/module-drafts/exports`,
       { manifest, config },
       { responseType: 'blob' },
     );
@@ -95,24 +108,43 @@ export const zmbComposeService = {
     return { blob: rsp.data as Blob, fileName };
   },
 
+  /**
+   * Generate a demo seed SQL preview for the current manifest's entities.
+   * Returns { sql, rowCount, entityCount }.
+   */
+  generateSeed: async (
+    manifest: any,
+    rowsPerEntity?: number,
+  ): Promise<{ sql: string; rowCount: number; entityCount: number }> => {
+    const { data } = await api.post(`${BASE}/api/v1/G/module-drafts/seeds`, {
+      manifest,
+      rowsPerEntity,
+    });
+    return data;
+  },
+
   synthNarrations: async (
     narrations: SynthNarrationItem[],
     opts?: { voiceEngineUrl?: string; orgId?: string },
   ): Promise<SynthNarrationResult> => {
-    const { data } = await api.post(`${BASE}/api/v1/G/compose/synth-narrations`, {
+    const { data } = await api.post(`${BASE}/api/v1/G/module-drafts/narrations`, {
       narrations,
       ...opts,
     });
     return data;
   },
 
-  importManifest: async (manifest: any): Promise<{
+  /**
+   * Creates a module-draft from an uploaded manifest (round-trip validation
+   * + derived config). Returns { manifest, derivedConfig, validation, hash }.
+   */
+  createDraft: async (manifest: any): Promise<{
     manifest: any;
     derivedConfig: any;
-    validation: ComposeValidationResult;
+    validation: ModuleDraftValidationResult;
     hash: string;
   }> => {
-    const { data } = await api.post(`${BASE}/api/v1/G/compose/import`, { manifest });
+    const { data } = await api.post(`${BASE}/api/v1/G/module-drafts`, { manifest });
     return data;
   },
 };
@@ -120,14 +152,12 @@ export const zmbComposeService = {
 /**
  * Browser-side narration player. Plays a text string via the platform TTS
  * (voice_engine) if reachable, else falls back to window.speechSynthesis.
- *
- * Returns a Promise that resolves when playback finishes.
  */
 export async function playNarration(
   text: string,
   opts?: { voice?: string; onFinish?: () => void },
 ): Promise<'voice-engine' | 'browser-fallback'> {
-  const result = await zmbComposeService.synthNarrations(
+  const result = await zmbModuleDraftsService.synthNarrations(
     [{ id: 'inline', text, voice: opts?.voice }],
   );
   const first = result.items[0];
@@ -143,7 +173,6 @@ export async function playNarration(
     return 'voice-engine';
   }
 
-  // Fallback — browser's built-in speech synth.
   return new Promise<'browser-fallback'>((resolve) => {
     try {
       const u = new SpeechSynthesisUtterance(text);

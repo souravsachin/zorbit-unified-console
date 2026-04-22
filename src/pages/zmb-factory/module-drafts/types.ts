@@ -1,6 +1,5 @@
 /**
- * Types shared across the ZMB Compose authoring UI.
- * Added 2026-04-22 by Soldier AU.
+ * Types shared across the ZMB Module Drafts authoring UI.
  */
 
 export interface ManifestIdentity {
@@ -144,7 +143,7 @@ export interface SeedsDecl {
  * The in-memory manifest we edit in the browser. We keep it loosely typed
  * so round-tripping an imported manifest doesn't strip unknown keys.
  */
-export interface ComposeManifest extends ManifestIdentity {
+export interface ModuleDraftManifest extends ManifestIdentity {
   placement?: ManifestPlacement;
   navigation?: { sections: NavSection[] };
   frontend?: {

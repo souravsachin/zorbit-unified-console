@@ -179,7 +179,12 @@ const RateCardImportPage = lazyWithRetry(() => import('./pages/product-pricing/R
 const ProductPricingSetupPage = lazyWithRetry(() => import('./pages/product-pricing/ProductPricingSetupPage'));
 const ProductPricingDeploymentsPage = lazyWithRetry(() => import('./pages/product-pricing/ProductPricingDeploymentsPage'));
 const FormBuilderHubPage = lazyWithRetry(() => import('./pages/form-builder/FormBuilderHubPage'));
-const ZmbComposePage = lazyWithRetry(() => import('./pages/zmb-factory/compose/ComposePage'));
+const ZmbModuleDraftsPage = lazyWithRetry(() => import('./pages/zmb-factory/module-drafts/ModuleDraftsPage'));
+// Seeder Generator (Phase 1+2, 2026-04-23)
+const SeedBundlesListPage = lazyWithRetry(() => import('./pages/seeder/seed-bundles/SeedBundlesListPage'));
+const SeedBundleWizardPage = lazyWithRetry(() => import('./pages/seeder/seed-bundles/SeedBundleWizardPage'));
+const SeedBundleDetailPage = lazyWithRetry(() => import('./pages/seeder/seed-bundles/SeedBundleDetailPage'));
+const SeedBundleRunDetailPage = lazyWithRetry(() => import('./pages/seeder/seed-bundles/SeedBundleRunDetailPage'));
 const FormBuilderPage = lazyWithRetry(() => import('./pages/form-builder/FormBuilderPage'));
 const FormBuilderDetailPage = lazyWithRetry(() => import('./pages/form-builder/FormBuilderDetailPage'));
 const FormBuilderTokensPage = lazyWithRetry(() => import('./pages/form-builder/FormBuilderTokensPage'));
@@ -540,9 +545,21 @@ function PageRoutes() {
       <Route path="m/pcg4/pricing" element={<SafeLazy><PCG4PricingPage /></SafeLazy>} />
       <Route path="m/pcg4/help" element={<Navigate to="/m/pcg4/hub" replace />} />
 
-      {/* ZMB Factory — /m/zmb-factory/* */}
-      <Route path="m/zmb-factory/compose" element={<SafeLazy><ZmbComposePage /></SafeLazy>} />
-      <Route path="m/zmb_factory/compose" element={<Navigate to="/m/zmb-factory/compose" replace />} />
+      {/* ZMB Factory — /m/zmb-factory/* (noun-based RESTful, 2026-04-23) */}
+      <Route path="m/zmb-factory/modules/new" element={<SafeLazy><ZmbModuleDraftsPage /></SafeLazy>} />
+      <Route path="m/zmb-factory/modules/:draftId" element={<SafeLazy><ZmbModuleDraftsPage /></SafeLazy>} />
+      {/* Back-compat redirects (2-week transition; remove on/after 2026-05-07) */}
+      <Route path="m/zmb-factory/compose" element={<Navigate to="/m/zmb-factory/modules/new" replace />} />
+      <Route path="m/zmb_factory/compose" element={<Navigate to="/m/zmb-factory/modules/new" replace />} />
+      <Route path="m/zmb-factory/module-drafts" element={<Navigate to="/m/zmb-factory/modules/new" replace />} />
+      <Route path="m/zmb-factory/module-drafts/:draftId" element={<Navigate to="/m/zmb-factory/modules/new" replace />} />
+
+      {/* Seeder Generator — /m/seeder/seed-bundles/* (added 2026-04-23) */}
+      <Route path="m/seeder/seed-bundles" element={<SafeLazy><SeedBundlesListPage /></SafeLazy>} />
+      <Route path="m/seeder/seed-bundles/new" element={<SafeLazy><SeedBundleWizardPage /></SafeLazy>} />
+      <Route path="m/seeder/seed-bundles/:bundleId" element={<SafeLazy><SeedBundleDetailPage /></SafeLazy>} />
+      <Route path="m/seeder/seed-bundles/:bundleId/runs" element={<SafeLazy><SeedBundleDetailPage /></SafeLazy>} />
+      <Route path="m/seeder/seed-bundles/:bundleId/runs/:runId" element={<SafeLazy><SeedBundleRunDetailPage /></SafeLazy>} />
 
       {/* HI Quotation — /m/hi-quotation/* */}
       <Route path="m/hi-quotation" element={<ModuleIndexRedirect />} />
