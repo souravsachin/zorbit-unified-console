@@ -122,6 +122,7 @@ const UWWorkflowHelpPage = lazyWithRetry(() => import('./pages/uw-workflow/UWWor
 const HIDecisioningHelpPage = lazyWithRetry(() => import('./pages/hi-decisioning/HIDecisioningHelpPage'));
 const VerificationHelpPage = lazyWithRetry(() => import('./pages/verification/VerificationHelpPage'));
 const PaymentGatewayPage = lazyWithRetry(() => import('./pages/payments/PaymentGatewayPage'));
+const PaymentGatewaySandboxPage = lazyWithRetry(() => import('./pages/payments/PaymentGatewaySandboxPage'));
 
 // Module Setup Pages (reusable ModuleSetupPage wrappers)
 const IdentitySetupPage = lazyWithRetry(() => import('./pages/identity/IdentitySetupPage'));
@@ -424,6 +425,7 @@ function ModuleIndexRedirect() {
     'hi-decisioning': '/m/hi-decisioning/rules',
     'form-builder':   '/m/form-builder/forms',
     'datatable':      '/m/datatable/tables',
+    'payment-gateway':'/m/payment-gateway/sandbox',
   };
   const target = MODULE_DEFAULTS[slug] || '/';
   return <Navigate to={target} replace />;
@@ -543,6 +545,12 @@ function PageRoutes() {
       {/* ZMB Factory — /m/zmb-factory/* (noun-based RESTful, 2026-04-23) */}
       <Route path="m/zmb-factory/modules/new" element={<SafeLazy><ZmbModuleDraftsPage /></SafeLazy>} />
       <Route path="m/zmb-factory/modules/:draftId" element={<SafeLazy><ZmbModuleDraftsPage /></SafeLazy>} />
+
+      {/* Payment Gateway Sandbox — /m/payment-gateway/* (AX1 2026-04-22, zorbit-pfs-payment_gateway) */}
+      <Route path="m/payment-gateway" element={<ModuleIndexRedirect />} />
+      <Route path="m/payment-gateway/sandbox" element={<SafeLazy><PaymentGatewaySandboxPage /></SafeLazy>} />
+      <Route path="m/payment-gateway/gateways" element={<SafeLazy><PaymentGatewaySandboxPage /></SafeLazy>} />
+      <Route path="m/payment-gateway/attempts" element={<SafeLazy><PaymentGatewaySandboxPage /></SafeLazy>} />
 
       {/* Seeder Generator — /m/seeder/seed-bundles/* (added 2026-04-23) */}
       <Route path="m/seeder/seed-bundles" element={<SafeLazy><SeedBundlesListPage /></SafeLazy>} />

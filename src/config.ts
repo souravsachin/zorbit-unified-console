@@ -29,4 +29,8 @@ export const API_CONFIG = {
   MODULE_REGISTRY_URL: import.meta.env.VITE_MODULE_REGISTRY_URL || '/api/module-registry',
   DEPLOYMENT_REGISTRY_URL: import.meta.env.VITE_DEPLOYMENT_REGISTRY_URL || '/api/deployment-registry',
   ZMB_FACTORY_URL: import.meta.env.VITE_ZMB_FACTORY_URL || '/api/zmb-factory',
+  MEDICAL_CODING_URL: import.meta.env.VITE_MEDICAL_CODING_URL || '/api/medical-coding',
+  PAYMENT_GATEWAY_URL: import.meta.env.VITE_PAYMENT_GATEWAY_URL || '/api/payment-gateway',
+  paymentGateway: import.meta.env.VITE_PAYMENT_GATEWAY_URL || '/api/payment-gateway',
+  medicalCoding: import.meta.env.VITE_MEDICAL_CODING_URL || '/api/medical-coding',
 };
