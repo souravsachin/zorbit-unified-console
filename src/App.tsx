@@ -548,11 +548,6 @@ function PageRoutes() {
       {/* ZMB Factory — /m/zmb-factory/* (noun-based RESTful, 2026-04-23) */}
       <Route path="m/zmb-factory/modules/new" element={<SafeLazy><ZmbModuleDraftsPage /></SafeLazy>} />
       <Route path="m/zmb-factory/modules/:draftId" element={<SafeLazy><ZmbModuleDraftsPage /></SafeLazy>} />
-      {/* Back-compat redirects (2-week transition; remove on/after 2026-05-07) */}
-      <Route path="m/zmb-factory/compose" element={<Navigate to="/m/zmb-factory/modules/new" replace />} />
-      <Route path="m/zmb_factory/compose" element={<Navigate to="/m/zmb-factory/modules/new" replace />} />
-      <Route path="m/zmb-factory/module-drafts" element={<Navigate to="/m/zmb-factory/modules/new" replace />} />
-      <Route path="m/zmb-factory/module-drafts/:draftId" element={<Navigate to="/m/zmb-factory/modules/new" replace />} />
 
       {/* Seeder Generator — /m/seeder/seed-bundles/* (added 2026-04-23) */}
       <Route path="m/seeder/seed-bundles" element={<SafeLazy><SeedBundlesListPage /></SafeLazy>} />
