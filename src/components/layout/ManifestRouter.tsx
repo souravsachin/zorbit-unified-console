@@ -46,6 +46,45 @@ function firstModuleSlug(path: string): string {
   return idx === -1 ? rest : rest.slice(0, idx);
 }
 
+/**
+ * Strip the standard zorbit module prefix to derive the short slug used in
+ * `feRoute` values. Mirrors the convention enforced by Sidebar6Level /
+ * ModuleRegistryPage: `zorbit-(app|cor|pfs|tpm|sdk|ext|ai)-<short>` →
+ * `<short>`. The `_` separator inside `<short>` is preserved verbatim per
+ * `feedback_nomenclature_strict` (NEVER replace `_` with `-`).
+ *
+ * F3 fix 2026-04-25 — see fix/F3-manifest-route-matcher-2026-04-25:
+ * Cycle 102 found `/m/<full-module-id>` (e.g. `/m/zorbit-cor-identity`)
+ * showed "No manifest nav item matches this path" because every manifest
+ * declares feRoutes using the short slug only. We now accept BOTH shapes
+ * by translating the full module-id segment into its short-slug equivalent
+ * before matching.
+ */
+function shortSlugFromModuleId(moduleId: string): string {
+  return moduleId.replace(/^zorbit-(app|cor|pfs|tpm|sdk|ext|ai)-/, '');
+}
+
+/**
+ * If `path` begins with `/m/<full-module-id>` (matching one of the
+ * registered sections), rewrite it to `/m/<short-slug>...`. Otherwise
+ * return `path` unchanged. Pure function — never mutates the URL bar.
+ */
+function rewriteFullModuleIdPath(sections: NavSection[], path: string): string {
+  const head = firstModuleSlug(path);
+  if (!head) return path;
+  // Already a short slug (no zorbit-xxx- prefix)? Leave it.
+  if (!/^zorbit-(app|cor|pfs|tpm|sdk|ext|ai)-/.test(head)) return path;
+  for (const section of sections) {
+    if (section.moduleId === head) {
+      const short = shortSlugFromModuleId(head);
+      if (!short || short === head) return path;
+      const rest = path.slice(`/m/${head}`.length); // includes leading '/' if any
+      return `/m/${short}${rest}`;
+    }
+  }
+  return path;
+}
+
 function findMatchingItem(sections: NavSection[], path: string): { section: NavSection; item: NavItem } | null {
   let bestExact: { section: NavSection; item: NavItem } | null = null;
   let bestPrefix: { section: NavSection; item: NavItem; len: number } | null = null;
@@ -78,11 +117,19 @@ function findMatchingItem(sections: NavSection[], path: string): { section: NavS
  */
 function firstItemForSlug(sections: NavSection[], slug: string): NavItem | null {
   if (!slug) return null;
+  // F3 fix 2026-04-25: accept BOTH the short slug (e.g. `identity`) AND the
+  // full module-id (e.g. `zorbit-cor-identity`). When the caller hands us a
+  // full module-id we resolve it to the short slug declared in feRoutes.
+  let resolvedSlug = slug;
+  if (/^zorbit-(app|cor|pfs|tpm|sdk|ext|ai)-/.test(slug)) {
+    const matchSection = sections.find((s) => s.moduleId === slug);
+    if (matchSection) resolvedSlug = shortSlugFromModuleId(slug);
+  }
   const candidates: NavItem[] = [];
   for (const section of sections) {
     for (const item of section.items || []) {
       if (!item.feRoute) continue;
-      if (firstModuleSlug(item.feRoute) === slug) {
+      if (firstModuleSlug(item.feRoute) === resolvedSlug) {
         candidates.push(item);
       }
     }
@@ -213,7 +260,19 @@ const ManifestRouter: React.FC = () => {
 
   const path = location.pathname;
   const slug = params.slug || '';
-  const match = useMemo(() => findMatchingItem(sections, path), [sections, path]);
+  // F3 fix 2026-04-25: when a user lands on `/m/<full-module-id>/...` we
+  // canonicalise the URL to the short-slug shape declared in manifests.
+  // This is computed synchronously from `sections` (already loaded) so the
+  // redirect fires at most once per navigation.
+  const canonicalPath = useMemo(
+    () => rewriteFullModuleIdPath(sections, path),
+    [sections, path]
+  );
+  const needsCanonicalRedirect = canonicalPath !== path;
+  const match = useMemo(
+    () => findMatchingItem(sections, canonicalPath),
+    [sections, canonicalPath]
+  );
 
   // Derive moduleId from the matching section (same as what sidebar declared)
   const moduleId = match?.section.moduleId || null;
@@ -233,9 +292,19 @@ const ManifestRouter: React.FC = () => {
 
   if (loadingMenu) return <div className="p-6 text-gray-500 text-sm">Loading module manifest…</div>;
 
+  // F3 fix 2026-04-25: if the URL's first segment is a full module-id
+  // (e.g. `/m/zorbit-cor-identity/users`) replace the URL with the
+  // canonical short-slug form (`/m/identity/users`). Then ManifestRouter
+  // re-runs against the canonical path. We replace (not push) so Back
+  // doesn't bounce the user back into the alias.
+  if (needsCanonicalRedirect) {
+    return <Navigate to={canonicalPath} replace />;
+  }
+
   // Bare `/m/{slug}` (no feature path) — redirect to the first nav item
   // registered for that slug so users see a module-landing page instead
-  // of being bounced to Dashboard via StubNoMatch.
+  // of being bounced to Dashboard via StubNoMatch. `firstItemForSlug` now
+  // accepts both the short slug AND the full module-id (F3 fix).
   if (!match) {
     const isBareSlug = path === `/m/${slug}` || path === `/m/${slug}/`;
     if (isBareSlug && slug) {
