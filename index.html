@@ -5,6 +5,24 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Zorbit Unified Console</title>
+    <script>
+      // Owner directive 2026-04-25 (MSG-013): manifests carry slugs;
+      // display labels come from /slug-translations.json (served by ze-web).
+      // Missing slug -> fallback = humanised slug. Renaming a label is a
+      // single-line JSON edit, never a manifest re-registration.
+      fetch('/slug-translations.json')
+        .then((r) => (r.ok ? r.json() : null))
+        .then((t) => {
+          if (!t) return;
+          window.__SLUG_LABELS = {
+            scaffold: t.scaffold || {},
+            businessLine: t.businessLine || {},
+            capabilityArea: t.capabilityArea || {},
+            edition: t.edition || {},
+          };
+        })
+        .catch(() => {});
+    </script>
   </head>
   <body class="bg-gray-50 dark:bg-gray-900">
     <div id="root"></div>

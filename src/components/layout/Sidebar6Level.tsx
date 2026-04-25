@@ -257,62 +257,67 @@ interface L3Bucket {
   sections: ApiSection[];
 }
 
-function buildDbScaffold(sections: ApiSection[], selectedEdition: BusinessLine): MenuNodeData[] {
+function buildDbScaffold(sections: ApiSection[], _selectedEdition: BusinessLine): MenuNodeData[] {
   const visible = sections.filter((sec) => (sec.items || []).length > 0);
+
+  // Owner directive 2026-04-25 (MSG-013): manifests carry SLUGS only.
+  // Display labels come from window.__SLUG_LABELS (loaded from
+  // /slug-translations.json). Fallback = humanised slug. Edition is the L1
+  // SUFFIX for Business scaffold only — NOT a filter that hides modules.
+  const slugLabels = (window as any).__SLUG_LABELS || {};
+  const tr = (kind: 'scaffold' | 'businessLine' | 'capabilityArea', slug: string): string =>
+    slugLabels[kind]?.[slug] || slug.replace(/_/g, ' ');
 
   const scaffolds = new Map<string, ScaffoldGroup>();
 
   for (const sec of visible) {
     const placement = sec.placement || {};
-    const scaffoldName = (placement.scaffold as string) || 'Other';
+    const scaffoldSlug = (placement.scaffold as string) || 'other';
     const scaffoldOrder = (placement.scaffoldSortOrder as number) ?? 999;
 
-    // Edition gate (strict): Business modules show only when the user-
-    // selected edition matches the manifest's declared edition.name.
-    if (scaffoldName === 'Business') {
-      const edName = placement.edition?.name;
-      if (!edName || edName !== selectedEdition) continue;
-    }
-
-    if (!scaffolds.has(scaffoldName)) {
-      scaffolds.set(scaffoldName, {
-        id: scaffoldName.toLowerCase().replace(/\s+/g, '-'),
-        label: scaffoldName.toUpperCase(),
+    if (!scaffolds.has(scaffoldSlug)) {
+      scaffolds.set(scaffoldSlug, {
+        id: scaffoldSlug,
+        label: tr('scaffold', scaffoldSlug).toUpperCase(),
         sortOrder: scaffoldOrder,
         l2Buckets: new Map(),
       });
     }
-    const sc = scaffolds.get(scaffoldName)!;
+    const sc = scaffolds.get(scaffoldSlug)!;
     if (scaffoldOrder < sc.sortOrder) sc.sortOrder = scaffoldOrder;
 
-    // L2 bucket: businessLine for Business scaffold, capabilityArea for others.
-    const l2Label = scaffoldName === 'Business'
-      ? (placement.businessLine || 'Other')
+    // L2 bucket: businessLine slug for Business scaffold, capabilityArea
+    // (or pretty module name) for others.
+    const l2Slug = scaffoldSlug === 'business'
+      ? (placement.businessLine || 'other')
       : (placement.capabilityArea || prettyModuleName(sec.moduleId));
+    const l2DisplayLabel = scaffoldSlug === 'business'
+      ? tr('businessLine', l2Slug)
+      : (placement.capabilityArea ? tr('capabilityArea', l2Slug) : l2Slug);
     const l2Order = (placement.sortOrder as number) ?? 999;
 
-    if (!sc.l2Buckets.has(l2Label)) {
-      sc.l2Buckets.set(l2Label, {
-        id: `${sc.id}-${l2Label.toLowerCase().replace(/\s+/g, '-')}`,
-        label: l2Label,
+    if (!sc.l2Buckets.has(l2Slug)) {
+      sc.l2Buckets.set(l2Slug, {
+        id: `${sc.id}-${l2Slug}`,
+        label: l2DisplayLabel,
         sortOrder: l2Order,
         l3Buckets: new Map(),
       });
     }
-    const l2 = sc.l2Buckets.get(l2Label)!;
+    const l2 = sc.l2Buckets.get(l2Slug)!;
 
-    if (scaffoldName === 'Business') {
-      // L3 inside Business: capabilityArea (Product Mgmt / Policy Admin / FWA / etc.).
-      const l3Label = placement.capabilityArea || 'Other';
-      if (!l2.l3Buckets.has(l3Label)) {
-        l2.l3Buckets.set(l3Label, {
-          id: `${l2.id}-${l3Label.toLowerCase().replace(/\s+/g, '-')}`,
-          label: l3Label,
+    if (scaffoldSlug === 'business') {
+      // L3 inside Business: capabilityArea slug (product_management, etc.).
+      const l3Slug = placement.capabilityArea || 'other';
+      if (!l2.l3Buckets.has(l3Slug)) {
+        l2.l3Buckets.set(l3Slug, {
+          id: `${l2.id}-${l3Slug}`,
+          label: tr('capabilityArea', l3Slug),
           sortOrder: l2Order,
           sections: [],
         });
       }
-      l2.l3Buckets.get(l3Label)!.sections.push(sec);
+      l2.l3Buckets.get(l3Slug)!.sections.push(sec);
     } else {
       // Non-Business: each module is its own L2 (already created above).
       // We use a single synthetic L3 keyed by the module to keep the same
@@ -321,7 +326,7 @@ function buildDbScaffold(sections: ApiSection[], selectedEdition: BusinessLine):
       if (!l2.l3Buckets.has(onlyKey)) {
         l2.l3Buckets.set(onlyKey, {
           id: l2.id,
-          label: l2Label,
+          label: l2DisplayLabel,
           sortOrder: l2Order,
           sections: [],
         });
@@ -347,7 +352,7 @@ function buildDbScaffold(sections: ApiSection[], selectedEdition: BusinessLine):
     children: Array.from(sc.l2Buckets.values())
       .sort((a, b) => a.sortOrder - b.sortOrder || a.label.localeCompare(b.label))
       .map((l2): MenuNodeData => {
-        if (sc.label === 'BUSINESS') {
+        if (sc.id === 'business') {
           // Business: emit L2 (Distribution/Servicing/Finance) with L3
           // capability buckets containing the modules below them.
           return {
@@ -1000,7 +1005,7 @@ const Sidebar6Level: React.FC<Sidebar6LevelProps> = ({
                 {filteredData.map((node, idx) => {
                   // Dynamic label for the BUSINESS section based on selected edition
                   const renderNode =
-                    node.id === 'business-insurer' && businessLine !== 'platform'
+                    node.id === 'business' && businessLine !== 'platform'
                       ? { ...node, label: `BUSINESS — ${SHORT_LABELS[businessLine]}` }
                       : node;
                   return (
