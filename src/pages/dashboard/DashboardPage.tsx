@@ -60,10 +60,13 @@ const DashboardPage: React.FC = () => {
         // Try to get recent audit events
         let recentEvents: AuditEventSummary[] = [];
         try {
-          const auditRes = await api.get('/api/audit/api/v1/G/audit/logs?limit=5');
+          // MSG-101 issue #8 / cycle-106: legacy '/audit/logs' route never existed at G scope.
+          // Use canonical global-events feed added in cycle-104 (deployed cycle-105).
+          // Response shape: { data: [...], total, page, limit, totalPages }
+          const auditRes = await api.get('/api/audit/api/v1/G/events?page=1&pageSize=5');
           recentEvents = Array.isArray(auditRes.data)
             ? auditRes.data.slice(0, 5)
-            : (auditRes.data?.logs ?? auditRes.data?.items ?? []).slice(0, 5);
+            : (auditRes.data?.data ?? auditRes.data?.logs ?? auditRes.data?.items ?? []).slice(0, 5);
         } catch {
           // Audit service might not be available
         }
