@@ -191,6 +191,51 @@ async function fetchManifest(moduleId: string): Promise<ManifestData> {
   return p;
 }
 
+/**
+ * Slug → moduleId map persisted in localStorage. Populated whenever the menu
+ * loads, so that subsequent visits to /m/<slug>/... can fire the manifest
+ * fetch IN PARALLEL with the menu fetch instead of waiting for the menu to
+ * resolve first (sequential waterfall — see cycle-106 RCA on /m/pii_vault/db).
+ *
+ * Cycle-106 owner pain (MSG-102): "/m/pii_vault/db took so long" — caused by
+ * the manifest fetch being gated on the menu fetch (~530ms wasted on
+ * /m/<slug>/db cold load).
+ */
+const SLUG_TO_MODULE_KEY = 'zorbit_slug_to_moduleId_v1';
+
+function readSlugMap(): Record<string, string> {
+  try {
+    const raw = localStorage.getItem(SLUG_TO_MODULE_KEY);
+    if (!raw) return {};
+    const parsed = JSON.parse(raw);
+    return parsed && typeof parsed === 'object' ? (parsed as Record<string, string>) : {};
+  } catch {
+    return {};
+  }
+}
+
+function writeSlugMap(map: Record<string, string>): void {
+  try {
+    localStorage.setItem(SLUG_TO_MODULE_KEY, JSON.stringify(map));
+  } catch {
+    /* quota / privacy mode — silently ignore */
+  }
+}
+
+function buildSlugMapFromSections(sections: NavSection[]): Record<string, string> {
+  const map: Record<string, string> = {};
+  for (const section of sections) {
+    if (!section.moduleId) continue;
+    for (const item of section.items || []) {
+      const itemSlug = firstModuleSlug(item.feRoute || '');
+      if (itemSlug && !map[itemSlug]) {
+        map[itemSlug] = section.moduleId;
+      }
+    }
+  }
+  return map;
+}
+
 const ManifestRouter: React.FC = () => {
   const params = useParams();
   const location = useLocation();
@@ -206,7 +251,13 @@ const ManifestRouter: React.FC = () => {
     if (!user?.id) return;
     setLoadingMenu(true);
     api.get<MenuResponse>(`${API_CONFIG.NAVIGATION_URL}/api/v1/U/${user.id}/navigation/menu`)
-      .then((res) => setSections(res.data?.sections || []))
+      .then((res) => {
+        const newSections = res.data?.sections || [];
+        setSections(newSections);
+        // Persist the slug→moduleId map so the NEXT visit can fire the
+        // manifest fetch in parallel with the menu fetch. Cycle-106 perf fix.
+        writeSlugMap(buildSlugMapFromSections(newSections));
+      })
       .catch(() => setSections([]))
       .finally(() => setLoadingMenu(false));
   }, [user?.id]);
@@ -215,10 +266,21 @@ const ManifestRouter: React.FC = () => {
   const slug = params.slug || '';
   const match = useMemo(() => findMatchingItem(sections, path), [sections, path]);
 
-  // Derive moduleId from the matching section (same as what sidebar declared)
-  const moduleId = match?.section.moduleId || null;
+  // Derive moduleId. Prefer the menu match (authoritative for current session).
+  // Fall back to the cached slug→moduleId map so we can fire the manifest
+  // fetch BEFORE the menu has loaded — this eliminates the sequential
+  // waterfall on cold loads of /m/<slug>/<feature>.
+  const moduleIdFromMenu = match?.section.moduleId || null;
+  const moduleIdFromCache = useMemo(() => {
+    if (!slug) return null;
+    const map = readSlugMap();
+    return map[slug] || null;
+  }, [slug]);
+  const moduleId = moduleIdFromMenu || moduleIdFromCache;
 
   // Fetch manifest for current moduleId and re-fetch only when moduleId changes.
+  // With the slug→moduleId cache, this can fire in parallel with the menu fetch
+  // on warm visits, saving ~500ms on the perceived load time.
   useEffect(() => {
     if (!moduleId) return;
     if (lastModuleIdRef.current === moduleId) return;
