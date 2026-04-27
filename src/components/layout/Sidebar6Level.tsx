@@ -131,6 +131,54 @@ function filterByBusinessLine(
 // the Business scaffold. Non-Business scaffolds (Platform Core / PFS /
 // AI and Voice / Administration) ignore edition entirely.
 
+// ─── Canonical group nesting (cycle-106 — owner MSG-101 #5/#6) ─────────
+//
+// Every module's nav items render as flat siblings under the module root
+// by default. That made the six Guide pages (Intro/Presentation/Lifecycle/
+// Videos/Resources/Pricing) sit shoulder-to-shoulder with the module's
+// working pages (Users / Orgs / Sessions etc.) and drown them out. There
+// was also nowhere canonical to put Database Operations, Setup, or
+// Deployment screens.
+//
+// Cycle-106 introduces four canonical groups: guide, data, setup,
+// deployment. The renderer collects flat items into the matching wrapper
+// node based on (in order of precedence):
+//   1. item.groupId      (item-level override from the manifest)
+//   2. section.groupId   (explicit section-level group)
+//   3. section.id        (when id matches a canonical group)
+//   4. feComponent       (legacy detection — Guide-only, back-compat)
+//
+// Items with no canonical group remain flat. Sections without canonical
+// id/groupId render flat (back-compat for pre-cycle-106 manifests).
+//
+// See zorbit-core/platform-spec/nav-canonical-groups.md for the full
+// contract.
+
+type CanonicalGroupId = 'guide' | 'data' | 'setup' | 'deployment';
+
+const CANONICAL_GROUP_ORDER: Record<CanonicalGroupId, number> = {
+  guide: 1,
+  data: 2,
+  setup: 3,
+  deployment: 4,
+};
+
+const CANONICAL_GROUP_LABEL: Record<CanonicalGroupId, string> = {
+  guide: 'Guide',
+  data: 'Data',
+  setup: 'Setup',
+  deployment: 'Deployment',
+};
+
+const CANONICAL_GROUP_ICON: Record<CanonicalGroupId, string> = {
+  guide: 'BookOpen',
+  data: 'Database',
+  setup: 'Settings',
+  deployment: 'Server',
+};
+
+const CANONICAL_GROUP_IDS = new Set<string>(['guide', 'data', 'setup', 'deployment']);
+
 interface ApiSection {
   moduleId: string;
   moduleName?: string;
@@ -140,19 +188,32 @@ interface ApiSection {
     edition?: EditionMeta | null;
     capabilityArea?: string;
   };
-  items?: Array<{ label: string; feRoute: string; icon: string; privilege: string; feComponent?: string | null }>;
+  // Cycle-106 (cascade-resolver fanout): the resolver now passes the
+  // source section's id/label/groupId alongside the flat items so the
+  // SPA can nest items under a canonical group wrapper. Older resolver
+  // versions omit these — the renderer falls back to feComponent
+  // detection for Guide.
+  sectionId?: string | null;
+  sectionLabel?: string | null;
+  groupId?: CanonicalGroupId | string | null;
+  items?: Array<{
+    label: string;
+    feRoute: string;
+    icon: string;
+    privilege: string;
+    feComponent?: string | null;
+    // Item-level group override (cycle-106). When set, the item is
+    // hoisted out of its declared section and placed under the named
+    // wrapper.
+    groupId?: CanonicalGroupId | string | null;
+  }>;
 }
 
-// ─── Guide grouping (US-GU-2101) ───────────────────────────────────────
-//
-// Every module that declares a `guide` block (per SPEC-module-manifest §5)
-// ships six nav items with these feComponent names. The sidebar collects
-// them under a single "Guide" parent node so the flat 6-siblings layout
-// (Intro / Presentation / Lifecycle / Videos / Resources / Pricing) does
-// not drown out the module's actual working pages.
-//
-// Detection is by feComponent — explicit, avoids false positives from any
-// page that happens to be labelled "Pricing" or "Videos".
+// Legacy Guide auto-detection by feComponent (pre-cycle-106 manifests).
+// Kept for back-compat — manifests that haven't migrated to the canonical
+// section.id='guide' pattern still get auto-grouped. The cascade resolver
+// returns feComponent values in two flavours (`GuideIntroView` and
+// `@platform:GuideIntroView`); we match both.
 const GUIDE_FE_COMPONENTS = new Set([
   'GuideIntroView',
   'GuideSlideDeck',
@@ -160,69 +221,173 @@ const GUIDE_FE_COMPONENTS = new Set([
   'GuideVideos',
   'GuideDocs',
   'GuidePricing',
+  '@platform:GuideIntroView',
+  '@platform:GuideSlideDeck',
+  '@platform:GuideLifecycle',
+  '@platform:GuideVideos',
+  '@platform:GuideDocs',
+  '@platform:GuidePricing',
 ]);
 
 // Canonical display order inside the Guide parent.
 const GUIDE_COMPONENT_ORDER: Record<string, number> = {
-  GuideIntroView:  1,
-  GuideSlideDeck:  2,
-  GuideLifecycle:  3,
-  GuideVideos:     4,
-  GuideDocs:       5,
-  GuidePricing:    6,
+  GuideIntroView:               1,
+  GuideSlideDeck:               2,
+  GuideLifecycle:               3,
+  GuideVideos:                  4,
+  GuideDocs:                    5,
+  GuidePricing:                 6,
+  '@platform:GuideIntroView':   1,
+  '@platform:GuideSlideDeck':   2,
+  '@platform:GuideLifecycle':   3,
+  '@platform:GuideVideos':      4,
+  '@platform:GuideDocs':        5,
+  '@platform:GuidePricing':     6,
 };
 
 /**
- * Walk a module's leaf items. If two or more are "guide" items (identified
- * by feComponent), pull them out of the flat list and insert a single
- * collapsible Guide parent in the position of the FIRST guide item. The
- * six children appear under it in the canonical order above.
+ * Resolve the canonical group id for a single item. Returns null when
+ * the item belongs at the flat (module-root) level.
  *
- * Non-guide items keep their relative order. When fewer than 2 guide items
- * are present, the input is returned unchanged (no wrapping for 0/1 items —
- * a single-child "Guide" parent would be visual noise).
+ * Precedence:
+ *   1. itemGroupId   — explicit per-item override
+ *   2. sectionGroup  — explicit section-level group / canonical section id
+ *   3. feComponent   — legacy Guide detection (back-compat)
  */
+function resolveCanonicalGroup(
+  itemGroupId: string | null | undefined,
+  sectionGroup: string | null | undefined,
+  feComponent: string | null | undefined,
+): CanonicalGroupId | null {
+  if (itemGroupId && CANONICAL_GROUP_IDS.has(itemGroupId)) {
+    return itemGroupId as CanonicalGroupId;
+  }
+  if (sectionGroup && CANONICAL_GROUP_IDS.has(sectionGroup)) {
+    return sectionGroup as CanonicalGroupId;
+  }
+  if (feComponent && GUIDE_FE_COMPONENTS.has(feComponent)) {
+    return 'guide';
+  }
+  return null;
+}
+
+/**
+ * Walk a module's leaf items and bucket them by canonical group. Items
+ * without a canonical group stay flat. Wrapper nodes are inserted at
+ * the position of the first item that mapped to that group, in
+ * canonical order (guide < data < setup < deployment).
+ *
+ * `itemGroupHints` is a parallel array carrying each item's resolved
+ * canonical group (computed up-front from cascade-resolver metadata).
+ * It is parallel-indexed with `items`. When omitted, the function falls
+ * back to feComponent-only detection — equivalent to the pre-cycle-106
+ * groupGuideItems behaviour.
+ *
+ * `wrapperIdPrefix` namespaces the wrapper node ids so multiple modules
+ * each get their own (e.g. "zorbit-cor-identity-guide" vs
+ * "zorbit-cor-audit-guide"). The wrapper node sits at `parentLevel`,
+ * children at `parentLevel + 1`.
+ *
+ * When fewer than 2 items map to a group, that group does NOT get a
+ * wrapper — a single-child "Setup" parent would be visual noise. The
+ * lone item stays flat at module-root level.
+ */
+function groupItemsByCanonicalGroup(
+  items: MenuNodeData[],
+  parentLevel: number,
+  wrapperIdPrefix: string,
+  itemGroupHints?: Array<CanonicalGroupId | null>,
+): MenuNodeData[] {
+  const buckets = new Map<CanonicalGroupId, MenuNodeData[]>();
+  const flat: MenuNodeData[] = [];
+  // Track the "result list" position of the first item that mapped to
+  // each group, so the wrapper inserts where the author placed the first
+  // group-tagged item.
+  const firstAppearance = new Map<CanonicalGroupId, number>();
+
+  for (let i = 0; i < items.length; i++) {
+    const item = items[i];
+    const hint = itemGroupHints?.[i] ?? null;
+    const group: CanonicalGroupId | null =
+      hint ?? resolveCanonicalGroup(null, null, item.feComponent || null);
+
+    if (group) {
+      if (!buckets.has(group)) {
+        buckets.set(group, []);
+        firstAppearance.set(group, flat.length);
+      }
+      buckets.get(group)!.push({ ...item, level: parentLevel + 1 });
+    } else {
+      flat.push(item);
+    }
+  }
+
+  // No canonical groups present → return the original list unchanged.
+  if (buckets.size === 0) return items;
+
+  // Sort wrappers in canonical order so Guide is always before Data is
+  // always before Setup is always before Deployment.
+  const orderedGroupIds = Array.from(buckets.keys()).sort(
+    (a, b) => CANONICAL_GROUP_ORDER[a] - CANONICAL_GROUP_ORDER[b],
+  );
+
+  // Build wrapper nodes. Skip groups with <2 items — leave them flat.
+  const wrappers: Array<{ group: CanonicalGroupId; node: MenuNodeData; insertAt: number }> = [];
+  for (const group of orderedGroupIds) {
+    const bucketItems = buckets.get(group)!;
+    if (bucketItems.length < 2) {
+      // Restore the lone item to its first-appearance slot in the flat
+      // list. This preserves backwards compat (pre-cycle-106 modules
+      // with a single Guide page didn't get a wrapper either).
+      const restored = bucketItems[0];
+      const slot = firstAppearance.get(group) ?? flat.length;
+      flat.splice(Math.min(slot, flat.length), 0, restored);
+      continue;
+    }
+    // Sort items inside Guide by their feComponent canonical order
+    // (legacy ordering rule). Other groups respect cascade-resolver
+    // sortOrder, which is already preserved by the input array order.
+    if (group === 'guide') {
+      bucketItems.sort(
+        (a, b) =>
+          (GUIDE_COMPONENT_ORDER[a.feComponent || ''] ?? 99) -
+          (GUIDE_COMPONENT_ORDER[b.feComponent || ''] ?? 99),
+      );
+    }
+    wrappers.push({
+      group,
+      insertAt: firstAppearance.get(group) ?? flat.length,
+      node: {
+        id: `${wrapperIdPrefix}-${group}`,
+        label: CANONICAL_GROUP_LABEL[group],
+        icon: CANONICAL_GROUP_ICON[group],
+        route: null,
+        privilegeCode: null,
+        level: parentLevel,
+        children: bucketItems,
+      },
+    });
+  }
+
+  // Insert wrappers at their first-appearance positions. Process in
+  // reverse index order so earlier insertions don't shift later ones.
+  wrappers.sort((a, b) => b.insertAt - a.insertAt);
+  for (const w of wrappers) {
+    flat.splice(Math.min(w.insertAt, flat.length), 0, w.node);
+  }
+
+  return flat;
+}
+
+// Back-compat shim. The old name is still referenced in callers that
+// just want the legacy Guide-only behaviour. Routes through the generic
+// grouper using feComponent detection only.
 function groupGuideItems(
   items: MenuNodeData[],
   parentLevel: number,
   wrapperIdPrefix: string,
 ): MenuNodeData[] {
-  const guideChildren: MenuNodeData[] = [];
-  const result: MenuNodeData[] = [];
-  let insertIdx = -1;
-
-  for (const item of items) {
-    const fc = item.feComponent || '';
-    if (GUIDE_FE_COMPONENTS.has(fc)) {
-      if (insertIdx === -1) insertIdx = result.length;
-      guideChildren.push({ ...item, level: parentLevel + 1 });
-    } else {
-      result.push(item);
-    }
-  }
-
-  if (guideChildren.length < 2) return items; // don't wrap 0/1 items
-
-  guideChildren.sort(
-    (a, b) =>
-      (GUIDE_COMPONENT_ORDER[a.feComponent || ''] ?? 99) -
-      (GUIDE_COMPONENT_ORDER[b.feComponent || ''] ?? 99),
-  );
-
-  const wrapper: MenuNodeData = {
-    id: `${wrapperIdPrefix}-guide`,
-    label: 'Guide',
-    icon: 'BookOpen',
-    route: null,
-    privilegeCode: null,
-    level: parentLevel,
-    children: guideChildren,
-  };
-
-  // Insert wrapper at the position of the first removed guide item so the
-  // Guide block appears where the author placed the first guide entry.
-  result.splice(insertIdx, 0, wrapper);
-  return result;
+  return groupItemsByCanonicalGroup(items, parentLevel, wrapperIdPrefix);
 }
 
 function prettyModuleName(moduleId: string): string {
@@ -404,6 +569,15 @@ function buildDbScaffold(sections: ApiSection[], _selectedEdition: BusinessLine)
                   children: l3.sections
                     .sort((a, b) => (a.placement?.sortOrder ?? 999) - (b.placement?.sortOrder ?? 999))
                     .map((sec): MenuNodeData => {
+                      // Cycle-106: each ApiSection coming back from the
+                      // cascade resolver represents ONE manifest section.
+                      // Resolve the canonical group for the section once,
+                      // then reuse for every item (item.groupId still
+                      // wins).
+                      const sectionGroup =
+                        (sec.groupId as string | null | undefined) ||
+                        (sec.sectionId as string | null | undefined) ||
+                        null;
                       const flat: MenuNodeData[] = (sec.items || []).map((item, idx) => ({
                         id: `${sec.moduleId}-${idx}`,
                         label: item.label,
@@ -414,6 +588,14 @@ function buildDbScaffold(sections: ApiSection[], _selectedEdition: BusinessLine)
                         children: [],
                         feComponent: item.feComponent ?? null,
                       }));
+                      const hints: Array<CanonicalGroupId | null> = (sec.items || []).map(
+                        (item) =>
+                          resolveCanonicalGroup(
+                            (item.groupId as string | null | undefined) ?? null,
+                            sectionGroup,
+                            item.feComponent ?? null,
+                          ),
+                      );
                       return {
                         id: sec.moduleId,
                         label: sec.moduleName || prettyModuleName(sec.moduleId),
@@ -421,7 +603,7 @@ function buildDbScaffold(sections: ApiSection[], _selectedEdition: BusinessLine)
                         route: null,
                         privilegeCode: null,
                         level: 4,
-                        children: groupGuideItems(flat, 5, sec.moduleId),
+                        children: groupItemsByCanonicalGroup(flat, 5, sec.moduleId, hints),
                       };
                     }),
                 };
@@ -433,18 +615,40 @@ function buildDbScaffold(sections: ApiSection[], _selectedEdition: BusinessLine)
         const sectionsFlat: ApiSection[] = Array.from(l2.l3Buckets.values()).flatMap((b) => b.sections);
         sectionsFlat.sort((a, b) => (a.placement?.sortOrder ?? 999) - (b.placement?.sortOrder ?? 999));
         const l2Id = l2.id;
-        const flatChildren: MenuNodeData[] = sectionsFlat.flatMap((sec) =>
-          (sec.items || []).map((item, idx) => ({
-            id: `${sec.moduleId}-${idx}`,
-            label: item.label,
-            icon: item.icon || 'circle',
-            route: item.feRoute || null,
-            privilegeCode: item.privilege || null,
-            level: 3,
-            children: [] as MenuNodeData[],
-            feComponent: item.feComponent ?? null,
-          })),
-        );
+
+        // Cycle-106: thread section.groupId through so canonical group
+        // wrappers (Guide / Data / Setup / Deployment) can be applied per
+        // section. The flat children array stays in section order, and
+        // each item carries a parallel hint with its resolved group.
+        const flatChildren: MenuNodeData[] = [];
+        const flatHints: Array<CanonicalGroupId | null> = [];
+        let childIdxCounter = 0;
+        for (const sec of sectionsFlat) {
+          const sectionGroup =
+            (sec.groupId as string | null | undefined) ||
+            (sec.sectionId as string | null | undefined) ||
+            null;
+          for (const item of sec.items || []) {
+            const hint = resolveCanonicalGroup(
+              (item.groupId as string | null | undefined) ?? null,
+              sectionGroup,
+              item.feComponent ?? null,
+            );
+            flatChildren.push({
+              id: `${sec.moduleId}-${childIdxCounter}`,
+              label: item.label,
+              icon: item.icon || 'circle',
+              route: item.feRoute || null,
+              privilegeCode: item.privilege || null,
+              level: 3,
+              children: [] as MenuNodeData[],
+              feComponent: item.feComponent ?? null,
+            });
+            flatHints.push(hint);
+            childIdxCounter++;
+          }
+        }
+
         // Non-Business L2 carries the module's own icon (one section per L2).
         // When multiple sections share an L2 (rare), use the first section's
         // module slug for icon lookup.
@@ -457,7 +661,7 @@ function buildDbScaffold(sections: ApiSection[], _selectedEdition: BusinessLine)
           route: null,
           privilegeCode: null,
           level: 2,
-          children: groupGuideItems(flatChildren, 3, l2Id),
+          children: groupItemsByCanonicalGroup(flatChildren, 3, l2Id, flatHints),
         };
       }),
   }));
